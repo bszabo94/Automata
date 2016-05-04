@@ -1,0 +1,12 @@
+.classpath
+*/.classpath
+.settings/
+*/.settings/
+.project
+*/.project
+target/
+*/target/
+*.log
+*/*.log
+pom.xml
+*/pom.xml
