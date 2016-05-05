@@ -13,7 +13,7 @@ public class Main {
 		try {
 			String a = new String("aabcc");
 			Machine m = new Machine("Moore");
-			m.createMachine(in, out);
+			m.init(in, out);
 			System.out.println(m);
 			System.out.println(a);
 			System.out.println(m.encode(a));

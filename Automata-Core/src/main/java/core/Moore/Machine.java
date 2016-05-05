@@ -1,4 +1,4 @@
-package core.Mealy;
+package core.Moore;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,11 +24,15 @@ public class Machine {
 		this.name = name;
 		this.states = new ArrayList<State>();
 		this.currState = null;
-		this.createMachine(iAlphabet, oAlphabet);
+		this.init(iAlphabet, oAlphabet);
 	}
 
 	public void addState() {
 		this.states.add(new State());
+	}
+
+	public void addState(Character output) {
+		this.states.add(new State(output));
 	}
 
 	public State getState(int n) {
@@ -51,7 +55,7 @@ public class Machine {
 		return oAlphabet;
 	}
 
-	public void createMachine(Set<Character> iAlphabet, Set<Character> oAlphabet) throws MachineExpection {
+	public void init(Set<Character> iAlphabet, Set<Character> oAlphabet) throws MachineExpection {
 		if (iAlphabet.size() != oAlphabet.size())
 			throw new MachineExpection("Input and Output Alphabets must contain the same amount of letters!");
 		this.iAlphabet = iAlphabet;
@@ -61,16 +65,14 @@ public class Machine {
 		List<Character> outputAlphabet = new ArrayList<Character>(oAlphabet);
 		List<Integer> range = IntStream.range(0, iAlphabet.size()).boxed().collect(Collectors.toList());
 
-		for (int i = 0; i < iAlphabet.size(); i++)
-			this.addState();
+		for (int i = 0; i < oAlphabet.size(); i++)
+			this.addState(outputAlphabet.get(i));
 
 		for (State currState : this.states) {
-			Collections.shuffle(outputAlphabet);
 			Collections.shuffle(range);
 
 			for (int i = 0; i < iAlphabet.size(); i++) {
-				currState.addTranslation(
-						new Translation(inputAlphabet.get(i), outputAlphabet.get(i), this.states.get(range.get(i))));
+				currState.addTranslation(new Translation(inputAlphabet.get(i), this.states.get(range.get(i))));
 			}
 		}
 
@@ -93,19 +95,22 @@ public class Machine {
 				return false;
 
 			checkIAlphabet.clear();
-			checkOAlphabet.clear();
 			checkRange.clear();
 
 			for (Translation currTranslation : currState.getTranslations()) {
 				checkIAlphabet.add(currTranslation.getInput());
-				checkOAlphabet.add(currTranslation.getOutput());
 				checkRange.add(this.states.indexOf(currTranslation.getTarget()));
 			}
 
-			if (!checkIAlphabet.equals(this.iAlphabet) || !checkOAlphabet.equals(this.oAlphabet)
-					|| !checkRange.equals(compareRange))
+			if (!checkIAlphabet.equals(this.iAlphabet) || !checkRange.equals(compareRange))
 				return false;
 
+			checkOAlphabet.add(currState.getOutput());
+		}
+
+		if (!checkOAlphabet.equals(this.oAlphabet)) {
+			// System.out.println("debug");
+			return false;
 		}
 
 		return true;
@@ -116,12 +121,12 @@ public class Machine {
 			for (Translation currTranslation : this.currState.getTranslations()) {
 				if (currTranslation.getInput().equals(input)) {
 					this.currState = currTranslation.getTarget();
-					return currTranslation.getOutput();
+					return currState.getOutput();
 				}
 			}
 		} else {
 			for (Translation currTranslation : this.currState.getTranslations()) {
-				if (currTranslation.getOutput().equals(input)) {
+				if (currTranslation.getTarget().getOutput().equals(input)) {
 					this.currState = currTranslation.getTarget();
 					return currTranslation.getInput();
 				}
@@ -158,7 +163,7 @@ public class Machine {
 		for (int i = 0; i < data.length(); i++) {
 			base.add(data.charAt(i));
 		}
-		this.createMachine(base, base);
+		this.init(base, base);
 	}
 
 	@Override
@@ -166,9 +171,9 @@ public class Machine {
 		String output = new String();
 		output += "Machine: " + this.name + "\n";
 		for (State currState : this.states) {
-			output += "---State " + this.states.indexOf(currState) + "---\n";
+			output += "---State " + this.states.indexOf(currState) + " | output: " + currState.getOutput() + "---\n";
 			for (Translation currTranslation : currState.getTranslations()) {
-				output += "[ " + currTranslation.getInput() + " ---> " + currTranslation.getOutput() + " / "
+				output += "[ " + currTranslation.getInput() + " ---> "
 						+ this.states.indexOf(currTranslation.getTarget()) + " ]\n";
 			}
 		}

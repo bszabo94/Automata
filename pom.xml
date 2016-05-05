@@ -1,11 +1,18 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>hu.unideb.inf</groupId>
-  <artifactId>Automata</artifactId>
-  <version>1.0</version>
-  <packaging>pom</packaging>
-  <name>Automata</name>
-  <modules>
-  	<module>Automata-core</module>
-  </modules>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>hu.unideb.inf</groupId>
+	<artifactId>Automata</artifactId>
+	<version>1.0</version>
+	<packaging>pom</packaging>
+	<name>Automata</name>
+	<modules>
+		<module>Automata-core</module>
+		<module>Automata-IO</module>
+	</modules>
+	<scm>
+		<url>https://github.com/bszabo94/Automata</url>
+		<connection>scm:git:git://github.com/bszabo94/Automata.git</connection>
+		<developerConnection>scm:git:git@github.com/bszabo94/Automata.git</developerConnection>
+	</scm>
 </project>
