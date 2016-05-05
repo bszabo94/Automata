@@ -7,7 +7,7 @@
 	<packaging>pom</packaging>
 	<name>Automata</name>
 	<modules>
-		<module>Automata-core</module>
+		<module>Automata-Core</module>
 		<module>Automata-IO</module>
 	</modules>
 	<scm>
