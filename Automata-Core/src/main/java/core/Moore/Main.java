@@ -12,27 +12,13 @@ public class Main {
 		
 		try {
 			String a = new String("aabcc");
-			Machine m = new Machine("Moore");
+			Machine m = new core.Moore.Machine("Moore");
 			m.init(in, out);
 			System.out.println(m);
-			System.out.println(a);
-			System.out.println(m.encode(a));
-			System.out.println(m.decode(m.encode(a)));
-			System.out.println(m.isValid());
+			System.out.println("------");
+			core.Mealy.Machine mealy = m.toMealy();
+			System.out.println(mealy);
 			
-			m.getiAlphabet().add('d');
-			m.getoAlphabet().add('h');
-			m.addState('h');
-			m.getState(3).addTranslation(new Translation('a', m.getState(0)));
-			m.getState(3).addTranslation(new Translation('b', m.getState(1)));
-			m.getState(3).addTranslation(new Translation('c', m.getState(2)));
-			m.getState(3).addTranslation(new Translation('d', m.getState(3)));
-			
-			m.getState(0).addTranslation(new Translation('d', m.getState(3)));
-			m.getState(1).addTranslation(new Translation('d', m.getState(3)));
-			m.getState(2).addTranslation(new Translation('d', m.getState(3)));
-			System.out.println(m.isValid());
-			System.out.println(m);
 			
 		} catch (MachineExpection e) {
 			e.printStackTrace();

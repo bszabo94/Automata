@@ -7,4 +7,11 @@
   </parent>
   <artifactId>Automata-IO</artifactId>
   <name>Automata-IO</name>
+  <dependencies>
+  	<dependency>
+  		<groupId>hu.unideb.inf</groupId>
+  		<artifactId>Automata-Core</artifactId>
+  		<version>1.0</version>
+  	</dependency>
+  </dependencies>
 </project>

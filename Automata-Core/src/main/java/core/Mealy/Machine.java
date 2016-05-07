@@ -1,9 +1,12 @@
 package core.Mealy;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -27,12 +30,16 @@ public class Machine {
 		this.init(iAlphabet, oAlphabet);
 	}
 
-	public void addState() {
-		this.states.add(new State());
+	public List<State> getStates() {
+		return states;
 	}
 
-	public State getState(int n) {
-		return this.states.get(n);
+	public State getCurrState() {
+		return currState;
+	}
+
+	public void addState() {
+		this.states.add(new State());
 	}
 
 	public String getName() {
@@ -41,6 +48,18 @@ public class Machine {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public void setiAlphabet(Set<Character> iAlphabet) {
+		this.iAlphabet = iAlphabet;
+	}
+
+	public void setoAlphabet(Set<Character> oAlphabet) {
+		this.oAlphabet = oAlphabet;
+	}
+
+	public void setCurrState(State currState) {
+		this.currState = currState;
 	}
 
 	public Set<Character> getiAlphabet() {
@@ -74,7 +93,7 @@ public class Machine {
 			}
 		}
 
-		this.currState = this.getState(0);
+		this.currState = this.states.get(0);
 
 	}
 
@@ -136,7 +155,7 @@ public class Machine {
 			output += this.step(input.charAt(i), true);
 		}
 
-		this.currState = this.getState(0);
+		this.currState = this.states.get(0);
 
 		return output;
 	}
@@ -147,7 +166,7 @@ public class Machine {
 			output += this.step(input.charAt(i), false);
 		}
 
-		this.currState = this.getState(0);
+		this.currState = this.states.get(0);
 
 		return output;
 
@@ -160,11 +179,51 @@ public class Machine {
 		}
 		this.init(base, base);
 	}
-	
-	public core.Moore.Machine toMoore(){
+
+	public core.Moore.Machine toMoore() {
 		core.Moore.Machine m = new core.Moore.Machine(this.name);
-		
-		
+		m.setiAlphabet(new HashSet<Character>(this.iAlphabet));
+		m.setoAlphabet(new HashSet<Character>(this.oAlphabet));
+
+		Map<State, Set<Character>> stateDistributor = new HashMap<State, Set<Character>>();
+		for (State currState : this.states) {
+			stateDistributor.put(currState, new HashSet<Character>());
+		}
+
+		for (State currState : this.states) {
+			for (Translation currTranslation : currState.getTranslations()) {
+				stateDistributor.get(currTranslation.getTarget()).add(currTranslation.getOutput());
+			}
+		}
+
+		Map<State, List<core.Moore.State>> symbolDistributor = new HashMap<State, List<core.Moore.State>>();
+
+		for (State currState : stateDistributor.keySet()) {
+			symbolDistributor.put(currState, new ArrayList<core.Moore.State>());
+			for (Character currChar : stateDistributor.get(currState)) {
+				m.addState(currChar);
+				symbolDistributor.get(currState).add(m.getStates().get(m.getStates().size() - 1));
+			}
+		}
+
+		for (State currState : this.states) {
+			for (Translation currTranslation : currState.getTranslations()) {
+				core.Moore.State target = null;
+				for (core.Moore.State currMooreState : symbolDistributor.get(currTranslation.getTarget())) {
+					if (currMooreState.getOutput().equals(currTranslation.getOutput())) {
+						target = currMooreState;
+						break;
+					}
+				}
+				for (core.Moore.State currMooreState : symbolDistributor.get(currState)) {
+					currMooreState.addTranslation(new core.Moore.Translation(currTranslation.getInput(), target));
+				}
+			}
+		}
+
+		// Map<State, Map<Character, core.Moore.State>> translationDistributor =
+		// new HashMap<State, Map<Character, core.Moore.State>>();
+
 		return m;
 	}
 
@@ -175,7 +234,7 @@ public class Machine {
 		for (State currState : this.states) {
 			output += "---State " + this.states.indexOf(currState) + "---\n";
 			for (Translation currTranslation : currState.getTranslations()) {
-				output += "[ " + currTranslation.getInput() + " ---> " + currTranslation.getOutput() + " / "
+				output += "[ " + currTranslation.getInput() + " ---> " + currTranslation.getOutput() + " / q"
 						+ this.states.indexOf(currTranslation.getTarget()) + " ]\n";
 			}
 		}

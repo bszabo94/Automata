@@ -9,6 +9,7 @@ public class State {
 
 	public State() {
 		this.translations = new ArrayList<Translation>();
+		this.output = null;
 	}
 
 	public State(Character output) {

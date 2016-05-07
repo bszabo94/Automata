@@ -27,6 +27,10 @@ public class Machine {
 		this.init(iAlphabet, oAlphabet);
 	}
 
+	public List<State> getStates() {
+		return states;
+	}
+
 	public void addState() {
 		this.states.add(new State());
 	}
@@ -35,8 +39,8 @@ public class Machine {
 		this.states.add(new State(output));
 	}
 
-	public State getState(int n) {
-		return this.states.get(n);
+	public State getCurrState() {
+		return currState;
 	}
 
 	public String getName() {
@@ -45,6 +49,18 @@ public class Machine {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public void setiAlphabet(Set<Character> iAlphabet) {
+		this.iAlphabet = iAlphabet;
+	}
+
+	public void setoAlphabet(Set<Character> oAlphabet) {
+		this.oAlphabet = oAlphabet;
+	}
+
+	public void setCurrState(State currState) {
+		this.currState = currState;
 	}
 
 	public Set<Character> getiAlphabet() {
@@ -76,7 +92,7 @@ public class Machine {
 			}
 		}
 
-		this.currState = this.getState(0);
+		this.currState = this.states.get(0);
 
 	}
 
@@ -141,7 +157,7 @@ public class Machine {
 			output += this.step(input.charAt(i), true);
 		}
 
-		this.currState = this.getState(0);
+		this.currState = this.states.get(0);
 
 		return output;
 	}
@@ -152,7 +168,7 @@ public class Machine {
 			output += this.step(input.charAt(i), false);
 		}
 
-		this.currState = this.getState(0);
+		this.currState = this.states.get(0);
 
 		return output;
 
@@ -164,6 +180,29 @@ public class Machine {
 			base.add(data.charAt(i));
 		}
 		this.init(base, base);
+	}
+
+	public core.Mealy.Machine toMealy() {
+		core.Mealy.Machine m = new core.Mealy.Machine(this.getName());
+		
+		m.setiAlphabet(new HashSet<Character>(this.iAlphabet));
+		m.setoAlphabet(new HashSet<Character>(this.oAlphabet));
+
+		for (State currState : this.states)
+			m.addState();
+
+		m.setCurrState(m.getStates().get(this.states.indexOf(this.currState)));
+
+		for (int i = 0; i < this.states.size(); i++) {
+			for (Translation currTranslation : this.states.get(i).getTranslations()) {
+				m.getStates().get(i)
+						.addTranslation(new core.Mealy.Translation(currTranslation.getInput(),
+								currTranslation.getTarget().getOutput(),
+								m.getStates().get(this.states.indexOf((currTranslation.getTarget())))));
+			}
+		}
+
+		return m;
 	}
 
 	@Override

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Machines>
+   <Machine Initial_State="q0" name="letters">
+      <InputAlphabet>
+         <Symbol>a</Symbol>
+         <Symbol>b</Symbol>
+      </InputAlphabet>
+      <OutputAlphabet>
+         <Symbol>d</Symbol>
+         <Symbol>e</Symbol>
+      </OutputAlphabet>
+      <States>
+         <State id="q0">
+            <Translation input="a" output="e" target="1"/>
+            <Translation input="b" output="d" target="2"/>
+         </State>
+         <State id="q1">
+            <Translation input="a" output="e" target="1"/>
+            <Translation input="b" output="d" target="2"/>
+         </State>
+      </States>
+   </Machine>
+   <Machine Initial_State="q0" name="numbers">
+      <InputAlphabet>
+         <Symbol>1</Symbol>
+         <Symbol>2</Symbol>
+      </InputAlphabet>
+      <OutputAlphabet>
+         <Symbol>3</Symbol>
+         <Symbol>4</Symbol>
+      </OutputAlphabet>
+      <States>
+         <State id="q0">
+            <Translation input="1" output="3" target="2"/>
+            <Translation input="2" output="4" target="1"/>
+         </State>
+         <State id="q1">
+            <Translation input="1" output="4" target="1"/>
+            <Translation input="2" output="3" target="2"/>
+         </State>
+      </States>
+   </Machine>
+   <Machine Initial_State="q0" name="spec">
+      <InputAlphabet>
+         <Symbol>Ł</Symbol>
+         <Symbol>$</Symbol>
+      </InputAlphabet>
+      <OutputAlphabet>
+         <Symbol> </Symbol>
+         <Symbol>ß</Symbol>
+      </OutputAlphabet>
+      <States>
+         <State id="q0">
+            <Translation input="Ł" output=" " target="2"/>
+            <Translation input="$" output="ß" target="1"/>
+         </State>
+         <State id="q1">
+            <Translation input="Ł" output=" " target="2"/>
+            <Translation input="$" output="ß" target="1"/>
+         </State>
+      </States>
+   </Machine>
+</Machines>
