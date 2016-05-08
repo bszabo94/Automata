@@ -185,44 +185,41 @@ public class Machine {
 		m.setiAlphabet(new HashSet<Character>(this.iAlphabet));
 		m.setoAlphabet(new HashSet<Character>(this.oAlphabet));
 
-		Map<State, Set<Character>> stateDistributor = new HashMap<State, Set<Character>>();
+		Map<State, Set<Character>> symbolDistributor = new HashMap<State, Set<Character>>();
 		for (State currState : this.states) {
-			stateDistributor.put(currState, new HashSet<Character>());
+			symbolDistributor.put(currState, new HashSet<Character>());
 		}
 
 		for (State currState : this.states) {
 			for (Translation currTranslation : currState.getTranslations()) {
-				stateDistributor.get(currTranslation.getTarget()).add(currTranslation.getOutput());
+				symbolDistributor.get(currTranslation.getTarget()).add(currTranslation.getOutput());
 			}
 		}
 
-		Map<State, List<core.Moore.State>> symbolDistributor = new HashMap<State, List<core.Moore.State>>();
+		Map<State, Map<Character, core.Moore.State>> translationDistributor = new HashMap<State, Map<Character, core.Moore.State>>();
 
-		for (State currState : stateDistributor.keySet()) {
-			symbolDistributor.put(currState, new ArrayList<core.Moore.State>());
-			for (Character currChar : stateDistributor.get(currState)) {
+		for (State currState : symbolDistributor.keySet()) {
+			translationDistributor.put(currState, new HashMap<Character, core.Moore.State>());
+		}
+
+		for (State currState : symbolDistributor.keySet()) {
+			for (Character currChar : symbolDistributor.get(currState)) {
 				m.addState(currChar);
-				symbolDistributor.get(currState).add(m.getStates().get(m.getStates().size() - 1));
+				translationDistributor.get(currState).put(currChar, m.getStates().get(m.getStates().size() - 1));
+				if (m.getCurrState() == null && this.currState == currState) {
+					m.setCurrState(m.getStates().get(m.getStates().size() - 1));
+				}
 			}
 		}
 
 		for (State currState : this.states) {
 			for (Translation currTranslation : currState.getTranslations()) {
-				core.Moore.State target = null;
-				for (core.Moore.State currMooreState : symbolDistributor.get(currTranslation.getTarget())) {
-					if (currMooreState.getOutput().equals(currTranslation.getOutput())) {
-						target = currMooreState;
-						break;
-					}
-				}
-				for (core.Moore.State currMooreState : symbolDistributor.get(currState)) {
-					currMooreState.addTranslation(new core.Moore.Translation(currTranslation.getInput(), target));
+				for (core.Moore.State tempState : translationDistributor.get(currState).values()) {
+					tempState.addTranslation(new core.Moore.Translation(currTranslation.getInput(),
+							translationDistributor.get(currTranslation.getTarget()).get(currTranslation.getOutput())));
 				}
 			}
 		}
-
-		// Map<State, Map<Character, core.Moore.State>> translationDistributor =
-		// new HashMap<State, Map<Character, core.Moore.State>>();
 
 		return m;
 	}
