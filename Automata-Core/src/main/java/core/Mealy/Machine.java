@@ -1,7 +1,6 @@
 package core.Mealy;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -98,33 +97,64 @@ public class Machine {
 	}
 
 	public boolean isValid() {
-		if (this.iAlphabet.size() != this.oAlphabet.size() || this.currState == null)
+		// if (this.iAlphabet.size() != this.oAlphabet.size() || this.currState
+		// == null)
+		// return false;
+		//
+		// Set<Integer> compareRange = IntStream.range(0,
+		// this.iAlphabet.size()).boxed().collect(Collectors.toSet());
+		//
+		// Set<Character> checkIAlphabet = new HashSet<Character>();
+		// Set<Character> checkOAlphabet = new HashSet<Character>();
+		// Set<Integer> checkRange = new HashSet<Integer>();
+		//
+		// for (State currState : this.states) {
+		// if (currState.getTranslations().size() != this.states.size())
+		// return false;
+		//
+		// checkIAlphabet.clear();
+		// checkOAlphabet.clear();
+		// checkRange.clear();
+		//
+		// for (Translation currTranslation : currState.getTranslations()) {
+		// checkIAlphabet.add(currTranslation.getInput());
+		// checkOAlphabet.add(currTranslation.getOutput());
+		// checkRange.add(this.states.indexOf(currTranslation.getTarget()));
+		// }
+		//
+		// if (!checkIAlphabet.equals(this.iAlphabet) ||
+		// !checkOAlphabet.equals(this.oAlphabet)
+		// || !checkRange.equals(compareRange))
+		// return false;
+		//
+		// }
+		if (this.currState == null) {
 			return false;
-
-		Set<Integer> compareRange = IntStream.range(0, this.iAlphabet.size()).boxed().collect(Collectors.toSet());
+		}
 
 		Set<Character> checkIAlphabet = new HashSet<Character>();
-		Set<Character> checkOAlphabet = new HashSet<Character>();
-		Set<Integer> checkRange = new HashSet<Integer>();
-
+		List<Character> checkOAlphabet = new ArrayList<Character>();
 		for (State currState : this.states) {
-			if (currState.getTranslations().size() != this.states.size())
-				return false;
-
 			checkIAlphabet.clear();
 			checkOAlphabet.clear();
-			checkRange.clear();
-
+			if (this.iAlphabet.size() != currState.getTranslations().size())
+				return false;
 			for (Translation currTranslation : currState.getTranslations()) {
 				checkIAlphabet.add(currTranslation.getInput());
 				checkOAlphabet.add(currTranslation.getOutput());
-				checkRange.add(this.states.indexOf(currTranslation.getTarget()));
 			}
-
-			if (!checkIAlphabet.equals(this.iAlphabet) || !checkOAlphabet.equals(this.oAlphabet)
-					|| !checkRange.equals(compareRange))
+			if (!this.iAlphabet.equals(checkIAlphabet))
 				return false;
-
+			if (checkOAlphabet.size() != new HashSet<Character>(checkOAlphabet).size())
+				return false;
+			for (Character currChar : checkOAlphabet) {
+				if (!this.oAlphabet.contains(currChar))
+					return false;
+			}
+			for (Character currChar : checkIAlphabet) {
+				if (!this.iAlphabet.contains(currChar))
+					return false;
+			}
 		}
 
 		return true;

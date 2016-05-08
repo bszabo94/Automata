@@ -97,36 +97,69 @@ public class Machine {
 	}
 
 	public boolean isValid() {
-		if (this.iAlphabet.size() != this.oAlphabet.size() || this.currState == null)
+		// if (this.iAlphabet.size() != this.oAlphabet.size() || this.currState
+		// == null)
+		// return false;
+		//
+		// Set<Integer> compareRange = IntStream.range(0,
+		// this.iAlphabet.size()).boxed().collect(Collectors.toSet());
+		//
+		// Set<Character> checkIAlphabet = new HashSet<Character>();
+		// Set<Character> checkOAlphabet = new HashSet<Character>();
+		// Set<Integer> checkRange = new HashSet<Integer>();
+		//
+		// for (State currState : this.states) {
+		// if (currState.getTranslations().size() != this.states.size())
+		// return false;
+		//
+		// checkIAlphabet.clear();
+		// checkRange.clear();
+		//
+		// for (Translation currTranslation : currState.getTranslations()) {
+		// checkIAlphabet.add(currTranslation.getInput());
+		// checkRange.add(this.states.indexOf(currTranslation.getTarget()));
+		// }
+		//
+		// if (!checkIAlphabet.equals(this.iAlphabet) ||
+		// !checkRange.equals(compareRange))
+		// return false;
+		//
+		// checkOAlphabet.add(currState.getOutput());
+		// }
+		//
+		// if (!checkOAlphabet.equals(this.oAlphabet)) {
+		// // System.out.println("debug");
+		// return false;
+		// }
+
+		if (this.currState == null) {
 			return false;
-
-		Set<Integer> compareRange = IntStream.range(0, this.iAlphabet.size()).boxed().collect(Collectors.toSet());
-
-		Set<Character> checkIAlphabet = new HashSet<Character>();
-		Set<Character> checkOAlphabet = new HashSet<Character>();
-		Set<Integer> checkRange = new HashSet<Integer>();
-
-		for (State currState : this.states) {
-			if (currState.getTranslations().size() != this.states.size())
-				return false;
-
-			checkIAlphabet.clear();
-			checkRange.clear();
-
-			for (Translation currTranslation : currState.getTranslations()) {
-				checkIAlphabet.add(currTranslation.getInput());
-				checkRange.add(this.states.indexOf(currTranslation.getTarget()));
-			}
-
-			if (!checkIAlphabet.equals(this.iAlphabet) || !checkRange.equals(compareRange))
-				return false;
-
-			checkOAlphabet.add(currState.getOutput());
 		}
 
-		if (!checkOAlphabet.equals(this.oAlphabet)) {
-			// System.out.println("debug");
-			return false;
+		Set<Character> checkIAlphabet = new HashSet<Character>();
+		List<Character> checkOAlphabet = new ArrayList<Character>();
+
+		for (State currState : this.states) {
+			checkIAlphabet.clear();
+			checkOAlphabet.clear();
+			if (this.iAlphabet.size() != currState.getTranslations().size())
+				return false;
+			for (Translation currTranslation : currState.getTranslations()) {
+				checkIAlphabet.add(currTranslation.getInput());
+				checkOAlphabet.add(currTranslation.getTarget().getOutput());
+			}
+			if (!this.iAlphabet.equals(checkIAlphabet))
+				return false;
+			if (checkOAlphabet.size() != new HashSet<Character>(checkOAlphabet).size())
+				return false;
+			for (Character currChar : checkIAlphabet) {
+				if (!this.iAlphabet.contains(currChar))
+					return false;
+			}
+			for (Character currChar : checkOAlphabet) {
+				if (!this.oAlphabet.contains(currChar))
+					return false;
+			}
 		}
 
 		return true;
@@ -182,9 +215,10 @@ public class Machine {
 		this.init(base, base);
 	}
 
+	@SuppressWarnings("unused")
 	public core.Mealy.Machine toMealy() {
 		core.Mealy.Machine m = new core.Mealy.Machine(this.getName());
-		
+
 		m.setiAlphabet(new HashSet<Character>(this.iAlphabet));
 		m.setoAlphabet(new HashSet<Character>(this.oAlphabet));
 
