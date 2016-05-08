@@ -1,6 +1,8 @@
 package io.XML;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -15,16 +17,40 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class XMLHandler {
 
+	public List<core.Mealy.Machine> doImport(String filename)
+			throws SAXException, IOException, ParserConfigurationException {
+		List<core.Mealy.Machine> machineList = new ArrayList<core.Mealy.Machine>();
+
+		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(filename);
+
+//		NodeList machines = doc.getDocumentElement().getElementsByTagName("Machine");
+//		for (int i = 0; i < machines.getLength(); i++) {
+//			machineList.add(
+//					new core.Mealy.Machine(machines.item(i).getAttributes().getNamedItem("name").getTextContent()));
+//			NodeList states = machines.item(i).getChildNodes();
+//			for (int j = 0; j < states.getLength(); j++) {
+//				System.out.println(states.item(i));
+//			}
+//		}
+		
+		NodeList machines = doc.getDocumentElement().getChildNodes();
+		for(int i=0; i<machines.getLength(); i++) {
+			System.out.println(machines.item(i).getNodeName());
+		}
+
+		for (core.Mealy.Machine m : machineList) {
+			System.out.println(m);
+		}
+		return machineList;
+	}
+
 	public void doExport(String filename, List<core.Mealy.Machine> machines)
 			throws ParserConfigurationException, TransformerException {
-		
-		core.Mealy.Machine ma = new core.Mealy.Machine("a");
-		Class t = ma.getClass();
-		System.out.println(t.getName());
-		System.out.println(t.getPackage().getName());
 
 		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
 
