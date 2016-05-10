@@ -3,7 +3,9 @@ package io.XML;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -27,25 +29,82 @@ public class XMLHandler {
 		List<core.Mealy.Machine> machineList = new ArrayList<core.Mealy.Machine>();
 
 		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(filename);
+		Set<Character> alphabet = new HashSet<Character>();
 
-//		NodeList machines = doc.getDocumentElement().getElementsByTagName("Machine");
-//		for (int i = 0; i < machines.getLength(); i++) {
-//			machineList.add(
-//					new core.Mealy.Machine(machines.item(i).getAttributes().getNamedItem("name").getTextContent()));
-//			NodeList states = machines.item(i).getChildNodes();
-//			for (int j = 0; j < states.getLength(); j++) {
-//				System.out.println(states.item(i));
-//			}
-//		}
-		
 		NodeList machines = doc.getDocumentElement().getChildNodes();
-		for(int i=0; i<machines.getLength(); i++) {
-			System.out.println(machines.item(i).getNodeName());
+		for (int i = 0; i < machines.getLength(); i++) {
+			if (machines.item(i).getNodeType() != 3) {
+				machineList.add(
+						new core.Mealy.Machine(machines.item(i).getAttributes().getNamedItem("id").getNodeValue()));
+
+				NodeList properties = machines.item(i).getChildNodes();
+				for (int j = 0; j < properties.getLength(); j++) {
+					if (properties.item(j).getNodeType() != 3) {
+						if (properties.item(j).getNodeName() == "InputAlphabet") {
+							NodeList symbols = properties.item(j).getChildNodes();
+							for (int k = 0; k < symbols.getLength(); k++) {
+								if (symbols.item(k).getNodeType() != 3) {
+									alphabet.add(symbols.item(k).getTextContent().charAt(0));
+								}
+
+							}
+							machineList.get(machineList.size() - 1).setiAlphabet(new HashSet<Character>(alphabet));
+							alphabet.clear();
+						}
+						if (properties.item(j).getNodeName() == "OutputAlphabet") {
+							NodeList symbols = properties.item(j).getChildNodes();
+							for (int k = 0; k < symbols.getLength(); k++) {
+								if (symbols.item(k).getNodeType() != 3) {
+									alphabet.add(symbols.item(k).getTextContent().charAt(0));
+								}
+
+							}
+							machineList.get(machineList.size() - 1).setoAlphabet(new HashSet<Character>(alphabet));
+							alphabet.clear();
+						}
+						if (properties.item(j).getNodeName() == "States") {
+
+							NodeList states = properties.item(j).getChildNodes();
+							for (int l = 0; l < states.getLength(); l++)
+								if (states.item(l).getNodeType() != 3)
+									machineList.get(machineList.size() - 1).addState();
+
+							machineList.get(machineList.size() - 1)
+									.setCurrState(
+											machineList.get(machineList.size() - 1).getStates()
+													.get(Integer.parseInt(machines.item(i).getAttributes()
+															.getNamedItem("Initial_State").getNodeValue()
+															.substring(1))));
+
+							for (int l = 0; l < states.getLength(); l++) {
+								if (states.item(l).getNodeType() != 3) {
+									NodeList translations = states.item(l).getChildNodes();
+									for (int m = 0; m < translations.getLength(); m++) {
+										if (translations.item(m).getNodeType() != 3) {
+											machineList.get(machineList.size() - 1).getStates()
+													.get(Integer.parseInt(states.item(l).getAttributes()
+															.getNamedItem("id").getNodeValue().substring(1)))
+													.addTranslation(new core.Mealy.Translation(
+															translations.item(m).getAttributes().getNamedItem("input")
+																	.getNodeValue().charAt(0),
+															translations.item(m).getAttributes().getNamedItem("output")
+																	.getNodeValue().charAt(0),
+															machineList.get(machineList.size() - 1).getStates()
+																	.get(Integer.parseInt(translations.item(m)
+																			.getAttributes().getNamedItem("target")
+																			.getNodeValue().substring(1)))));
+										}
+									}
+								}
+							}
+
+						}
+					}
+
+				}
+			}
 		}
 
-		for (core.Mealy.Machine m : machineList) {
-			System.out.println(m);
-		}
 		return machineList;
 	}
 
@@ -75,12 +134,11 @@ public class XMLHandler {
 
 	private Node createNode(Document doc, core.Mealy.Machine machine) {
 		Element currMachine = doc.createElement("Machine");
-		currMachine.setAttribute("name", machine.getName());
+		currMachine.setAttribute("id", machine.getID());
 		currMachine.setAttribute("Initial_State",
 				"q" + Integer.toString(machine.getStates().indexOf(machine.getCurrState())));
 
 		Element iAlphabet = doc.createElement("InputAlphabet");
-		currMachine.appendChild(iAlphabet);
 
 		for (Character currChar : machine.getiAlphabet()) {
 			Element currChr = doc.createElement("Symbol");
@@ -88,21 +146,22 @@ public class XMLHandler {
 			iAlphabet.appendChild(currChr);
 		}
 
+		currMachine.appendChild(iAlphabet);
+
 		Element oAlphabet = doc.createElement("OutputAlphabet");
-		currMachine.appendChild(oAlphabet);
 
 		for (Character currChar : machine.getoAlphabet()) {
 			Element currChr = doc.createElement("Symbol");
 			currChr.appendChild(doc.createTextNode(Character.toString(currChar)));
 			oAlphabet.appendChild(currChr);
 		}
+		currMachine.appendChild(oAlphabet);
 
 		Element states = doc.createElement("States");
-		currMachine.appendChild(states);
 
 		for (core.Mealy.State currState : machine.getStates()) {
 			Element state = doc.createElement("State");
-			states.appendChild(state);
+
 			state.setAttribute("id", "q" + machine.getStates().indexOf(currState));
 
 			for (core.Mealy.Translation currTranslation : currState.getTranslations()) {
@@ -110,10 +169,12 @@ public class XMLHandler {
 				translation.setAttribute("input", Character.toString(currTranslation.getInput()));
 				translation.setAttribute("output", Character.toString(currTranslation.getOutput()));
 				translation.setAttribute("target",
-						Integer.toString(machine.getStates().indexOf(currTranslation.getTarget()) + 1));
+						"q" + Integer.toString(machine.getStates().indexOf(currTranslation.getTarget())));
 				state.appendChild(translation);
 			}
+			states.appendChild(state);
 		}
+		currMachine.appendChild(states);
 		return currMachine;
 	}
 

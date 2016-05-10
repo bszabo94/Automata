@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import core.Moore.MachineExpection;
+
 public class Main {
 
 	public static void main(String[] args) {
@@ -33,6 +35,23 @@ public class Main {
 		
 		System.out.println(m.isValid());
 		
+		String teststring = "it's working! yaay";
+		Machine tester = new Machine("tester");
+		
+		Set<Character> testinput = tester.getSymbols(teststring);
+		Set<Character> testoutput = new HashSet<Character>(testinput);
+		testoutput.addAll(Arrays.asList('Ł', 'ß', '$', '<', '#', '>', '@'));
+		try {
+			tester.init(testinput, testoutput);
+		} catch (MachineExpection e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+
+		System.out.println(tester);
+		System.out.println(tester.encode(teststring));
+		System.out.println(tester.decode(tester.encode(teststring)));
 		
 	}
 //		Set<Character> in = new HashSet<Character>(Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g'));

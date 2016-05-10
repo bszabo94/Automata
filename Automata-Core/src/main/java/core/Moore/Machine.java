@@ -2,26 +2,28 @@ package core.Moore;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Machine {
 	private List<State> states;
-	private String name;
+	private String id;
 	private Set<Character> iAlphabet, oAlphabet;
 	private State currState;
 
-	public Machine(String name) {
+	public Machine(String id) {
 		this.states = new ArrayList<State>();
-		this.name = name;
+		this.id = id;
 		this.currState = null;
 	}
 
-	public Machine(String name, Set<Character> iAlphabet, Set<Character> oAlphabet) throws MachineExpection {
-		this.name = name;
+	public Machine(String id, Set<Character> iAlphabet, Set<Character> oAlphabet) throws MachineExpection {
+		this.id = id;
 		this.states = new ArrayList<State>();
 		this.currState = null;
 		this.init(iAlphabet, oAlphabet);
@@ -43,12 +45,12 @@ public class Machine {
 		return currState;
 	}
 
-	public String getName() {
-		return name;
+	public String getID() {
+		return id;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setID(String id) {
+		this.id = id;
 	}
 
 	public void setiAlphabet(Set<Character> iAlphabet) {
@@ -72,8 +74,8 @@ public class Machine {
 	}
 
 	public void init(Set<Character> iAlphabet, Set<Character> oAlphabet) throws MachineExpection {
-		if (iAlphabet.size() != oAlphabet.size())
-			throw new MachineExpection("Input and Output Alphabets must contain the same amount of letters!");
+		if (iAlphabet.size() > oAlphabet.size())
+			throw new MachineExpection("Input Alphabet must contain equal or less symbols than the Output Alphabet!");
 		this.iAlphabet = iAlphabet;
 		this.oAlphabet = oAlphabet;
 
@@ -97,40 +99,6 @@ public class Machine {
 	}
 
 	public boolean isValid() {
-		// if (this.iAlphabet.size() != this.oAlphabet.size() || this.currState
-		// == null)
-		// return false;
-		//
-		// Set<Integer> compareRange = IntStream.range(0,
-		// this.iAlphabet.size()).boxed().collect(Collectors.toSet());
-		//
-		// Set<Character> checkIAlphabet = new HashSet<Character>();
-		// Set<Character> checkOAlphabet = new HashSet<Character>();
-		// Set<Integer> checkRange = new HashSet<Integer>();
-		//
-		// for (State currState : this.states) {
-		// if (currState.getTranslations().size() != this.states.size())
-		// return false;
-		//
-		// checkIAlphabet.clear();
-		// checkRange.clear();
-		//
-		// for (Translation currTranslation : currState.getTranslations()) {
-		// checkIAlphabet.add(currTranslation.getInput());
-		// checkRange.add(this.states.indexOf(currTranslation.getTarget()));
-		// }
-		//
-		// if (!checkIAlphabet.equals(this.iAlphabet) ||
-		// !checkRange.equals(compareRange))
-		// return false;
-		//
-		// checkOAlphabet.add(currState.getOutput());
-		// }
-		//
-		// if (!checkOAlphabet.equals(this.oAlphabet)) {
-		// // System.out.println("debug");
-		// return false;
-		// }
 
 		if (this.currState == null) {
 			return false;
@@ -185,23 +153,25 @@ public class Machine {
 	}
 
 	public String encode(String input) {
+		State temp = this.currState;
 		String output = new String();
 		for (int i = 0; i < input.length(); i++) {
 			output += this.step(input.charAt(i), true);
 		}
 
-		this.currState = this.states.get(0);
+		this.currState = temp;
 
 		return output;
 	}
 
 	public String decode(String input) {
+		State temp = this.currState;
 		String output = new String();
 		for (int i = 0; i < input.length(); i++) {
 			output += this.step(input.charAt(i), false);
 		}
 
-		this.currState = this.states.get(0);
+		this.currState = temp;
 
 		return output;
 
@@ -217,7 +187,7 @@ public class Machine {
 
 	@SuppressWarnings("unused")
 	public core.Mealy.Machine toMealy() {
-		core.Mealy.Machine m = new core.Mealy.Machine(this.getName());
+		core.Mealy.Machine m = new core.Mealy.Machine(this.getID());
 
 		m.setiAlphabet(new HashSet<Character>(this.iAlphabet));
 		m.setoAlphabet(new HashSet<Character>(this.oAlphabet));
@@ -239,14 +209,38 @@ public class Machine {
 		return m;
 	}
 
+	public Set<Character> getSymbols(String sentence) {
+		Set<Character> symbols = new HashSet<Character>();
+		for (int i = 0; i < sentence.length(); i++) {
+			symbols.add(sentence.charAt(i));
+		}
+
+		return symbols;
+	}
+
+	public Map<State, List<Translation>> getTranslations() {
+		Map<State, List<Translation>> allTranslation = new HashMap<State, List<Translation>>();
+
+		for (State currState : this.states) {
+			allTranslation.put(currState, new ArrayList<Translation>());
+			for (Translation currTranslation : currState.getTranslations()) {
+				allTranslation.get(currState).add(currTranslation);
+			}
+		}
+
+		return allTranslation;
+	}
+
 	@Override
 	public String toString() {
 		String output = new String();
-		output += "Machine: " + this.name + "\n";
+		output += "Machine: " + this.id + "\n";
+		output += "Input Alphabet: " + this.iAlphabet + "\n";
+		output += "Output Alphabet: " + this.oAlphabet + "\n";
 		for (State currState : this.states) {
 			output += "---State " + this.states.indexOf(currState) + " | output: " + currState.getOutput() + "---\n";
 			for (Translation currTranslation : currState.getTranslations()) {
-				output += "[ " + currTranslation.getInput() + " ---> "
+				output += "[ " + currTranslation.getInput() + " ---> q"
 						+ this.states.indexOf(currTranslation.getTarget()) + " ]\n";
 			}
 		}
