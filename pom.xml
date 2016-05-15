@@ -6,9 +6,17 @@
 	<version>1.0</version>
 	<packaging>pom</packaging>
 	<name>Automata</name>
+	<developers>
+		<developer>
+			<id>bszabo</id>
+			<name>Bence Szabó</name>
+			<email>bszabo@wenetto.hu</email>
+		</developer>
+	</developers>
 	<modules>
 		<module>Automata-Core</module>
 		<module>Automata-IO</module>
+		<module>Automata-GUI</module>
 	</modules>
 	<scm>
 		<url>https://github.com/bszabo94/Automata</url>

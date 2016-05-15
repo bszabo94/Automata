@@ -29,6 +29,10 @@ public class Machine {
 		this.init(iAlphabet, oAlphabet);
 	}
 
+	public String getType() {
+		return "Moore";
+	}
+
 	public List<State> getStates() {
 		return states;
 	}

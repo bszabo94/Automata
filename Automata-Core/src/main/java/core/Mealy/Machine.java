@@ -10,7 +10,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import core.Moore.MachineExpection;
 
 public class Machine {
 	private List<State> states;
@@ -24,11 +23,15 @@ public class Machine {
 		this.currState = null;
 	}
 
-	public Machine(String id, Set<Character> iAlphabet, Set<Character> oAlphabet) throws MachineExpection {
+	public Machine(String id, Set<Character> iAlphabet, Set<Character> oAlphabet) throws MachineException {
 		this.id = id;
 		this.states = new ArrayList<State>();
 		this.currState = null;
 		this.init(iAlphabet, oAlphabet);
+	}
+
+	public String getType() {
+		return "Mealy";
 	}
 
 	public List<State> getStates() {
@@ -71,9 +74,9 @@ public class Machine {
 		return oAlphabet;
 	}
 
-	public void init(Set<Character> iAlphabet, Set<Character> oAlphabet) throws MachineExpection {
+	public void init(Set<Character> iAlphabet, Set<Character> oAlphabet) throws MachineException {
 		if (iAlphabet.size() > oAlphabet.size())
-			throw new MachineExpection("Input Alphabet must contain equal or less symbols than the Output Alphabet!");
+			throw new MachineException("Input Alphabet must contain equal or less symbols than the Output Alphabet!");
 		this.iAlphabet = iAlphabet;
 		this.oAlphabet = oAlphabet;
 
@@ -157,7 +160,7 @@ public class Machine {
 			output += this.step(input.charAt(i), true);
 		}
 
-//		this.currState = this.states.get(0);
+		// this.currState = this.states.get(0);
 		this.currState = temp;
 
 		return output;
@@ -170,14 +173,14 @@ public class Machine {
 			output += this.step(input.charAt(i), false);
 		}
 
-//		this.currState = this.states.get(0);
+		// this.currState = this.states.get(0);
 		this.currState = temp;
 
 		return output;
 
 	}
 
-	public void processData(String data) throws MachineExpection {
+	public void processData(String data) throws MachineException {
 		Set<Character> base = new HashSet<Character>();
 		for (int i = 0; i < data.length(); i++) {
 			base.add(data.charAt(i));
@@ -251,7 +254,6 @@ public class Machine {
 		return allTranslation;
 	}
 
-	@Override
 	public String toString() {
 		String output = new String();
 		output += "Machine: " + this.id + "\n";

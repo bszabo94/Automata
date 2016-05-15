@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+
 public class Main {
 
 	public static void main(String[] args) {
@@ -23,15 +24,34 @@ public class Main {
 							Arrays.asList('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c')),
 					new HashSet<Character>(
 							Arrays.asList('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c'))));
+			
+			List<core.Moore.Machine> moorelist = new ArrayList<core.Moore.Machine>();
+			moorelist.add(new core.Moore.Machine("letters", new HashSet<Character>(Arrays.asList('a', 'b', 'c')),
+					new HashSet<Character>(Arrays.asList('d', 'e', 'f'))));
+			moorelist.add(new core.Moore.Machine("numbers", new HashSet<Character>(Arrays.asList('1', '2', '3')),
+					new HashSet<Character>(Arrays.asList('3', '4', '5'))));
+			moorelist.add(new core.Moore.Machine("spec", new HashSet<Character>(Arrays.asList('$', 'Ł', 'ß')),
+					new HashSet<Character>(Arrays.asList('ß', ' ', 'ł'))));
+			moorelist.add(new core.Moore.Machine("big",
+					new HashSet<Character>(
+							Arrays.asList('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c')),
+					new HashSet<Character>(
+							Arrays.asList('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c'))));
 
 			XMLHandler a = new XMLHandler();
 
 			String filename = "testIO.xml";
+			String filename2 = "testMooreIO.xml";
+			List<core.Moore.Machine> importedmoore = new ArrayList<core.Moore.Machine>();
+			
 
-			a.doExport(filename, mlist);
+			a.exportMealy(filename, mlist);
+			a.exportMoore(filename2, moorelist);
+			importedmoore = a.importMoore(filename2);
+			System.out.println(importedmoore);
 			XMLHandler b = new XMLHandler();
 
-			List<core.Mealy.Machine> myList = b.doImport(filename);
+			List<core.Mealy.Machine> myList = b.importMealy(filename);
 			core.Mealy.Machine myMealy = myList.get(myList.size() - 1);
 			core.Moore.Machine myMoore = myMealy.toMoore();
 			core.Mealy.Machine mySecond = myMoore.toMealy();
