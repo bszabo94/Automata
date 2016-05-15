@@ -22,7 +22,7 @@ public class Machine {
 		this.currState = null;
 	}
 
-	public Machine(String id, Set<Character> iAlphabet, Set<Character> oAlphabet) throws MachineExpection {
+	public Machine(String id, Set<Character> iAlphabet, Set<Character> oAlphabet) throws MachineException {
 		this.id = id;
 		this.states = new ArrayList<State>();
 		this.currState = null;
@@ -77,9 +77,9 @@ public class Machine {
 		return oAlphabet;
 	}
 
-	public void init(Set<Character> iAlphabet, Set<Character> oAlphabet) throws MachineExpection {
+	public void init(Set<Character> iAlphabet, Set<Character> oAlphabet) throws MachineException {
 		if (iAlphabet.size() > oAlphabet.size())
-			throw new MachineExpection("Input Alphabet must contain equal or less symbols than the Output Alphabet!");
+			throw new MachineException("Input Alphabet must contain equal or less symbols than the Output Alphabet!");
 		this.iAlphabet = iAlphabet;
 		this.oAlphabet = oAlphabet;
 
@@ -181,7 +181,7 @@ public class Machine {
 
 	}
 
-	public void processData(String data) throws MachineExpection {
+	public void processData(String data) throws MachineException {
 		Set<Character> base = new HashSet<Character>();
 		for (int i = 0; i < data.length(); i++) {
 			base.add(data.charAt(i));
@@ -191,7 +191,7 @@ public class Machine {
 
 	@SuppressWarnings("unused")
 	public core.Mealy.Machine toMealy() {
-		core.Mealy.Machine m = new core.Mealy.Machine(this.getID());
+		core.Mealy.Machine m = new core.Mealy.Machine(this.id + " --> Mealy");
 
 		m.setiAlphabet(new HashSet<Character>(this.iAlphabet));
 		m.setoAlphabet(new HashSet<Character>(this.oAlphabet));

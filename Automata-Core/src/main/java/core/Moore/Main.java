@@ -45,7 +45,7 @@ public class Main {
 					return;
 				}
 
-			} catch (MachineExpection e) {
+			} catch (MachineException e) {
 				e.printStackTrace();
 			}
 

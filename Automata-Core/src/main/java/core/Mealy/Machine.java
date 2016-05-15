@@ -189,7 +189,7 @@ public class Machine {
 	}
 
 	public core.Moore.Machine toMoore() {
-		core.Moore.Machine m = new core.Moore.Machine(this.id);
+		core.Moore.Machine m = new core.Moore.Machine(this.id + " --> Moore");
 		m.setiAlphabet(new HashSet<Character>(this.iAlphabet));
 		m.setoAlphabet(new HashSet<Character>(this.oAlphabet));
 

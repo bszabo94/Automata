@@ -1,11 +1,11 @@
 package core.Mealy;
 
 
-import core.Moore.MachineExpection;
+import core.Moore.MachineException;
 
 public class Main {
 
-	public static void main(String[] args) throws MachineExpection {
+	public static void main(String[] args) throws MachineException {
 		// Set<Character> in = new HashSet<Character>(Arrays.asList('a', 'b'));
 		// Set<Character> out = new HashSet<Character>(Arrays.asList('0', '1',
 		// '2'));

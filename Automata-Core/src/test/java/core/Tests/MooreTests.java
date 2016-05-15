@@ -1,6 +1,6 @@
 package core.Tests;
 
-import core.Mealy.*;
+import core.Moore.*;
 
 import static org.junit.Assert.*;
 
@@ -15,11 +15,11 @@ import java.util.Set;
 
 import org.junit.Test;
 
-public class MealyTests {
+public class MooreTests {
 
 	@Test
 	public void testGetType() {
-		assertEquals("Mealy", new Machine("").getType());
+		assertEquals("Moore", new Machine("").getType());
 	}
 
 	@Test
@@ -113,28 +113,28 @@ public class MealyTests {
 
 		assertFalse(m.isValid());
 
-		m.addState();
-
+		m.addState('a');
+		m.addState('b');
 		assertFalse(m.isValid());
 
 		m.setCurrState(m.getStates().get(0));
 
 		assertFalse(m.isValid());
 
-		m.getStates().get(0).addTranslation(new Translation('a', 'a', m.getStates().get(0)));
-		m.getStates().get(0).addTranslation(new Translation('b', 'b', m.getStates().get(0)));
+		m.getStates().get(0).addTranslation(new Translation('a', m.getStates().get(0)));
+		m.getStates().get(0).addTranslation(new Translation('b', m.getStates().get(1)));
+
+		assertFalse(m.isValid());
+
+		m.getStates().get(1).addTranslation(new Translation('a', m.getStates().get(0)));
+		m.getStates().get(1).addTranslation(new Translation('b', m.getStates().get(1)));
 
 		assertTrue(m.isValid());
 
-		m.addState();
-		m.getStates().get(1).addTranslation(new Translation('a', 'e', m.getStates().get(0)));
-		m.getStates().get(1).addTranslation(new Translation('b', 'f', m.getStates().get(1)));
+		m.addState('e');
 
-		assertTrue(m.isValid());
-
-		m.addState();
-		m.getStates().get(2).addTranslation(new Translation('a', 'f', m.getStates().get(1)));
-		m.getStates().get(2).addTranslation(new Translation('b', 'f', m.getStates().get(1)));
+		m.getStates().get(2).addTranslation(new Translation('a', m.getStates().get(1)));
+		m.getStates().get(2).addTranslation(new Translation('b', m.getStates().get(1)));
 
 		assertFalse(m.isValid());
 	}
@@ -161,30 +161,30 @@ public class MealyTests {
 	public void testStep() {
 
 		// q0:
-		// a --> 0 --> q0
-		// b --> 1 --> q1
+		// a --> q1
+		// b --> q0
 		// q1:
-		// a --> 1 --> q1
-		// b --> 0 --> q0
+		// a --> q1
+		// b --> q0
 
 		Machine m = new Machine("Tester");
 		m.setiAlphabet(new HashSet<Character>(Arrays.asList('a', 'b')));
 		m.setiAlphabet(new HashSet<Character>(Arrays.asList('1', '0')));
-		m.addState();
-		m.addState();
+		m.addState('1');
+		m.addState('0');
 		m.setCurrState(m.getStates().get(0));
 
-		m.getStates().get(0).addTranslation(new Translation('a', '0', m.getStates().get(0)));
-		m.getStates().get(0).addTranslation(new Translation('b', '1', m.getStates().get(1)));
-		m.getStates().get(1).addTranslation(new Translation('a', '1', m.getStates().get(1)));
-		m.getStates().get(1).addTranslation(new Translation('b', '0', m.getStates().get(0)));
+		m.getStates().get(0).addTranslation(new Translation('a', m.getStates().get(1)));
+		m.getStates().get(0).addTranslation(new Translation('b', m.getStates().get(0)));
+		m.getStates().get(1).addTranslation(new Translation('a', m.getStates().get(1)));
+		m.getStates().get(1).addTranslation(new Translation('b', m.getStates().get(0)));
 
 		if (!m.step('a', true).equals('0'))
 			fail("step method not working correctly.");
 		if (!m.step('b', true).equals('1'))
 			fail("step method not working correctly.");
-		assertSame(m.getCurrState(), m.getStates().get(1));
-		if (!m.step('1', false).equals('a'))
+		assertSame(m.getCurrState(), m.getStates().get(0));
+		if (!m.step('1', false).equals('b'))
 			fail("step method not working correctly.");
 		assertEquals(null, m.step('u', true));
 
@@ -202,14 +202,14 @@ public class MealyTests {
 		Machine m = new Machine("Tester");
 		m.setiAlphabet(new HashSet<Character>(Arrays.asList('a', 'b')));
 		m.setiAlphabet(new HashSet<Character>(Arrays.asList('1', '0')));
-		m.addState();
-		m.addState();
+		m.addState('0');
+		m.addState('1');
 		m.setCurrState(m.getStates().get(0));
 
-		m.getStates().get(0).addTranslation(new Translation('a', '0', m.getStates().get(0)));
-		m.getStates().get(0).addTranslation(new Translation('b', '1', m.getStates().get(1)));
-		m.getStates().get(1).addTranslation(new Translation('a', '1', m.getStates().get(1)));
-		m.getStates().get(1).addTranslation(new Translation('b', '0', m.getStates().get(0)));
+		m.getStates().get(0).addTranslation(new Translation('a', m.getStates().get(0)));
+		m.getStates().get(0).addTranslation(new Translation('b', m.getStates().get(1)));
+		m.getStates().get(1).addTranslation(new Translation('a', m.getStates().get(1)));
+		m.getStates().get(1).addTranslation(new Translation('b', m.getStates().get(0)));
 
 		assertEquals("0100011000", m.encode("abbaababaa"));
 	}
