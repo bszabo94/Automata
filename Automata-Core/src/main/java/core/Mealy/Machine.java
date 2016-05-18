@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import javafx.beans.property.SimpleStringProperty;
 
 public class Machine {
 	private List<State> states;
@@ -30,6 +31,14 @@ public class Machine {
 		this.init(iAlphabet, oAlphabet);
 	}
 
+	public SimpleStringProperty getIDProperty() {
+		return new SimpleStringProperty(this.id);
+	}
+
+	public SimpleStringProperty getNbmOfStatesProperty() {
+		return new SimpleStringProperty(Integer.toString(this.states.size()));
+	}
+
 	public String getType() {
 		return "Mealy";
 	}
@@ -44,6 +53,10 @@ public class Machine {
 
 	public void addState() {
 		this.states.add(new State());
+	}
+
+	public void addState(int n) {
+		this.states.add(new State(n));
 	}
 
 	public String getID() {
@@ -85,15 +98,15 @@ public class Machine {
 		List<Integer> range = IntStream.range(0, iAlphabet.size()).boxed().collect(Collectors.toList());
 
 		for (int i = 0; i < iAlphabet.size(); i++)
-			this.addState();
+			this.addState(i);
 
 		for (State currState : this.states) {
 			Collections.shuffle(outputAlphabet);
 			Collections.shuffle(range);
 
 			for (int i = 0; i < iAlphabet.size(); i++) {
-				currState.addTranslation(
-						new Translation(inputAlphabet.get(i), outputAlphabet.get(i), this.states.get(range.get(i))));
+				currState.addTranslation(new Translation(inputAlphabet.get(i), outputAlphabet.get(i), currState,
+						this.states.get(range.get(i))));
 			}
 		}
 
@@ -212,7 +225,7 @@ public class Machine {
 
 		for (State currState : symbolDistributor.keySet()) {
 			for (Character currChar : symbolDistributor.get(currState)) {
-				m.addState(currChar);
+				m.addState(currChar, 0);
 				translationDistributor.get(currState).put(currChar, m.getStates().get(m.getStates().size() - 1));
 				if (m.getCurrState() == null && this.currState == currState) {
 					m.setCurrState(m.getStates().get(m.getStates().size() - 1));
@@ -223,7 +236,7 @@ public class Machine {
 		for (State currState : this.states) {
 			for (Translation currTranslation : currState.getTranslations()) {
 				for (core.Moore.State tempState : translationDistributor.get(currState).values()) {
-					tempState.addTranslation(new core.Moore.Translation(currTranslation.getInput(),
+					tempState.addTranslation(new core.Moore.Translation(tempState, currTranslation.getInput(),
 							translationDistributor.get(currTranslation.getTarget()).get(currTranslation.getOutput())));
 				}
 			}
@@ -254,6 +267,19 @@ public class Machine {
 		return allTranslation;
 	}
 
+	public List<Translation> getTranslationsAsList() {
+		List<Translation> translations = new ArrayList<Translation>();
+
+		for (State currState : this.getTranslations().keySet()) {
+			for (Translation currTranslation : this.getTranslations().get(currState)) {
+				translations.add(currTranslation);
+				currTranslation.setParent(currState);
+			}
+		}
+
+		return translations;
+	}
+
 	public String toString() {
 		String output = new String();
 		output += "Machine: " + this.id + "\n";
@@ -262,8 +288,9 @@ public class Machine {
 		for (State currState : this.states) {
 			output += "---State " + this.states.indexOf(currState) + "---\n";
 			for (Translation currTranslation : currState.getTranslations()) {
-				output += "[ " + currTranslation.getInput() + " ---> " + currTranslation.getOutput() + " / q"
-						+ this.states.indexOf(currTranslation.getTarget()) + " ]\n";
+				output += "[ " + currTranslation.getParent().getID() + "/" + currTranslation.getInput() + " ---> "
+						+ currTranslation.getOutput() + " / q" + this.states.indexOf(currTranslation.getTarget())
+						+ " ]\n";
 			}
 		}
 		return output;

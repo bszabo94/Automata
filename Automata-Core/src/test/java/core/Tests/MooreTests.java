@@ -121,20 +121,20 @@ public class MooreTests {
 
 		assertFalse(m.isValid());
 
-		m.getStates().get(0).addTranslation(new Translation('a', m.getStates().get(0)));
-		m.getStates().get(0).addTranslation(new Translation('b', m.getStates().get(1)));
+		m.getStates().get(0).addTranslation(new Translation(m.getStates().get(0), 'a', m.getStates().get(0)));
+		m.getStates().get(0).addTranslation(new Translation(m.getStates().get(0), 'b', m.getStates().get(1)));
 
 		assertFalse(m.isValid());
 
-		m.getStates().get(1).addTranslation(new Translation('a', m.getStates().get(0)));
-		m.getStates().get(1).addTranslation(new Translation('b', m.getStates().get(1)));
+		m.getStates().get(1).addTranslation(new Translation(m.getStates().get(1), 'a', m.getStates().get(0)));
+		m.getStates().get(1).addTranslation(new Translation(m.getStates().get(1), 'b', m.getStates().get(1)));
 
 		assertTrue(m.isValid());
 
 		m.addState('e');
 
-		m.getStates().get(2).addTranslation(new Translation('a', m.getStates().get(1)));
-		m.getStates().get(2).addTranslation(new Translation('b', m.getStates().get(1)));
+		m.getStates().get(2).addTranslation(new Translation(m.getStates().get(2), 'a', m.getStates().get(1)));
+		m.getStates().get(2).addTranslation(new Translation(m.getStates().get(2), 'b', m.getStates().get(1)));
 
 		assertFalse(m.isValid());
 	}
@@ -174,10 +174,10 @@ public class MooreTests {
 		m.addState('0');
 		m.setCurrState(m.getStates().get(0));
 
-		m.getStates().get(0).addTranslation(new Translation('a', m.getStates().get(1)));
-		m.getStates().get(0).addTranslation(new Translation('b', m.getStates().get(0)));
-		m.getStates().get(1).addTranslation(new Translation('a', m.getStates().get(1)));
-		m.getStates().get(1).addTranslation(new Translation('b', m.getStates().get(0)));
+		m.getStates().get(0).addTranslation(new Translation(m.getStates().get(0), 'a', m.getStates().get(1)));
+		m.getStates().get(0).addTranslation(new Translation(m.getStates().get(0), 'b', m.getStates().get(0)));
+		m.getStates().get(1).addTranslation(new Translation(m.getStates().get(1), 'a', m.getStates().get(1)));
+		m.getStates().get(1).addTranslation(new Translation(m.getStates().get(1), 'b', m.getStates().get(0)));
 
 		if (!m.step('a', true).equals('0'))
 			fail("step method not working correctly.");
@@ -206,10 +206,10 @@ public class MooreTests {
 		m.addState('1');
 		m.setCurrState(m.getStates().get(0));
 
-		m.getStates().get(0).addTranslation(new Translation('a', m.getStates().get(0)));
-		m.getStates().get(0).addTranslation(new Translation('b', m.getStates().get(1)));
-		m.getStates().get(1).addTranslation(new Translation('a', m.getStates().get(1)));
-		m.getStates().get(1).addTranslation(new Translation('b', m.getStates().get(0)));
+		m.getStates().get(0).addTranslation(new Translation(m.getStates().get(0), 'a', m.getStates().get(0)));
+		m.getStates().get(0).addTranslation(new Translation(m.getStates().get(0), 'b', m.getStates().get(1)));
+		m.getStates().get(1).addTranslation(new Translation(m.getStates().get(1), 'a', m.getStates().get(1)));
+		m.getStates().get(1).addTranslation(new Translation(m.getStates().get(1), 'b', m.getStates().get(0)));
 
 		assertEquals("0100011000", m.encode("abbaababaa"));
 	}

@@ -2,12 +2,29 @@ package core.Mealy;
 
 public class Translation {
 	private Character input, output;
-	private State target;
+	private State parent, target;
 
-	public Translation(Character input, Character output, State target) {
+	public Translation() {
+		this.parent = null;
+		this.target = null;
+		this.input = null;
+		this.output = null;
+	}
+
+	public Translation(Character input, Character output, State parent, State target) {
+		this();
 		this.input = input;
 		this.output = output;
 		this.target = target;
+		this.parent = parent;
+	}
+
+	public State getParent() {
+		return parent;
+	}
+
+	public void setParent(State parent) {
+		this.parent = parent;
 	}
 
 	public Character getInput() {

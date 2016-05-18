@@ -121,20 +121,20 @@ public class MealyTests {
 
 		assertFalse(m.isValid());
 
-		m.getStates().get(0).addTranslation(new Translation('a', 'a', m.getStates().get(0)));
-		m.getStates().get(0).addTranslation(new Translation('b', 'b', m.getStates().get(0)));
+		m.getStates().get(0).addTranslation(new Translation('a', 'a',m.getStates().get(0), m.getStates().get(0)));
+		m.getStates().get(0).addTranslation(new Translation('b', 'b',m.getStates().get(0), m.getStates().get(0)));
 
 		assertTrue(m.isValid());
 
 		m.addState();
-		m.getStates().get(1).addTranslation(new Translation('a', 'e', m.getStates().get(0)));
-		m.getStates().get(1).addTranslation(new Translation('b', 'f', m.getStates().get(1)));
+		m.getStates().get(1).addTranslation(new Translation('a', 'e',m.getStates().get(1), m.getStates().get(0)));
+		m.getStates().get(1).addTranslation(new Translation('b', 'f',m.getStates().get(1), m.getStates().get(1)));
 
 		assertTrue(m.isValid());
 
 		m.addState();
-		m.getStates().get(2).addTranslation(new Translation('a', 'f', m.getStates().get(1)));
-		m.getStates().get(2).addTranslation(new Translation('b', 'f', m.getStates().get(1)));
+		m.getStates().get(2).addTranslation(new Translation('a', 'f',m.getStates().get(2), m.getStates().get(1)));
+		m.getStates().get(2).addTranslation(new Translation('b', 'f',m.getStates().get(2), m.getStates().get(1)));
 
 		assertFalse(m.isValid());
 	}
@@ -174,10 +174,10 @@ public class MealyTests {
 		m.addState();
 		m.setCurrState(m.getStates().get(0));
 
-		m.getStates().get(0).addTranslation(new Translation('a', '0', m.getStates().get(0)));
-		m.getStates().get(0).addTranslation(new Translation('b', '1', m.getStates().get(1)));
-		m.getStates().get(1).addTranslation(new Translation('a', '1', m.getStates().get(1)));
-		m.getStates().get(1).addTranslation(new Translation('b', '0', m.getStates().get(0)));
+		m.getStates().get(0).addTranslation(new Translation('a', '0', m.getStates().get(0), m.getStates().get(0)));
+		m.getStates().get(0).addTranslation(new Translation('b', '1', m.getStates().get(0), m.getStates().get(1)));
+		m.getStates().get(1).addTranslation(new Translation('a', '1', m.getStates().get(1), m.getStates().get(1)));
+		m.getStates().get(1).addTranslation(new Translation('b', '0', m.getStates().get(1), m.getStates().get(0)));
 
 		if (!m.step('a', true).equals('0'))
 			fail("step method not working correctly.");
@@ -206,10 +206,10 @@ public class MealyTests {
 		m.addState();
 		m.setCurrState(m.getStates().get(0));
 
-		m.getStates().get(0).addTranslation(new Translation('a', '0', m.getStates().get(0)));
-		m.getStates().get(0).addTranslation(new Translation('b', '1', m.getStates().get(1)));
-		m.getStates().get(1).addTranslation(new Translation('a', '1', m.getStates().get(1)));
-		m.getStates().get(1).addTranslation(new Translation('b', '0', m.getStates().get(0)));
+		m.getStates().get(0).addTranslation(new Translation('a', '0', m.getStates().get(0), m.getStates().get(0)));
+		m.getStates().get(0).addTranslation(new Translation('b', '1', m.getStates().get(0), m.getStates().get(1)));
+		m.getStates().get(1).addTranslation(new Translation('a', '1', m.getStates().get(1), m.getStates().get(1)));
+		m.getStates().get(1).addTranslation(new Translation('b', '0', m.getStates().get(1), m.getStates().get(0)));
 
 		assertEquals("0100011000", m.encode("abbaababaa"));
 	}

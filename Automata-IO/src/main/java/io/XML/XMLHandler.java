@@ -24,14 +24,13 @@ import org.xml.sax.SAXException;
 
 public class XMLHandler {
 
-	public List<core.Mealy.Machine> importMealy(String filename)
+	public static List<core.Mealy.Machine> importMealy(File inFile)
 			throws SAXException, IOException, ParserConfigurationException {
 		List<core.Mealy.Machine> machineList = new ArrayList<core.Mealy.Machine>();
 
 		// Document doc =
 		// DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(this.getClass().getResourceAsStream(filename));
-		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-				.parse(ClassLoader.getSystemResourceAsStream(filename));
+		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inFile);
 
 		// Document doc =
 		// DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(this.getClass().getResourceAsStream(filename));
@@ -70,7 +69,8 @@ public class XMLHandler {
 						NodeList states = properties.item(j).getChildNodes();
 						for (int l = 0; l < states.getLength(); l++)
 							if (states.item(l).getNodeType() == Node.ELEMENT_NODE)
-								machineList.get(machineList.size() - 1).addState();
+								machineList.get(machineList.size() - 1).addState(Integer.parseInt(
+										states.item(l).getAttributes().getNamedItem("id").getNodeValue().substring(1)));
 
 						machineList.get(machineList.size() - 1)
 								.setCurrState(machineList.get(machineList.size() - 1).getStates()
@@ -91,6 +91,10 @@ public class XMLHandler {
 														translations.item(m).getAttributes().getNamedItem("output")
 																.getNodeValue().charAt(0),
 														machineList.get(machineList.size() - 1).getStates()
+																.get(Integer.parseInt(states.item(l).getAttributes()
+																		.getNamedItem("id").getNodeValue()
+																		.substring(1))),
+														machineList.get(machineList.size() - 1).getStates()
 																.get(Integer.parseInt(translations.item(m)
 																		.getAttributes().getNamedItem("target")
 																		.getNodeValue().substring(1)))));
@@ -108,17 +112,12 @@ public class XMLHandler {
 		return machineList;
 	}
 
-	public List<core.Moore.Machine> importMoore(String filename)
+	public static List<core.Moore.Machine> importMoore(File inFile)
 			throws SAXException, IOException, ParserConfigurationException {
 		List<core.Moore.Machine> machineList = new ArrayList<core.Moore.Machine>();
 
-		// Document doc =
-		// DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(this.getClass().getResourceAsStream(filename));
-		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-				.parse(ClassLoader.getSystemResourceAsStream(filename));
+		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inFile);
 
-		// Document doc =
-		// DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(this.getClass().getResourceAsStream(filename));
 		Set<Character> alphabet = new HashSet<Character>();
 
 		NodeList machines = doc.getDocumentElement().getChildNodes();
@@ -157,8 +156,11 @@ public class XMLHandler {
 							NodeList states = properties.item(j).getChildNodes();
 							for (int l = 0; l < states.getLength(); l++)
 								if (states.item(l).getNodeType() == Node.ELEMENT_NODE)
-									machineList.get(machineList.size() - 1).addState(states.item(l).getAttributes()
-											.getNamedItem("output").getNodeValue().charAt(0));
+									machineList.get(machineList.size() - 1).addState(
+											states.item(l).getAttributes().getNamedItem("output").getNodeValue()
+													.charAt(0),
+											Integer.parseInt(states.item(l).getAttributes().getNamedItem("id")
+													.getNodeValue().substring(1)));
 
 							machineList.get(machineList.size() - 1)
 									.setCurrState(
@@ -176,6 +178,10 @@ public class XMLHandler {
 													.get(Integer.parseInt(states.item(l).getAttributes()
 															.getNamedItem("id").getNodeValue().substring(1)))
 													.addTranslation(new core.Moore.Translation(
+															machineList.get(machineList.size() - 1).getStates()
+																	.get(Integer.parseInt(states.item(l).getAttributes()
+																			.getNamedItem("id").getNodeValue()
+																			.substring(1))),
 															translations.item(m).getAttributes().getNamedItem("input")
 																	.getNodeValue().charAt(0),
 															machineList.get(machineList.size() - 1).getStates()
@@ -197,7 +203,7 @@ public class XMLHandler {
 		return machineList;
 	}
 
-	public void exportMealy(String filename, List<core.Mealy.Machine> machines)
+	public static void exportMealy(File outFile, List<core.Mealy.Machine> machines)
 			throws ParserConfigurationException, TransformerException {
 
 		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
@@ -210,7 +216,8 @@ public class XMLHandler {
 		}
 
 		Transformer transf = TransformerFactory.newInstance().newTransformer();
-		StreamResult sr = new StreamResult(new File(filename));
+		// StreamResult sr = new StreamResult(new File(filename));
+		StreamResult sr = new StreamResult(outFile);
 
 		DOMSource src = new DOMSource(doc);
 
@@ -221,7 +228,7 @@ public class XMLHandler {
 
 	}
 
-	public void exportMoore(String filename, List<core.Moore.Machine> machines)
+	public static void exportMoore(File outFile, List<core.Moore.Machine> machines)
 			throws ParserConfigurationException, TransformerException {
 
 		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
@@ -234,7 +241,7 @@ public class XMLHandler {
 		}
 
 		Transformer transf = TransformerFactory.newInstance().newTransformer();
-		StreamResult sr = new StreamResult(new File(filename));
+		StreamResult sr = new StreamResult(outFile);
 
 		DOMSource src = new DOMSource(doc);
 
@@ -245,7 +252,7 @@ public class XMLHandler {
 
 	}
 
-	private Node createNode(Document doc, core.Mealy.Machine machine) {
+	private static Node createNode(Document doc, core.Mealy.Machine machine) {
 		Element currMachine = doc.createElement("Machine");
 		currMachine.setAttribute("id", machine.getID());
 		currMachine.setAttribute("Initial_State",
@@ -291,7 +298,7 @@ public class XMLHandler {
 		return currMachine;
 	}
 
-	private Node createNode(Document doc, core.Moore.Machine machine) {
+	private static Node createNode(Document doc, core.Moore.Machine machine) {
 		Element currMachine = doc.createElement("Machine");
 		currMachine.setAttribute("id", machine.getID());
 		currMachine.setAttribute("Initial_State",

@@ -4,17 +4,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class State {
+	private String id;
+
 	private List<Translation> translations;
 	private Character output;
 
 	public State() {
 		this.translations = new ArrayList<Translation>();
 		this.output = null;
+		this.id = null;
 	}
-
+	
 	public State(Character output) {
+		this.id = null;
 		this.output = output;
 		this.translations = new ArrayList<Translation>();
+	}
+
+	public State(Character output, String id) {
+		this.id = id;
+		this.output = output;
+		this.translations = new ArrayList<Translation>();
+	}
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public void addTranslation(Translation newTranslation) {

@@ -8,5 +8,3 @@ target/
 */target/
 *.log
 */*.log
-*/testIO.xml
-*/*Test.xml
