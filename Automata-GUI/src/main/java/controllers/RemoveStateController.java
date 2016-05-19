@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import main.Main;
 
@@ -50,13 +51,14 @@ public class RemoveStateController {
 			}
 			handleButtonCancel(event);
 		} catch (Exception e) {
-			main.showWarning(e.getMessage());
+			main.showPopup(e.getMessage(), AlertType.WARNING);
 		}
 
 	}
 
 	@FXML
 	private void initialize() {
+		//TODO
 //		if (main.getSelectedMealy() != null) {
 //			removeTitle.setText("Remove State from " + main.getSelectedMealy().getID());
 //		}

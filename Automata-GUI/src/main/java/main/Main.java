@@ -124,8 +124,8 @@ public class Main extends Application {
 		}
 	}
 
-	public void showWarning(String message) {
-		Alert alert = new Alert(AlertType.ERROR);
+	public void showPopup(String message, AlertType alertType) {
+		Alert alert = new Alert(alertType);
 		alert.setHeaderText(null);
 		alert.setTitle("Warning!");
 		alert.setContentText(message);

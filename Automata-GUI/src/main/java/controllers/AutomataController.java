@@ -9,16 +9,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -129,6 +127,12 @@ public class AutomataController {
 
 	@FXML
 	TextArea textareaIA;
+
+	@FXML
+	TextArea textAreaInput;
+
+	@FXML
+	TextArea textAreaOutput;
 
 	@FXML
 	private void initialize() {
@@ -318,11 +322,11 @@ public class AutomataController {
 
 	@FXML
 	private void handleButtonRemoveState(ActionEvent event) {
-		if (main.getSelectedMealy() == null && main.getSelectedMoore() == null){
-			main.showWarning("Select a machine first!");
+		if (main.getSelectedMealy() == null && main.getSelectedMoore() == null) {
+			main.showPopup("Select a machine first!", AlertType.WARNING);
 			return;
 		}
-			
+
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("/fxml/RemoveState.fxml"));
@@ -341,6 +345,70 @@ public class AutomataController {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
+	}
+
+	@FXML
+	private void handleButtonAddState(ActionEvent event) {
+		// TODO
+	}
+
+	@FXML
+	private void handleButtonValidate(ActionEvent event) {
+		if (main.getSelectedMealy() != null) {
+			String isValid = main.getSelectedMealy().isValid() ? "valid" : "invalid";
+			main.showPopup(main.getSelectedMealy().getID()+ " is " + isValid + ".", AlertType.INFORMATION);
+			return;
+		} else if (main.getSelectedMoore() != null) {
+			String isValid = main.getSelectedMoore().isValid() ? "valid" : "invalid";
+			main.showPopup(main.getSelectedMoore().getID()+ " is " + isValid + ".", AlertType.INFORMATION);
+			return;
+		} else {
+			main.showPopup("Select a Machine first!", AlertType.WARNING);
+		}
+	}
+
+	@FXML
+	private void handleButtonEncode(ActionEvent event) {
+		// TODO legyen validate
+		if (main.getSelectedMealy() != null) {
+			textAreaOutput.setText(main.getSelectedMealy().encode(textAreaInput.getText()));
+			return;
+		} else if (main.getSelectedMoore() != null) {
+			textAreaOutput.setText(main.getSelectedMoore().encode(textAreaInput.getText()));
+			return;
+		} else {
+			main.showPopup("Select a Machine first!", AlertType.WARNING);
+		}
+	}
+
+	@FXML
+	private void handleButtonDecode(ActionEvent event) {
+		// TODO legyen validate
+		if (main.getSelectedMealy() != null) {
+			textAreaOutput.setText(main.getSelectedMealy().decode(textAreaInput.getText()));
+			return;
+		}
+		if (main.getSelectedMoore() != null) {
+			textAreaOutput.setText(main.getSelectedMoore().decode(textAreaInput.getText()));
+			return;
+		}
+
+	}
+
+	@FXML
+	private void handleButtonAddTranslation(ActionEvent event) {
+		// TODO
+	}
+
+	@FXML
+	private void handleButtonRemoveTranslation(ActionEvent event) {
+		// TODO
+	}
+
+	@FXML
+	private void handleButtonRead(ActionEvent event) {
+		// TODO
+		// újablak, radiobutonnel
 	}
 
 }

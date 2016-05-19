@@ -7,6 +7,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import main.Main;
 
@@ -69,7 +70,7 @@ public class NewMachineController {
 		} catch (core.Moore.MachineException | core.Mealy.MachineException e) {
 			// TODO
 			// System.out.println(e.getMessage());
-			main.showWarning(e.getMessage());
+			main.showPopup(e.getMessage(), AlertType.WARNING);
 		}
 	}
 
