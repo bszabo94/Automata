@@ -10,7 +10,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import javafx.beans.property.SimpleStringProperty;
 
 public class Machine {
 	private List<State> states;
@@ -18,10 +17,14 @@ public class Machine {
 	private Set<Character> iAlphabet, oAlphabet;
 	private State currState;
 
-	public Machine(String id) {
+	public Machine(String id) throws MachineException {
+		if (id == null || id.equals(""))
+			throw new MachineException("The Machine must have an ID.");
 		this.states = new ArrayList<State>();
 		this.id = id;
 		this.currState = null;
+		this.iAlphabet = new HashSet<Character>();
+		this.oAlphabet = new HashSet<Character>();
 	}
 
 	public Machine(String id, Set<Character> iAlphabet, Set<Character> oAlphabet) throws MachineException {
@@ -29,14 +32,6 @@ public class Machine {
 		this.states = new ArrayList<State>();
 		this.currState = null;
 		this.init(iAlphabet, oAlphabet);
-	}
-
-	public SimpleStringProperty getIDProperty() {
-		return new SimpleStringProperty(this.id);
-	}
-
-	public SimpleStringProperty getNbmOfStatesProperty() {
-		return new SimpleStringProperty(Integer.toString(this.states.size()));
 	}
 
 	public String getType() {
@@ -125,8 +120,12 @@ public class Machine {
 
 		Set<Character> checkIAlphabet = new HashSet<Character>();
 		List<Character> checkOAlphabet = new ArrayList<Character>();
+		Set<String> checkStateID = new HashSet<String>();
 
 		for (State currState : this.states) {
+			if (checkStateID.contains(currState.getID()))
+				return false;
+			checkStateID.add(currState.getID());
 			checkIAlphabet.clear();
 			checkOAlphabet.clear();
 			if (this.iAlphabet.size() != currState.getTranslations().size())
@@ -205,7 +204,7 @@ public class Machine {
 	}
 
 	@SuppressWarnings("unused")
-	public core.Mealy.Machine toMealy() {
+	public core.Mealy.Machine toMealy() throws core.Mealy.MachineException {
 		core.Mealy.Machine m = new core.Mealy.Machine(this.id + " --> Mealy");
 
 		m.setiAlphabet(new HashSet<Character>(this.iAlphabet));
@@ -263,6 +262,27 @@ public class Machine {
 		return translations;
 	}
 
+	public void removeState(String id) throws MachineException {
+		State s = null;
+		for (State currState : this.states)
+			if(id.equals(currState.getID())){
+				s = currState;
+				break;
+			}
+		if (s == null)
+			throw new MachineException("There is no State with the given ID.");
+		for (State currState : this.states) {
+			for (int i = 0; i < currState.getTranslations().size(); i++) {
+				if (currState.getTranslations().get(i).getParent() == s
+						|| currState.getTranslations().get(i).getTarget() == s) {
+					currState.getTranslations().remove(currState.getTranslations().get(i));
+					i--;
+				}
+			}
+		}
+		this.states.remove(s);
+	}
+
 	@Override
 	public String toString() {
 		String output = new String();
@@ -272,7 +292,7 @@ public class Machine {
 		for (State currState : this.states) {
 			output += "---State " + this.states.indexOf(currState) + " | output: " + currState.getOutput() + "---\n";
 			for (Translation currTranslation : currState.getTranslations()) {
-				output += "[ " + currTranslation.getParent().getId() + "/" + currTranslation.getInput() + " ---> q"
+				output += "[ " + currTranslation.getParent().getID() + "/" + currTranslation.getInput() + " ---> q"
 						+ this.states.indexOf(currTranslation.getTarget()) + " ]\n";
 			}
 		}

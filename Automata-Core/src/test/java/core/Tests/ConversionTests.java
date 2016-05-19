@@ -44,7 +44,7 @@ public class ConversionTests {
 				assertNotSame(moore.decode(testinput), mealy.decode(testinput));
 			}
 
-		} catch (core.Moore.MachineException e) {
+		} catch (core.Moore.MachineException | core.Mealy.MachineException e) {
 			fail(e.getMessage());
 		}
 
@@ -84,7 +84,7 @@ public class ConversionTests {
 				assertNotSame(moore.decode(testinput), mealy.decode(testinput));
 			}
 
-		} catch (core.Mealy.MachineException e) {
+		} catch (core.Moore.MachineException | core.Mealy.MachineException e) {
 			fail(e.getMessage());
 		}
 

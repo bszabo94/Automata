@@ -27,7 +27,7 @@ public class State {
 		this.translations = new ArrayList<Translation>();
 	}
 	
-	public String getId() {
+	public String getID() {
 		return id;
 	}
 

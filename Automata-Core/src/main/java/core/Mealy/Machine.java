@@ -18,13 +18,19 @@ public class Machine {
 	private Set<Character> iAlphabet, oAlphabet;
 	private State currState;
 
-	public Machine(String id) {
+	public Machine(String id) throws MachineException {
+		if (id == null || id.equals(""))
+			throw new MachineException("The Machine must have an ID.");
 		this.states = new ArrayList<State>();
 		this.id = id;
 		this.currState = null;
+		this.iAlphabet = new HashSet<Character>();
+		this.oAlphabet = new HashSet<Character>();
 	}
 
 	public Machine(String id, Set<Character> iAlphabet, Set<Character> oAlphabet) throws MachineException {
+		if (id == null)
+			throw new MachineException("The Machine must have an ID.");
 		this.id = id;
 		this.states = new ArrayList<State>();
 		this.currState = null;
@@ -121,7 +127,12 @@ public class Machine {
 
 		Set<Character> checkIAlphabet = new HashSet<Character>();
 		List<Character> checkOAlphabet = new ArrayList<Character>();
+		Set<String> checkStateID = new HashSet<String>();
+		
 		for (State currState : this.states) {
+			if(checkStateID.contains(currState.getID()))
+				return false;
+			checkStateID.add(currState.getID());
 			checkIAlphabet.clear();
 			checkOAlphabet.clear();
 			if (this.iAlphabet.size() != currState.getTranslations().size())
@@ -201,7 +212,7 @@ public class Machine {
 		this.init(base, base);
 	}
 
-	public core.Moore.Machine toMoore() {
+	public core.Moore.Machine toMoore() throws core.Moore.MachineException {
 		core.Moore.Machine m = new core.Moore.Machine(this.id + " --> Moore");
 		m.setiAlphabet(new HashSet<Character>(this.iAlphabet));
 		m.setoAlphabet(new HashSet<Character>(this.oAlphabet));
@@ -223,9 +234,12 @@ public class Machine {
 			translationDistributor.put(currState, new HashMap<Character, core.Moore.State>());
 		}
 
+		int i = 0;
+
 		for (State currState : symbolDistributor.keySet()) {
 			for (Character currChar : symbolDistributor.get(currState)) {
-				m.addState(currChar, 0);
+				m.addState(currChar, i);
+				i++;
 				translationDistributor.get(currState).put(currChar, m.getStates().get(m.getStates().size() - 1));
 				if (m.getCurrState() == null && this.currState == currState) {
 					m.setCurrState(m.getStates().get(m.getStates().size() - 1));
@@ -278,6 +292,28 @@ public class Machine {
 		}
 
 		return translations;
+	}
+
+	public void removeState(String id) throws MachineException {
+		State s = null;
+		for (State currState : this.states)
+			if(id.equals(currState.getID())){
+				s = currState;
+				break;
+			}
+		if (s == null)
+			throw new MachineException("There is no State with the given ID.");
+				
+		for (State currState : this.states) {
+			for (int i = 0; i < currState.getTranslations().size(); i++) {
+				if (currState.getTranslations().get(i).getParent() == s
+						|| currState.getTranslations().get(i).getTarget() == s) {
+					currState.getTranslations().remove(currState.getTranslations().get(i));
+					i--;
+				}
+			}
+		}
+		this.states.remove(s);
 	}
 
 	public String toString() {

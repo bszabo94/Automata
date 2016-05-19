@@ -18,12 +18,12 @@ import org.junit.Test;
 public class MooreTests {
 
 	@Test
-	public void testGetType() {
+	public void testGetType() throws MachineException {
 		assertEquals("Moore", new Machine("").getType());
 	}
 
 	@Test
-	public void testAddGetStates() {
+	public void testAddGetStates() throws MachineException {
 		Machine m = new Machine("tester");
 		List<State> compareStates = new ArrayList<State>();
 		for (int i = 0; i < 100; i++) {
@@ -39,7 +39,7 @@ public class MooreTests {
 	}
 
 	@Test
-	public void testGetCurrState() {
+	public void testGetCurrState() throws MachineException {
 		Machine m = new Machine("tester");
 		try {
 			m.processData("Data for processing.");
@@ -53,13 +53,13 @@ public class MooreTests {
 	}
 
 	@Test
-	public void testGetID() {
+	public void testGetID() throws MachineException {
 		String id = "Tester Machine";
 		assertEquals(id, new Machine(id).getID());
 	}
 
 	@Test
-	public void testSetID() {
+	public void testSetID() throws MachineException {
 		String id = "Tester Machine";
 		Machine m = new Machine("Old ID");
 		m.setID("Tester Machine");
@@ -95,7 +95,7 @@ public class MooreTests {
 	}
 
 	@Test
-	public void testSetCurrState() {
+	public void testSetCurrState() throws MachineException {
 		State testState = new State();
 		Machine m = new Machine("Tester");
 		m.setCurrState(testState);
@@ -103,7 +103,7 @@ public class MooreTests {
 	}
 
 	@Test
-	public void testIsValid() {
+	public void testIsValid() throws MachineException {
 		Machine m = new Machine("Tester");
 
 		assertFalse(m.isValid());
@@ -140,7 +140,7 @@ public class MooreTests {
 	}
 
 	@Test
-	public void testInit() {
+	public void testInit() throws MachineException {
 		Machine m = new Machine("Tester");
 		if (m.getCurrState() != null)
 			fail("Current State must be null before initialization.");
@@ -158,7 +158,7 @@ public class MooreTests {
 	}
 
 	@Test
-	public void testStep() {
+	public void testStep() throws MachineException {
 
 		// q0:
 		// a --> q1
@@ -191,7 +191,7 @@ public class MooreTests {
 	}
 
 	@Test
-	public void testEncode() {
+	public void testEncode() throws MachineException {
 		// q0:
 		// a --> 0 --> q0
 		// b --> 1 --> q1
@@ -242,7 +242,7 @@ public class MooreTests {
 	}
 
 	@Test
-	public void testGetSymbols() {
+	public void testGetSymbols() throws MachineException {
 		Machine m = new Machine("Tester");
 		String sentence = "This is a sentence to test getSymbol method.";
 		assertEquals(m.getSymbols(sentence),
