@@ -34,12 +34,81 @@ import java.util.stream.IntStream;
 
 import javafx.beans.property.SimpleStringProperty;
 
+/**
+ * <h1>Mealy Machine</h1>
+ * <P>
+ * Describes the representation of a Mealy Machine, a deterministic finite-state
+ * machine.
+ * 
+ * @author bszabo
+ * @version 1.0
+ * @see <a href="https://en.wikipedia.org/wiki/Mealy_machine">Mealy Machines on
+ *      Wikipedia</a>
+ *
+ */
 public class Machine {
+
+	/**
+	 * A list that contains the states of the Mealy Machine.
+	 * 
+	 * @see core.Mealy.State State
+	 */
 	private List<State> states;
+
+	/**
+	 * The ID or name of the Machine.
+	 * 
+	 * @see core.Mealy.Machine#getID() getID()
+	 * @see core.Mealy.Machine#setID() setID()
+	 */
 	private String id;
-	private Set<Character> iAlphabet, oAlphabet;
+
+	/**
+	 * Input Alphabet of the Machine.
+	 * <P>
+	 * A finite set of characters, which the Machine can use as input.
+	 * 
+	 * @see core.Mealy.Machine#getiAlphabet() getiAlphabet()
+	 * @see core.Mealy.Machine#setiAlphabet(Set) setiAlphabet(Set)
+	 */
+	private Set<Character> iAlphabet;
+
+	/**
+	 * Output Alphabet of the Machine.
+	 * <P>
+	 * A finite set of characters, which the Machine can use as output.
+	 * 
+	 * @see core.Mealy.Machine#getoAlphabet() getoAlphabet()
+	 * @see core.Mealy.Machine#setoAlphabet(Set) setoAlphabet(Set)
+	 */
+	private Set<Character> oAlphabet;
+
+	/**
+	 * Current State of the Machine.
+	 * <P>
+	 * The initial state of the Machine. This can only change TODO
+	 * 
+	 * @see core.Mealy.Machine#getoAlphabet() getoAlphabet()
+	 * @see core.Mealy.Machine#setoAlphabet(Set) setoAlphabet(Set)
+	 */
 	private State currState;
 
+	/**
+	 * <h1>Constructor of Machine</h1>
+	 * 
+	 * <P>
+	 * Creates a Machine object with empty input and output alphabets, and
+	 * without states and translations. Throws
+	 * {@link core.Mealy.MachineException MachineException} if the given id is
+	 * an empty string.
+	 * 
+	 * @param id
+	 *            The value of the {@code id} will be the ID of the Machine.
+	 * 
+	 * @throws core.Mealy.MachineException
+	 * @see core.Mealy.Machine#Machine(String, Set, Set) Machine(String, Set,
+	 *      Set)
+	 */
 	public Machine(String id) throws MachineException {
 		if (id == null || id.equals(""))
 			throw new MachineException("The Machine must have an ID.");
@@ -50,6 +119,26 @@ public class Machine {
 		this.oAlphabet = new HashSet<Character>();
 	}
 
+	/**
+	 * <h1>Constructor of Machine</h1>
+	 * 
+	 * <P>
+	 * Creates a Machine object with the given id, input and output alphabets,
+	 * and without states and translations. Throws
+	 * {@link core.Mealy.MachineException MachineException} if the given id is
+	 * an empty string.
+	 * 
+	 * @param id
+	 *            The value of the {@code id} will be the ID of the Machine.
+	 * @param iAlphabet
+	 *            The set of characters, which will be used as input alphabet
+	 *            for the machine.
+	 * @param oAlphabet
+	 *            The set of characters, which will be used as output alphabet
+	 *            for the machine.
+	 * @see core.Mealy.Machine#Machine(String) Machine(String)
+	 * @throws core.Mealy.MachineException
+	 */
 	public Machine(String id, Set<Character> iAlphabet, Set<Character> oAlphabet) throws MachineException {
 		if (id == null)
 			throw new MachineException("The Machine must have an ID.");
@@ -57,14 +146,6 @@ public class Machine {
 		this.states = new ArrayList<State>();
 		this.currState = null;
 		this.init(iAlphabet, oAlphabet);
-	}
-
-	public SimpleStringProperty getIDProperty() {
-		return new SimpleStringProperty(this.id);
-	}
-
-	public SimpleStringProperty getNbmOfStatesProperty() {
-		return new SimpleStringProperty(Integer.toString(this.states.size()));
 	}
 
 	public String getType() {
@@ -79,10 +160,32 @@ public class Machine {
 		return currState;
 	}
 
+	/**
+	 * Adds a new state to the machine without an id.
+	 * 
+	 * <P>
+	 * Creates a new {@link core.Mealy.State State} object without and id, and
+	 * puts it to the list, which contains the states of this machine.
+	 * 
+	 * @see core.Mealy.Machine#addState(int) addState(int)
+	 */
 	public void addState() {
 		this.states.add(new State());
 	}
 
+	/**
+	 * Adds a new state to the machine without an id.
+	 * 
+	 * <P>
+	 * Creates a new {@link core.Mealy.State State} object with an id of "qn",
+	 * where n stands for the number given as parameter, and puts it to the
+	 * list, which contains the states of this machine.
+	 * 
+	 * @param n
+	 *            A number, which determines the generated {@code id} of the new
+	 *            state;
+	 * @see core.Mealy.Machine#addState() addState()
+	 */
 	public void addState(int n) {
 		this.states.add(new State(n));
 	}
@@ -115,6 +218,25 @@ public class Machine {
 		return oAlphabet;
 	}
 
+	/**
+	 * Initializes the machine.
+	 * 
+	 * <P>
+	 * Initializes the machine with the given input and output alphabets. Sets
+	 * the input and output alphabets of the machine to be equal to the ones
+	 * given as parameters, as well as creates as many states as the number of
+	 * characters the input alphabet contains, then fills up with random
+	 * translations, assigning a translation to each input character in every
+	 * state. Throws a {@link core.Mealy.MachineException MachineException} if
+	 * the input alphabet contains more character than the output alphabet. The
+	 * machine initialized with this method is considered valid.
+	 * 
+	 * @param iAlphabet
+	 *            The set of characters, that will be used as input alphabet.
+	 * @param oAlphabet
+	 *            The set of characters, that will be used as output alphabet.
+	 * @throws core.Mealy.MachineException
+	 */
 	public void init(Set<Character> iAlphabet, Set<Character> oAlphabet) throws MachineException {
 		if (iAlphabet.size() > oAlphabet.size())
 			throw new MachineException("Input Alphabet must contain equal or less symbols than the Output Alphabet!");
@@ -142,6 +264,13 @@ public class Machine {
 
 	}
 
+	/**
+	 * Checks whether the machine is valid or not.
+	 * 
+	 * <P>
+	 * A machine is considered valid if it has an initial state.
+	 * @returns True, if the machine is valid, and false otherwise.
+	 */
 	public boolean isValid() {
 		if (this.currState == null) {
 			return false;
@@ -150,9 +279,9 @@ public class Machine {
 		Set<Character> checkIAlphabet = new HashSet<Character>();
 		List<Character> checkOAlphabet = new ArrayList<Character>();
 		Set<String> checkStateID = new HashSet<String>();
-		
+
 		for (State currState : this.states) {
-			if(checkStateID.contains(currState.getID()))
+			if (checkStateID.contains(currState.getID()))
 				return false;
 			checkStateID.add(currState.getID());
 			checkIAlphabet.clear();
@@ -319,13 +448,13 @@ public class Machine {
 	public void removeState(String id) throws MachineException {
 		State s = null;
 		for (State currState : this.states)
-			if(id.equals(currState.getID())){
+			if (id.equals(currState.getID())) {
 				s = currState;
 				break;
 			}
 		if (s == null)
 			throw new MachineException("There is no State with the given ID.");
-				
+
 		for (State currState : this.states) {
 			for (int i = 0; i < currState.getTranslations().size(); i++) {
 				if (currState.getTranslations().get(i).getParent() == s
