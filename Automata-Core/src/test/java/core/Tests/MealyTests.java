@@ -1,5 +1,27 @@
 package core.Tests;
 
+/*
+ * #%L
+ * Automata-Core
+ * %%
+ * Copyright (C) 2016 Faculty of Informatics, University of Debrecen
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
 import core.Mealy.*;
 
 import static org.junit.Assert.*;
@@ -113,7 +135,7 @@ public class MealyTests {
 
 		assertFalse(m.isValid());
 
-		m.addState();
+		m.addState(0);
 
 		assertFalse(m.isValid());
 
@@ -126,13 +148,13 @@ public class MealyTests {
 
 		assertTrue(m.isValid());
 
-		m.addState();
+		m.addState(1);
 		m.getStates().get(1).addTranslation(new Translation('a', 'e',m.getStates().get(1), m.getStates().get(0)));
 		m.getStates().get(1).addTranslation(new Translation('b', 'f',m.getStates().get(1), m.getStates().get(1)));
 
 		assertTrue(m.isValid());
 
-		m.addState();
+		m.addState(2);
 		m.getStates().get(2).addTranslation(new Translation('a', 'f',m.getStates().get(2), m.getStates().get(1)));
 		m.getStates().get(2).addTranslation(new Translation('b', 'f',m.getStates().get(2), m.getStates().get(1)));
 
