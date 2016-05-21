@@ -378,11 +378,11 @@ public class AutomataController {
 	private void handleButtonValidate(ActionEvent event) {
 		if (main.getSelectedMealy() != null) {
 			String isValid = main.getSelectedMealy().isValid() ? "valid" : "invalid";
-			main.showPopup(main.getSelectedMealy().getID()+ " is " + isValid + ".", AlertType.INFORMATION);
+			main.showPopup(main.getSelectedMealy().getID() + " is " + isValid + ".", AlertType.INFORMATION);
 			return;
 		} else if (main.getSelectedMoore() != null) {
 			String isValid = main.getSelectedMoore().isValid() ? "valid" : "invalid";
-			main.showPopup(main.getSelectedMoore().getID()+ " is " + isValid + ".", AlertType.INFORMATION);
+			main.showPopup(main.getSelectedMoore().getID() + " is " + isValid + ".", AlertType.INFORMATION);
 			return;
 		} else {
 			main.showPopup("Select a Machine first!", AlertType.WARNING);
@@ -392,27 +392,35 @@ public class AutomataController {
 	@FXML
 	private void handleButtonEncode(ActionEvent event) {
 		// TODO legyen validate
-		if (main.getSelectedMealy() != null) {
-			textAreaOutput.setText(main.getSelectedMealy().encode(textAreaInput.getText()));
-			return;
-		} else if (main.getSelectedMoore() != null) {
-			textAreaOutput.setText(main.getSelectedMoore().encode(textAreaInput.getText()));
-			return;
-		} else {
-			main.showPopup("Select a Machine first!", AlertType.WARNING);
+		try {
+			if (main.getSelectedMealy() != null) {
+				textAreaOutput.setText(main.getSelectedMealy().encode(textAreaInput.getText()));
+				return;
+			} else if (main.getSelectedMoore() != null) {
+				textAreaOutput.setText(main.getSelectedMoore().encode(textAreaInput.getText()));
+				return;
+			} else {
+				main.showPopup("Select a Machine first!", AlertType.WARNING);
+			}
+		} catch (core.Mealy.MachineException e) {
+			e.printStackTrace();
 		}
 	}
 
 	@FXML
 	private void handleButtonDecode(ActionEvent event) {
 		// TODO legyen validate
-		if (main.getSelectedMealy() != null) {
-			textAreaOutput.setText(main.getSelectedMealy().decode(textAreaInput.getText()));
-			return;
-		}
-		if (main.getSelectedMoore() != null) {
-			textAreaOutput.setText(main.getSelectedMoore().decode(textAreaInput.getText()));
-			return;
+		try {
+			if (main.getSelectedMealy() != null) {
+				textAreaOutput.setText(main.getSelectedMealy().decode(textAreaInput.getText()));
+				return;
+			}
+			if (main.getSelectedMoore() != null) {
+				textAreaOutput.setText(main.getSelectedMoore().decode(textAreaInput.getText()));
+				return;
+			}
+		} catch (core.Mealy.MachineException /* | core.Moore.MachineException */ e) {
+			e.printStackTrace();
 		}
 
 	}

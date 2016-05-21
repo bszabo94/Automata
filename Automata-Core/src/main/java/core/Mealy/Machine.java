@@ -32,8 +32,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import javafx.beans.property.SimpleStringProperty;
-
 /**
  * <h1>Mealy Machine</h1>
  * <P>
@@ -86,10 +84,11 @@ public class Machine {
 	/**
 	 * Current State of the Machine.
 	 * <P>
-	 * The initial state of the Machine. This can only change TODO
+	 * The initial state of the Machine. This can only changed by the
+	 * {@link core.Mealy.Machine#step(Character, boolean) step(Character,
+	 * boolean)} method.
 	 * 
-	 * @see core.Mealy.Machine#getoAlphabet() getoAlphabet()
-	 * @see core.Mealy.Machine#setoAlphabet(Set) setoAlphabet(Set)
+	 * @see core.Mealy.Machine#step(Character, boolean) step(Character, boolean)
 	 */
 	private State currState;
 
@@ -179,7 +178,8 @@ public class Machine {
 	 * <P>
 	 * Creates a new {@link core.Mealy.State State} object with an id of "qn",
 	 * where n stands for the number given as parameter, and puts it to the
-	 * list, which contains the states of this machine.
+	 * {@link core.Mealy.Machine#states list}, which contains the states of this
+	 * machine.
 	 * 
 	 * @param n
 	 *            A number, which determines the generated {@code id} of the new
@@ -268,8 +268,24 @@ public class Machine {
 	 * Checks whether the machine is valid or not.
 	 * 
 	 * <P>
-	 * A machine is considered valid if it has an initial state.
-	 * @returns True, if the machine is valid, and false otherwise.
+	 * A machine is considered valid if:
+	 * <ul>
+	 * <li>it has an initial state (the reference does not point to null)</li>
+	 * <li>each of it's states has unique id</li>
+	 * <li>each states contains a translation for all of the characters of the
+	 * input alphabet</li>
+	 * <li>does not assign the same output to different inputs</li>
+	 * <li>each state assign only one translation to each symbol of the input
+	 * alphabet</li>
+	 * <li>no translation contains symbol as input or output that is not a
+	 * member of the corresponding set</li>
+	 * </ul>
+	 * <P>
+	 * Following these, the machine will not be ambiguous, both encoding and
+	 * decoding will be clear.
+	 * 
+	 * 
+	 * @return True, if the machine is valid, and false otherwise.
 	 */
 	public boolean isValid() {
 		if (this.currState == null) {
@@ -309,8 +325,37 @@ public class Machine {
 		return true;
 	}
 
-	public Character step(Character input, boolean encoding) {
+	/**
+	 * Moves the machine, according to the given input.
+	 * 
+	 * One unit of the encoding, or decoding process. Whether the
+	 * {@code encoding} parameter is set to true or false, the method will
+	 * simulate encoding or decoding in the machine.
+	 * <ul>
+	 * <li>If encoding, the method will iterate over the translations of the
+	 * current state of the machine and, once found the translation with the
+	 * same input as given in {@code input}, it will set the current state of
+	 * the machine to the target state, and return the output symbol of the
+	 * translation assigned to the given input.</li>
+	 * <li>If decoding, the method will iterate over the translations of the
+	 * current state of the machine and, once found the translation with the
+	 * same output as given in {@code input}, it will set the current state of
+	 * the machine to the target state, and return the input symbol of the
+	 * translation assigned to the given output.</li>
+	 * </ul>
+	 * 
+	 * @param input
+	 *            The symbol we use as input.
+	 * @param encoding
+	 *            True will set the method to encoding, and false will set to
+	 *            decoding.
+	 * @return The symbol od the corresponding translation.
+	 * @throws core.Mealy.MachineException
+	 */
+	public Character step(Character input, boolean encoding) throws MachineException {
 		if (encoding) {
+			if (!this.iAlphabet.contains(input))
+				throw new MachineException("The given symbol is not in the input alphabet.");
 			for (Translation currTranslation : this.currState.getTranslations()) {
 				if (currTranslation.getInput().equals(input)) {
 					this.currState = currTranslation.getTarget();
@@ -318,6 +363,8 @@ public class Machine {
 				}
 			}
 		} else {
+			if (!this.oAlphabet.contains(input))
+				throw new MachineException("The given symbol is not in the output alphabet.");
 			for (Translation currTranslation : this.currState.getTranslations()) {
 				if (currTranslation.getOutput().equals(input)) {
 					this.currState = currTranslation.getTarget();
@@ -328,7 +375,20 @@ public class Machine {
 		return null;
 	}
 
-	public String encode(String input) {
+	/**
+	 * Encodes the given string.
+	 * 
+	 * Uses the given string as input, and encodes it with the usage of the
+	 * machine. Throws {@link core.Mealy.MachineException MachineException} if
+	 * one character of the given string is not included in the input alphabet
+	 * of the machine.
+	 * 
+	 * @param input
+	 *            The string it encodes.
+	 * @return The output string after the encoding.
+	 * @throws MachineException
+	 */
+	public String encode(String input) throws MachineException {
 		State temp = this.currState;
 		String output = new String();
 		for (int i = 0; i < input.length(); i++) {
@@ -341,7 +401,20 @@ public class Machine {
 		return output;
 	}
 
-	public String decode(String input) {
+	/**
+	 * Decodes the given string.
+	 * 
+	 * Uses the given string as input, and Decodes it with the usage of the
+	 * machine. Throws {@link core.Mealy.MachineException MachineException} if
+	 * one character of the given string is not included in the output alphabet
+	 * of the machine.
+	 * 
+	 * @param input
+	 *            The string it decodes.
+	 * @return The output string after the decoding.
+	 * @throws MachineException
+	 */
+	public String decode(String input) throws MachineException {
 		State temp = this.currState;
 		String output = new String();
 		for (int i = 0; i < input.length(); i++) {
@@ -355,14 +428,43 @@ public class Machine {
 
 	}
 
-	public void processData(String data) throws MachineException {
-		Set<Character> base = new HashSet<Character>();
-		for (int i = 0; i < data.length(); i++) {
-			base.add(data.charAt(i));
+	/**
+	 * Creates a machine that is capable of encoding and decoding the given
+	 * text.
+	 * 
+	 * Initaializes a machine, which input and output symbols are equal. All
+	 * symbols contained by the alphabets are characters of the given text in
+	 * the {@code data} parameter.
+	 * 
+	 * @param data
+	 *            The text the machine uses the characters of.
+	 */
+	public void processData(String data) {
+		Set<Character> base = getSymbols(data);
+		try {
+			this.init(base, base);
+		} catch (MachineException e) {
+			// can never reach here
+			e.printStackTrace();
 		}
-		this.init(base, base);
+
 	}
 
+	/**
+	 * Converts the Mealy Machine to a Moore Machine.
+	 * <P>
+	 * Converts the Mealy Machine to a Moore Machine. The difference between the
+	 * two, is that while the Mealy uses inputs given in the translations, the
+	 * Moore stores the outputs in the states, and not the translations.
+	 * Therefore all translations leading to the same state can return only the
+	 * same output. If there are translations leading to the same state with
+	 * different output in the initial Mealy Machine, then new states will be
+	 * introduced in the new Moore Machine with the corresponding outputs, and
+	 * reassigned new translations.
+	 * 
+	 * @return The Moore Machine converted from the Mealy Machine.
+	 * @throws core.Moore.MachineException
+	 */
 	public core.Moore.Machine toMoore() throws core.Moore.MachineException {
 		core.Moore.Machine m = new core.Moore.Machine(this.id + " --> Moore");
 		m.setiAlphabet(new HashSet<Character>(this.iAlphabet));
@@ -410,6 +512,17 @@ public class Machine {
 		return m;
 	}
 
+	/**
+	 * Creates a Set containing the characters of the given string.
+	 * 
+	 * Extracts all characters from the given string, and creates a Set of
+	 * Characters from the extracted symbols.
+	 * 
+	 * @param sentence
+	 *            The sentence or text we extracts the smybols from.
+	 * @return The set of characters, containing all the symbols found in the
+	 *         given sentence or text.
+	 */
 	public Set<Character> getSymbols(String sentence) {
 		Set<Character> symbols = new HashSet<Character>();
 		for (int i = 0; i < sentence.length(); i++) {
@@ -419,6 +532,17 @@ public class Machine {
 		return symbols;
 	}
 
+	/**
+	 * Creates a map for the state-translation connections of the machine.
+	 * 
+	 * <P>
+	 * Creates a map where keys will be the states of the machine, and for each
+	 * state assigns a list, that contains all the translations of the machine
+	 * where the state used as key is the parent of the translations.
+	 * 
+	 * @return A Map object, defining all state-translation connections of the
+	 *         machine.
+	 */
 	public Map<State, List<Translation>> getTranslations() {
 		Map<State, List<Translation>> allTranslation = new HashMap<State, List<Translation>>();
 
@@ -432,6 +556,15 @@ public class Machine {
 		return allTranslation;
 	}
 
+	/**
+	 * Creates a list for all translations of the machine.
+	 * 
+	 * <P>
+	 * Creates a list that contains every translations of the machine,
+	 * regardless of their parent state.
+	 * 
+	 * @return A List that contains all Translations that occur in the machine.
+	 */
 	public List<Translation> getTranslationsAsList() {
 		List<Translation> translations = new ArrayList<Translation>();
 
@@ -445,6 +578,20 @@ public class Machine {
 		return translations;
 	}
 
+	/**
+	 * Removes a state from the machine.
+	 * 
+	 * <P>
+	 * Removes the state from the machine, that ID is equal to the given
+	 * {@code id} parameter. Removing a state includes removing all translations
+	 * from the machine where the removed state appears as either parent or
+	 * target. Throws a {@link core.Mealy.MachineException MachineException} if
+	 * there is no state in the machine with the given id.
+	 * 
+	 * @param id
+	 *            The {@code ID} of the state to be removed.
+	 * @throws MachineException
+	 */
 	public void removeState(String id) throws MachineException {
 		State s = null;
 		for (State currState : this.states)
@@ -455,14 +602,22 @@ public class Machine {
 		if (s == null)
 			throw new MachineException("There is no State with the given ID.");
 
-		for (State currState : this.states) {
-			for (int i = 0; i < currState.getTranslations().size(); i++) {
-				if (currState.getTranslations().get(i).getParent() == s
-						|| currState.getTranslations().get(i).getTarget() == s) {
-					currState.getTranslations().remove(currState.getTranslations().get(i));
-					i--;
-				}
+		// for (State currState : this.states) {
+		// for (int i = 0; i < currState.getTranslations().size(); i++) {
+		// if (currState.getTranslations().get(i).getParent() == s
+		// || currState.getTranslations().get(i).getTarget() == s) {
+		// currState.getTranslations().remove(currState.getTranslations().get(i));
+		// i--;
+		// }
+		// }
+		// }
+		for (int i = 0; i < this.getTranslationsAsList().size(); i++) {
+			if (this.getTranslationsAsList().get(i).getParent() == s
+					|| this.getTranslationsAsList().get(i).getTarget() == s) {
+				this.getTranslationsAsList().remove(this.getTranslationsAsList().get(i));
+				i--;
 			}
+
 		}
 		this.states.remove(s);
 	}

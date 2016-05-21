@@ -63,11 +63,9 @@ public class MealyTests {
 	@Test
 	public void testGetCurrState() throws MachineException {
 		Machine m = new Machine("Tester");
-		try {
-			m.processData("Data for processing.");
-		} catch (MachineException e) {
-			e.printStackTrace();
-		}
+
+		m.processData("Data for processing.");
+
 		assertSame(m.getStates().get(0), m.getCurrState());
 		State testState = new State();
 		m.setCurrState(testState);
@@ -143,20 +141,20 @@ public class MealyTests {
 
 		assertFalse(m.isValid());
 
-		m.getStates().get(0).addTranslation(new Translation('a', 'a',m.getStates().get(0), m.getStates().get(0)));
-		m.getStates().get(0).addTranslation(new Translation('b', 'b',m.getStates().get(0), m.getStates().get(0)));
+		m.getStates().get(0).addTranslation(new Translation('a', 'a', m.getStates().get(0), m.getStates().get(0)));
+		m.getStates().get(0).addTranslation(new Translation('b', 'b', m.getStates().get(0), m.getStates().get(0)));
 
 		assertTrue(m.isValid());
 
 		m.addState(1);
-		m.getStates().get(1).addTranslation(new Translation('a', 'e',m.getStates().get(1), m.getStates().get(0)));
-		m.getStates().get(1).addTranslation(new Translation('b', 'f',m.getStates().get(1), m.getStates().get(1)));
+		m.getStates().get(1).addTranslation(new Translation('a', 'e', m.getStates().get(1), m.getStates().get(0)));
+		m.getStates().get(1).addTranslation(new Translation('b', 'f', m.getStates().get(1), m.getStates().get(1)));
 
 		assertTrue(m.isValid());
 
 		m.addState(2);
-		m.getStates().get(2).addTranslation(new Translation('a', 'f',m.getStates().get(2), m.getStates().get(1)));
-		m.getStates().get(2).addTranslation(new Translation('b', 'f',m.getStates().get(2), m.getStates().get(1)));
+		m.getStates().get(2).addTranslation(new Translation('a', 'f', m.getStates().get(2), m.getStates().get(1)));
+		m.getStates().get(2).addTranslation(new Translation('b', 'f', m.getStates().get(2), m.getStates().get(1)));
 
 		assertFalse(m.isValid());
 	}

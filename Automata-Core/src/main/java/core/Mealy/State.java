@@ -25,6 +25,15 @@ package core.Mealy;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <h1>State of a Mealy Machine</h1>
+ * <P>
+ * Describes a State of a Mealy Machine.
+ * @author bszabo
+ * @version 1.0
+ * @see core.Mealy.Machine Mealy Machine
+ *
+ */
 public class State {
 	private String id;
 	private List<Translation> translations;
@@ -39,6 +48,10 @@ public class State {
 		this.id = "q" + Integer.toString(n);
 	}
 
+	/**TODO
+	 * Adds a translation to the state.
+	 * @param newTranslation
+	 */
 	public void addTranslation(Translation newTranslation) {
 		this.translations.add(newTranslation);
 	}
