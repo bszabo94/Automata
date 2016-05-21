@@ -44,15 +44,31 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-
 /**
+ * <h1>Handler for XML input and output operations.</h1>
  * 
- * A class, which handles XML stuff.
+ * <P>
+ * Manages input and output operations into and from XML files. Allows to export
+ * machine objects with all their states and translations, and other information
+ * to XML files, as well as import data from valid XML files, and create machine
+ * objects defined in the files.
+ * 
  * @author bszabo
+ * @version 1.0
  */
 public class XMLHandler {
 
-	
+	/**
+	 * Imports Mealy machines from a valid XML file.
+	 * 
+	 * <P> 
+	 * Opens and reads an XML file and creates a Machine described in the opened file.
+	 * @param inFile The file used as input.
+	 * @return A list containing all the machines exported from the file.
+	 * @throws SAXException
+	 * @throws IOException
+	 * @throws ParserConfigurationException
+	 */
 	public static List<core.Mealy.Machine> importMealy(File inFile)
 			throws SAXException, IOException, ParserConfigurationException {
 		List<core.Mealy.Machine> machineList = new ArrayList<core.Mealy.Machine>();
@@ -63,77 +79,80 @@ public class XMLHandler {
 
 		NodeList machines = doc.getDocumentElement().getElementsByTagName("Machine");
 		for (int i = 0; i < machines.getLength(); i++) {
-			try{
-			machineList.add(new core.Mealy.Machine(machines.item(i).getAttributes().getNamedItem("id").getNodeValue()));
-			NodeList properties = machines.item(i).getChildNodes();
-			for (int j = 0; j < properties.getLength(); j++) {
-				if (properties.item(j).getNodeType() == Node.ELEMENT_NODE) {
-					if (properties.item(j).getNodeName() == "InputAlphabet") {
-						NodeList symbols = properties.item(j).getChildNodes();
-						for (int k = 0; k < symbols.getLength(); k++) {
-							if (symbols.item(k).getNodeType() == Node.ELEMENT_NODE) {
-								alphabet.add(symbols.item(k).getTextContent().charAt(0));
+			try {
+				machineList.add(
+						new core.Mealy.Machine(machines.item(i).getAttributes().getNamedItem("id").getNodeValue()));
+				NodeList properties = machines.item(i).getChildNodes();
+				for (int j = 0; j < properties.getLength(); j++) {
+					if (properties.item(j).getNodeType() == Node.ELEMENT_NODE) {
+						if (properties.item(j).getNodeName() == "InputAlphabet") {
+							NodeList symbols = properties.item(j).getChildNodes();
+							for (int k = 0; k < symbols.getLength(); k++) {
+								if (symbols.item(k).getNodeType() == Node.ELEMENT_NODE) {
+									alphabet.add(symbols.item(k).getTextContent().charAt(0));
+								}
+
 							}
-
+							machineList.get(machineList.size() - 1).setiAlphabet(new HashSet<Character>(alphabet));
+							alphabet.clear();
 						}
-						machineList.get(machineList.size() - 1).setiAlphabet(new HashSet<Character>(alphabet));
-						alphabet.clear();
-					}
-					if (properties.item(j).getNodeName() == "OutputAlphabet") {
-						NodeList symbols = properties.item(j).getChildNodes();
-						for (int k = 0; k < symbols.getLength(); k++) {
-							if (symbols.item(k).getNodeType() == Node.ELEMENT_NODE) {
-								alphabet.add(symbols.item(k).getTextContent().charAt(0));
+						if (properties.item(j).getNodeName() == "OutputAlphabet") {
+							NodeList symbols = properties.item(j).getChildNodes();
+							for (int k = 0; k < symbols.getLength(); k++) {
+								if (symbols.item(k).getNodeType() == Node.ELEMENT_NODE) {
+									alphabet.add(symbols.item(k).getTextContent().charAt(0));
+								}
+
 							}
-
+							machineList.get(machineList.size() - 1).setoAlphabet(new HashSet<Character>(alphabet));
+							alphabet.clear();
 						}
-						machineList.get(machineList.size() - 1).setoAlphabet(new HashSet<Character>(alphabet));
-						alphabet.clear();
-					}
-					if (properties.item(j).getNodeName() == "States") {
+						if (properties.item(j).getNodeName() == "States") {
 
-						NodeList states = properties.item(j).getChildNodes();
-						for (int l = 0; l < states.getLength(); l++)
-							if (states.item(l).getNodeType() == Node.ELEMENT_NODE)
-								machineList.get(machineList.size() - 1).addState(Integer.parseInt(
-										states.item(l).getAttributes().getNamedItem("id").getNodeValue().substring(1)));
+							NodeList states = properties.item(j).getChildNodes();
+							for (int l = 0; l < states.getLength(); l++)
+								if (states.item(l).getNodeType() == Node.ELEMENT_NODE)
+									machineList.get(machineList.size() - 1).addState(Integer.parseInt(states.item(l)
+											.getAttributes().getNamedItem("id").getNodeValue().substring(1)));
 
-						machineList.get(machineList.size() - 1)
-								.setCurrState(machineList.get(machineList.size() - 1).getStates()
-										.get(Integer.parseInt(machines.item(i).getAttributes()
-												.getNamedItem("Initial_State").getNodeValue().substring(1))));
+							machineList.get(machineList.size() - 1)
+									.setCurrState(
+											machineList.get(machineList.size() - 1).getStates()
+													.get(Integer.parseInt(machines.item(i).getAttributes()
+															.getNamedItem("Initial_State").getNodeValue()
+															.substring(1))));
 
-						for (int l = 0; l < states.getLength(); l++) {
-							if (states.item(l).getNodeType() == Node.ELEMENT_NODE) {
-								NodeList translations = states.item(l).getChildNodes();
-								for (int m = 0; m < translations.getLength(); m++) {
-									if (translations.item(m).getNodeType() == Node.ELEMENT_NODE) {
-										machineList.get(machineList.size() - 1).getStates()
-												.get(Integer.parseInt(states.item(l).getAttributes().getNamedItem("id")
-														.getNodeValue().substring(1)))
-												.addTranslation(new core.Mealy.Translation(
-														translations.item(m).getAttributes().getNamedItem("input")
-																.getNodeValue().charAt(0),
-														translations.item(m).getAttributes().getNamedItem("output")
-																.getNodeValue().charAt(0),
-														machineList.get(machineList.size() - 1).getStates()
-																.get(Integer.parseInt(states.item(l).getAttributes()
-																		.getNamedItem("id").getNodeValue()
-																		.substring(1))),
-														machineList.get(machineList.size() - 1).getStates()
-																.get(Integer.parseInt(translations.item(m)
-																		.getAttributes().getNamedItem("target")
-																		.getNodeValue().substring(1)))));
+							for (int l = 0; l < states.getLength(); l++) {
+								if (states.item(l).getNodeType() == Node.ELEMENT_NODE) {
+									NodeList translations = states.item(l).getChildNodes();
+									for (int m = 0; m < translations.getLength(); m++) {
+										if (translations.item(m).getNodeType() == Node.ELEMENT_NODE) {
+											machineList.get(machineList.size() - 1).getStates()
+													.get(Integer.parseInt(states.item(l).getAttributes()
+															.getNamedItem("id").getNodeValue().substring(1)))
+													.addTranslation(new core.Mealy.Translation(
+															translations.item(m).getAttributes().getNamedItem("input")
+																	.getNodeValue().charAt(0),
+															translations.item(m).getAttributes().getNamedItem("output")
+																	.getNodeValue().charAt(0),
+															machineList.get(machineList.size() - 1).getStates()
+																	.get(Integer.parseInt(states.item(l).getAttributes()
+																			.getNamedItem("id").getNodeValue()
+																			.substring(1))),
+															machineList.get(machineList.size() - 1).getStates()
+																	.get(Integer.parseInt(translations.item(m)
+																			.getAttributes().getNamedItem("target")
+																			.getNodeValue().substring(1)))));
+										}
 									}
 								}
 							}
+
 						}
-
 					}
-				}
 
-			}
-			}catch(core.Mealy.MachineException e){
+				}
+			} catch (core.Mealy.MachineException e) {
 				e.printStackTrace();
 			}
 		}
@@ -141,6 +160,17 @@ public class XMLHandler {
 		return machineList;
 	}
 
+	/**
+	 * Imports Moore machines from a valid XML file.
+	 * 
+	 * <P> 
+	 * Opens and reads an XML file and creates a Machine described in the opened file.
+	 * @param inFile The file used as input.
+	 * @return A list containing all the machines exported from the file.
+	 * @throws SAXException
+	 * @throws IOException
+	 * @throws ParserConfigurationException
+	 */
 	public static List<core.Moore.Machine> importMoore(File inFile)
 			throws SAXException, IOException, ParserConfigurationException {
 		List<core.Moore.Machine> machineList = new ArrayList<core.Moore.Machine>();
@@ -242,6 +272,13 @@ public class XMLHandler {
 		return machineList;
 	}
 
+	/**
+	 * Exports Machine objects to an XML file.
+	 * @param outFile The file used as output.
+	 * @param machines The list of Mealy Machines to be exported.
+	 * @throws ParserConfigurationException
+	 * @throws TransformerException
+	 */
 	public static void exportMealy(File outFile, List<core.Mealy.Machine> machines)
 			throws ParserConfigurationException, TransformerException {
 
@@ -267,6 +304,13 @@ public class XMLHandler {
 
 	}
 
+	/**
+	 * Exports Machine objects to an XML file.
+	 * @param outFile The file used as output.
+	 * @param machines The list of Moore Machines to be exported.
+	 * @throws ParserConfigurationException
+	 * @throws TransformerException
+	 */
 	public static void exportMoore(File outFile, List<core.Moore.Machine> machines)
 			throws ParserConfigurationException, TransformerException {
 
