@@ -371,7 +371,29 @@ public class AutomataController {
 
 	@FXML
 	private void handleButtonAddState(ActionEvent event) {
-		// TODO
+		if (main.getSelectedMealy() == null && main.getSelectedMoore() == null) {
+			main.showPopup("Select a machine first!", AlertType.WARNING);
+			return;
+		}
+
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource("/fxml/AddState.fxml"));
+			AnchorPane ap = (AnchorPane) loader.load();
+			AddStateController controller = loader.getController();
+			controller.setMain(this.main);
+
+			Stage stage = new Stage();
+			stage.initStyle(StageStyle.UNDECORATED);
+			stage.setTitle("Add New State");
+
+			stage.setScene(new Scene(ap));
+			stage.show();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 	@FXML

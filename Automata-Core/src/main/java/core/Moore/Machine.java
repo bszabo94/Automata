@@ -32,7 +32,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-
 public class Machine {
 	private List<State> states;
 	private String id;
@@ -74,6 +73,20 @@ public class Machine {
 
 	public void addState(Character output, int n) {
 		this.states.add(new State(output, "q" + Integer.toString(n)));
+	}
+
+	public void addState(Character output, String id) throws MachineException {
+		if (this.findState(id) != null)
+			throw new MachineException("There is already a state in the machine with the ID: " + id);
+		this.states.add(new State(output, id));
+	}
+
+	public void addState(String output, String id) throws MachineException {
+		if (this.findState(id) != null)
+			throw new MachineException("There is already a state in the machine with the ID: " + id + ".");
+		if (output.length() > 1)
+			throw new MachineException("Output is too large. It must be a single Character of Symbol.");
+		this.states.add(new State(output.charAt(0), id));
 	}
 
 	public State getCurrState() {
@@ -287,7 +300,7 @@ public class Machine {
 	public void removeState(String id) throws MachineException {
 		State s = null;
 		for (State currState : this.states)
-			if(id.equals(currState.getID())){
+			if (id.equals(currState.getID())) {
 				s = currState;
 				break;
 			}
@@ -303,6 +316,29 @@ public class Machine {
 			}
 		}
 		this.states.remove(s);
+	}
+
+	/**
+	 * Finds a state by ID.
+	 * 
+	 * Iterates over the states of the machine, and returns the state which has
+	 * an {@code id} equal to the one given as parameter. Returns null if there
+	 * is no such state.
+	 * 
+	 * @param id
+	 *            The id the method searches for.
+	 * @return The {@link core.Moore.State State} with the same id, null if
+	 *         there is no such state.
+	 */
+	public State findState(String id) {
+		State s = null;
+
+		for (State currState : this.states) {
+			if (currState.getID().equals(id))
+				s = currState;
+		}
+
+		return s;
 	}
 
 	@Override

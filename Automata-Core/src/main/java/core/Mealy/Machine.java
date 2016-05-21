@@ -176,6 +176,26 @@ public class Machine {
 	 * Adds a new state to the machine without an id.
 	 * 
 	 * <P>
+	 * Creates a new {@link core.Mealy.State State} object with the same id as
+	 * the string given as parameter, and puts it to the
+	 * {@link core.Mealy.Machine#states list}, which contains the states of this
+	 * machine.
+	 * 
+	 * @param id
+	 *            The string, which will be {@code id} of the new state;
+	 * @throws MachineException
+	 * @see core.Mealy.Machine#addState() addState()
+	 */
+	public void addState(String id) throws MachineException {
+		if (this.findState(id) != null)
+			throw new MachineException("There is already a state in the machine with the ID: " + id + ".");
+		this.states.add(new State(id));
+	}
+
+	/**
+	 * Adds a new state to the machine without an id.
+	 * 
+	 * <P>
 	 * Creates a new {@link core.Mealy.State State} object with an id of "qn",
 	 * where n stands for the number given as parameter, and puts it to the
 	 * {@link core.Mealy.Machine#states list}, which contains the states of this
@@ -355,7 +375,8 @@ public class Machine {
 	public Character step(Character input, boolean encoding) throws MachineException {
 		if (encoding) {
 			if (!this.iAlphabet.contains(input))
-				throw new MachineException("The given symbol is not in the input alphabet.");
+				throw new MachineException(
+						"The given symbol is not in the input alphabet: " + input + " in " + this.iAlphabet);
 			for (Translation currTranslation : this.currState.getTranslations()) {
 				if (currTranslation.getInput().equals(input)) {
 					this.currState = currTranslation.getTarget();
@@ -620,6 +641,29 @@ public class Machine {
 
 		}
 		this.states.remove(s);
+	}
+
+	/**
+	 * Finds a state by ID.
+	 * 
+	 * Iterates over the states of the machine, and returns the state which has
+	 * an {@code id} equal to the one given as parameter. Returns null if there
+	 * is no such state.
+	 * 
+	 * @param id
+	 *            The id the method searches for.
+	 * @return The {@link core.Mealy.State State} with the same id, null if
+	 *         there is no such state.
+	 */
+	public State findState(String id) {
+		State s = null;
+
+		for (State currState : this.states) {
+			if (currState.getID().equals(id))
+				s = currState;
+		}
+
+		return s;
 	}
 
 	public String toString() {

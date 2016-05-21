@@ -47,6 +47,11 @@ public class State {
 		this.translations = new ArrayList<Translation>();
 		this.id = "q" + Integer.toString(n);
 	}
+	
+	public State(String s) {
+		this.translations = new ArrayList<Translation>();
+		this.id = s;
+	}
 
 	/**TODO
 	 * Adds a translation to the state.

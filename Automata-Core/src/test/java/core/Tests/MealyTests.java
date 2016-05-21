@@ -177,7 +177,7 @@ public class MealyTests {
 		}
 	}
 
-	@Test
+	@Test(expected=MachineException.class)
 	public void testStep() throws MachineException {
 
 		// q0:
@@ -189,7 +189,7 @@ public class MealyTests {
 
 		Machine m = new Machine("Tester");
 		m.setiAlphabet(new HashSet<Character>(Arrays.asList('a', 'b')));
-		m.setiAlphabet(new HashSet<Character>(Arrays.asList('1', '0')));
+		m.setoAlphabet(new HashSet<Character>(Arrays.asList('1', '0')));
 		m.addState();
 		m.addState();
 		m.setCurrState(m.getStates().get(0));
@@ -221,7 +221,7 @@ public class MealyTests {
 
 		Machine m = new Machine("Tester");
 		m.setiAlphabet(new HashSet<Character>(Arrays.asList('a', 'b')));
-		m.setiAlphabet(new HashSet<Character>(Arrays.asList('1', '0')));
+		m.setoAlphabet(new HashSet<Character>(Arrays.asList('1', '0')));
 		m.addState();
 		m.addState();
 		m.setCurrState(m.getStates().get(0));
