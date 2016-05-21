@@ -17,26 +17,56 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="600.0" maxWidth="1000.0" minHeight="600.0" minWidth="1000.0" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AutomataController">
+<AnchorPane maxHeight="600.0" maxWidth="1000.0" minHeight="600.0"
+	minWidth="1000.0" prefHeight="600.0" prefWidth="1000.0"
+	xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="controllers.AutomataController">
 	<children>
-		<SplitPane dividerPositions="0.2" prefHeight="600.0" prefWidth="1000.0">
+		<SplitPane dividerPositions="0.2" prefHeight="600.0"
+			prefWidth="1000.0">
 			<items>
-				<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="200.0" SplitPane.resizableWithParent="false">
+				<AnchorPane minHeight="-Infinity" minWidth="-Infinity"
+					prefHeight="600.0" prefWidth="200.0" SplitPane.resizableWithParent="false">
 					<children>
-						<Button layoutX="40.0" layoutY="463.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleButtonNew" prefHeight="50.0" prefWidth="80.0" text="New" textAlignment="CENTER" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="15.0" />
-						<Button layoutX="187.0" layoutY="466.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleButtonDelete" prefHeight="50.0" prefWidth="80.0" text="Delete" textAlignment="CENTER" AnchorPane.bottomAnchor="80.0" AnchorPane.rightAnchor="15.0" />
-						<Button layoutX="35.0" layoutY="514.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleButtonLoad" prefHeight="50.0" prefWidth="80.0" text="Load" textAlignment="CENTER" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" />
-						<Button layoutX="119.0" layoutY="536.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleButtonSave" prefHeight="50.0" prefWidth="80.0" text="Save" textAlignment="CENTER" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" />
-						<TabPane layoutX="15.0" layoutY="56.0" prefHeight="420.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+						<Button layoutX="40.0" layoutY="463.0" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							mnemonicParsing="false" onAction="#handleButtonNew" prefHeight="50.0"
+							prefWidth="80.0" text="New" textAlignment="CENTER"
+							AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="15.0" />
+						<Button layoutX="187.0" layoutY="466.0" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							mnemonicParsing="false" onAction="#handleButtonDelete"
+							prefHeight="50.0" prefWidth="80.0" text="Delete" textAlignment="CENTER"
+							AnchorPane.bottomAnchor="80.0" AnchorPane.rightAnchor="15.0" />
+						<Button layoutX="35.0" layoutY="514.0" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							mnemonicParsing="false" onAction="#handleButtonLoad" prefHeight="50.0"
+							prefWidth="80.0" text="Load" textAlignment="CENTER"
+							AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" />
+						<Button layoutX="119.0" layoutY="536.0" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							mnemonicParsing="false" onAction="#handleButtonSave" prefHeight="50.0"
+							prefWidth="80.0" text="Save" textAlignment="CENTER"
+							AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" />
+						<TabPane layoutX="15.0" layoutY="56.0" prefHeight="420.0"
+							prefWidth="200.0" tabClosingPolicy="UNAVAILABLE"
+							AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+							AnchorPane.topAnchor="25.0">
 							<tabs>
 								<Tab fx:id="mealyTab" closable="false" text="Mealy">
 									<content>
-										<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+										<AnchorPane minHeight="0.0" minWidth="0.0"
+											prefHeight="180.0" prefWidth="200.0">
 											<children>
-												<TableView fx:id="tableMealy" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+												<TableView fx:id="tableMealy" prefHeight="200.0"
+													prefWidth="200.0" AnchorPane.bottomAnchor="0.0"
+													AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+													AnchorPane.topAnchor="0.0">
 													<columns>
-														<TableColumn fx:id="tableMealyID" editable="false" maxWidth="190.0" prefWidth="100.0" text="ID" />
-														<TableColumn fx:id="tableMealyStates" editable="false" maxWidth="190.0" prefWidth="100.0" text="States" />
+														<TableColumn fx:id="tableMealyID" editable="false"
+															maxWidth="190.0" prefWidth="100.0" text="ID" />
+														<TableColumn fx:id="tableMealyStates"
+															editable="false" maxWidth="190.0" prefWidth="100.0" text="States" />
 													</columns>
 												</TableView>
 											</children>
@@ -45,12 +75,18 @@
 								</Tab>
 								<Tab fx:id="mooreTab" closable="false" text="Moore">
 									<content>
-										<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+										<AnchorPane minHeight="0.0" minWidth="0.0"
+											prefHeight="180.0" prefWidth="200.0">
 											<children>
-												<TableView fx:id="tableMoore" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+												<TableView fx:id="tableMoore" prefHeight="200.0"
+													prefWidth="200.0" AnchorPane.bottomAnchor="0.0"
+													AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+													AnchorPane.topAnchor="0.0">
 													<columns>
-														<TableColumn fx:id="tableMooreID" editable="false" maxWidth="190.0" prefWidth="100.0" text="ID" />
-														<TableColumn fx:id="tableMooreStates" editable="false" maxWidth="190.0" prefWidth="100.0" text="States" />
+														<TableColumn fx:id="tableMooreID" editable="false"
+															maxWidth="190.0" prefWidth="100.0" text="ID" />
+														<TableColumn fx:id="tableMooreStates"
+															editable="false" maxWidth="190.0" prefWidth="100.0" text="States" />
 													</columns>
 												</TableView>
 											</children>
@@ -61,40 +97,108 @@
 						</TabPane>
 					</children>
 				</AnchorPane>
-				<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" SplitPane.resizableWithParent="false">
+				<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
+					minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+					prefWidth="800.0" SplitPane.resizableWithParent="false">
 					<children>
-						<SplitPane dividerPositions="0.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+						<SplitPane dividerPositions="0.5" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+							AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
 							<items>
 								<AnchorPane>
 									<children>
-										<Pane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+										<Pane prefHeight="200.0" prefWidth="200.0"
+											AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="0.0"
+											AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 											<children>
-												<Label layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="26.0" text="ID: " />
-												<Label fx:id="labelID" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="40.0" layoutY="14.0" prefHeight="25.0" prefWidth="344.0" textAlignment="RIGHT" />
-												<Label fx:id="labelNbrStates" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="150.0" layoutY="39.0" prefHeight="25.0" prefWidth="234.0" textAlignment="RIGHT" />
-												<Label layoutX="14.0" layoutY="39.0" prefHeight="25.0" prefWidth="132.0" text="Number of States: " />
-												<Label layoutX="54.0" layoutY="74.0" prefHeight="25.0" prefWidth="105.0" text="Input Alphabet" />
-												<Label layoutX="238.0" layoutY="74.0" prefHeight="25.0" prefWidth="113.0" text="Output Alphabet" />
-												<Text fx:id="textIAlphabet" layoutX="78.0" layoutY="142.0" strokeType="INSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" />
-												<Text fx:id="textOAlphabet" layoutX="13.0" layoutY="248.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-												<TextArea fx:id="textareaOA" editable="false" layoutX="198.0" layoutY="95.0" prefHeight="175.0" prefWidth="197.0" wrapText="true" />
-												<TextArea fx:id="textareaIA" editable="false" layoutX="0.0" layoutY="95.0" prefHeight="175.0" prefWidth="197.0" wrapText="true" />
+												<Label layoutX="14.0" layoutY="14.0" prefHeight="25.0"
+													prefWidth="26.0" text="ID: " />
+												<Label fx:id="labelID" alignment="CENTER_RIGHT"
+													contentDisplay="RIGHT" layoutX="40.0" layoutY="14.0"
+													prefHeight="25.0" prefWidth="344.0" textAlignment="RIGHT" />
+												<Label fx:id="labelNbrStates" alignment="CENTER_RIGHT"
+													contentDisplay="RIGHT" layoutX="150.0" layoutY="39.0"
+													prefHeight="25.0" prefWidth="234.0" textAlignment="RIGHT" />
+												<Label layoutX="14.0" layoutY="39.0" prefHeight="25.0"
+													prefWidth="132.0" text="Number of States: " />
+												<Label layoutX="54.0" layoutY="74.0" prefHeight="25.0"
+													prefWidth="105.0" text="Input Alphabet" />
+												<Label layoutX="238.0" layoutY="74.0" prefHeight="25.0"
+													prefWidth="113.0" text="Output Alphabet" />
+												<Text fx:id="textIAlphabet" layoutX="78.0" layoutY="142.0"
+													strokeType="INSIDE" strokeWidth="0.0" text="Text"
+													textAlignment="CENTER" />
+												<Text fx:id="textOAlphabet" layoutX="13.0" layoutY="248.0"
+													strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+												<TextArea fx:id="textareaOA" editable="false"
+													layoutX="198.0" layoutY="95.0" prefHeight="175.0"
+													prefWidth="197.0" wrapText="true" />
+												<TextArea fx:id="textareaIA" editable="false"
+													layoutX="0.0" layoutY="95.0" prefHeight="175.0" prefWidth="197.0"
+													wrapText="true" />
 											</children>
 										</Pane>
-										<TableView fx:id="mealyTranslationTable" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="275.0">
+										<TableView fx:id="mealyTranslationTable" prefHeight="200.0"
+											prefWidth="200.0" AnchorPane.bottomAnchor="0.0"
+											AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="125.0"
+											AnchorPane.topAnchor="300.0">
 											<columns>
-												<TableColumn fx:id="mealyTrState" editable="false" prefWidth="75.0" resizable="false" text="State" />
-												<TableColumn fx:id="mealyTrInput" editable="false" prefWidth="75.0" resizable="false" text="Input" />
-												<TableColumn fx:id="mealyTrOutput" editable="false" prefWidth="75.0" resizable="false" text="Output" />
-												<TableColumn fx:id="mealyTrTarget" editable="false" prefWidth="75.0" resizable="false" text="Target" />
+												<TableColumn fx:id="mealyTrState" editable="false"
+													prefWidth="65.0" resizable="false" text="State" />
+												<TableColumn fx:id="mealyTrInput" editable="false"
+													prefWidth="65.0" resizable="false" text="Input" />
+												<TableColumn fx:id="mealyTrOutput" editable="false"
+													prefWidth="65.0" resizable="false" text="Output" />
+												<TableColumn fx:id="mealyTrTarget" editable="false"
+													prefWidth="65.0" resizable="false" text="Target" />
 											</columns>
 										</TableView>
-										<TableView fx:id="mooreTranslationTable" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="275.0">
+										<TableView fx:id="mooreTranslationTable" prefHeight="300.0"
+											prefWidth="260.0" AnchorPane.bottomAnchor="0.0"
+											AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="125.0"
+											AnchorPane.topAnchor="300.0">
 											<columns>
-												<TableColumn fx:id="mooreTrState" editable="false" prefWidth="75.0" resizable="false" text="State" />
-												<TableColumn fx:id="mooreTrTarget" editable="false" prefWidth="75.0" resizable="false" text="Target" />
-												<TableColumn fx:id="mooreTrInput" editable="false" prefWidth="75.0" resizable="false" text="Input" />
-												<TableColumn fx:id="mooreTrOutput" editable="false" prefWidth="75.0" resizable="false" text="Output" />
+												<TableColumn fx:id="mooreTrState" editable="false"
+													prefWidth="65.0" resizable="false" text="State" />
+												<TableColumn fx:id="mooreTrTarget" editable="false"
+													prefWidth="65.0" resizable="false" text="Target" />
+												<TableColumn fx:id="mooreTrInput" editable="false"
+													prefWidth="65.0" resizable="false" text="Input" />
+												<TableColumn fx:id="mooreTrOutput" editable="false"
+													prefWidth="65.0" resizable="false" text="Output" />
+											</columns>
+										</TableView>
+										<Label alignment="CENTER" layoutX="14.0" layoutY="276.0"
+											prefHeight="25.0" prefWidth="250.0" text="Translations">
+											<font>
+												<Font size="22.0" />
+											</font>
+										</Label>
+										<Label alignment="CENTER" layoutX="263.0" layoutY="276.0"
+											prefHeight="26.0" prefWidth="132.0" text="States">
+											<font>
+												<Font size="22.0" />
+											</font>
+										</Label>
+										<TableView fx:id="mealyStatesTable" layoutX="270.0"
+											layoutY="10.0" prefHeight="273.0" prefWidth="125.0"
+											AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="270.0"
+											AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="300.0">
+											<columns>
+												<TableColumn fx:id="mealyStatesState" editable="false"
+													prefWidth="55.0" resizable="false" text="State" />
+											</columns>
+										</TableView>
+										<TableView fx:id="mooreStatesTable" layoutX="270.0"
+											layoutY="10.0" prefHeight="273.0" prefWidth="125.0"
+											AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="270.0"
+											AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="300.0">
+											<columns>
+												<TableColumn fx:id="mooreStatesState" editable="false"
+													prefWidth="55.0" resizable="false" text="State" />
+												<TableColumn fx:id="mooreStatesOutput" editable="false"
+													prefWidth="60.0" resizable="false" text="Output" />
 											</columns>
 										</TableView>
 									</children>
@@ -102,37 +206,77 @@
 								<AnchorPane>
 									<children>
 										<Button layoutX="14.0" layoutY="521.0" maxHeight="-Infinity"
-	maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-	mnemonicParsing="false" onAction="#handleButtonAddState" prefHeight="38.0"
-	prefWidth="113.0" text="Add State" textAlignment="CENTER" />
-                              <Separator layoutX="87.0" layoutY="451.0" prefHeight="15.0" prefWidth="207.0" />
-                              <Button layoutX="141.0" layoutY="521.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleButtonRemoveState" prefHeight="38.0" prefWidth="113.0" text="Remove State" textAlignment="CENTER" />
-                              <Button layoutX="268.0" layoutY="521.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleButtonValidate" prefHeight="38.0" prefWidth="113.0" text="Validate" textAlignment="CENTER" />
-                              <TextArea fx:id="textAreaInput" layoutX="44.0" layoutY="39.0" prefHeight="175.0" prefWidth="197.0" wrapText="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="38.0" />
-                              <Label alignment="CENTER" layoutX="145.0" layoutY="2.0" prefHeight="25.0" prefWidth="105.0" text="Input" textAlignment="CENTER" AnchorPane.topAnchor="0.0">
-                                 <font>
-                                    <Font size="30.0" />
-                                 </font>
-                              </Label>
-                              <Button layoutX="14.0" layoutY="225.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleButtonEncode" prefHeight="38.0" prefWidth="113.0" text="Encode&gt;&gt;" textAlignment="CENTER" />
-                              <Button layoutX="268.0" layoutY="225.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleButtonDecode" prefHeight="38.0" prefWidth="113.0" text="Decode&lt;&lt;" textAlignment="CENTER" />
-                              <TextArea fx:id="textAreaOutput" editable="false" layoutX="106.0" layoutY="276.0" prefHeight="175.0" prefWidth="197.0" wrapText="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-                              <Button layoutX="14.0" layoutY="466.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleButtonAddTranslation" prefHeight="38.0" prefWidth="113.0" text="Add Translation" textAlignment="CENTER" wrapText="true">
-                                 <font>
-                                    <Font size="12.0" />
-                                 </font>
-                              </Button>
-                              <Button layoutX="141.0" layoutY="466.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleButtonRemoveTranslation" prefHeight="38.0" prefWidth="113.0" text="Remove Translation" textAlignment="CENTER" wrapText="true">
-                                 <font>
-                                    <Font size="12.0" />
-                                 </font>
-                              </Button>
-                              <Button layoutX="268.0" layoutY="466.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleButtonRead" prefHeight="38.0" prefWidth="113.0" text="Read" textAlignment="CENTER" wrapText="true" />
-                              <Label alignment="CENTER" layoutX="145.0" layoutY="226.0" prefHeight="25.0" prefWidth="105.0" text="Output" textAlignment="CENTER">
-                                 <font>
-                                    <Font size="30.0" />
-                                 </font>
-                              </Label>
+											maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+											mnemonicParsing="false" onAction="#handleButtonAddState"
+											prefHeight="38.0" prefWidth="113.0" text="Add State"
+											textAlignment="CENTER" />
+										<Separator layoutX="87.0" layoutY="451.0"
+											prefHeight="15.0" prefWidth="207.0" />
+										<Button layoutX="141.0" layoutY="521.0" maxHeight="-Infinity"
+											maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+											mnemonicParsing="false" onAction="#handleButtonRemoveState"
+											prefHeight="38.0" prefWidth="113.0" text="Remove State"
+											textAlignment="CENTER" />
+										<Button layoutX="268.0" layoutY="521.0" maxHeight="-Infinity"
+											maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+											mnemonicParsing="false" onAction="#handleButtonValidate"
+											prefHeight="38.0" prefWidth="113.0" text="Validate"
+											textAlignment="CENTER" />
+										<TextArea fx:id="textAreaInput" layoutX="44.0"
+											layoutY="39.0" prefHeight="175.0" prefWidth="197.0" wrapText="true"
+											AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+											AnchorPane.topAnchor="38.0" />
+										<Label alignment="CENTER" layoutX="145.0" layoutY="2.0"
+											prefHeight="25.0" prefWidth="105.0" text="Input"
+											textAlignment="CENTER" AnchorPane.topAnchor="0.0">
+											<font>
+												<Font size="30.0" />
+											</font>
+										</Label>
+										<Button layoutX="14.0" layoutY="225.0" maxHeight="-Infinity"
+											maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+											mnemonicParsing="false" onAction="#handleButtonEncode"
+											prefHeight="38.0" prefWidth="113.0" text="Encode&gt;&gt;"
+											textAlignment="CENTER" />
+										<Button layoutX="268.0" layoutY="225.0" maxHeight="-Infinity"
+											maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+											mnemonicParsing="false" onAction="#handleButtonDecode"
+											prefHeight="38.0" prefWidth="113.0" text="Decode&lt;&lt;"
+											textAlignment="CENTER" />
+										<TextArea fx:id="textAreaOutput" editable="false"
+											layoutX="106.0" layoutY="276.0" prefHeight="175.0" prefWidth="197.0"
+											wrapText="true" AnchorPane.leftAnchor="0.0"
+											AnchorPane.rightAnchor="0.0" />
+										<Button layoutX="14.0" layoutY="466.0" maxHeight="-Infinity"
+											maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+											mnemonicParsing="false" onAction="#handleButtonAddTranslation"
+											prefHeight="38.0" prefWidth="113.0" text="Add Translation"
+											textAlignment="CENTER" wrapText="true">
+											<font>
+												<Font size="12.0" />
+											</font>
+										</Button>
+										<Button layoutX="141.0" layoutY="466.0" maxHeight="-Infinity"
+											maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+											mnemonicParsing="false" onAction="#handleButtonRemoveTranslation"
+											prefHeight="38.0" prefWidth="113.0" text="Remove Translation"
+											textAlignment="CENTER" wrapText="true">
+											<font>
+												<Font size="12.0" />
+											</font>
+										</Button>
+										<Button layoutX="268.0" layoutY="466.0" maxHeight="-Infinity"
+											maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+											mnemonicParsing="false" onAction="#handleButtonRead"
+											prefHeight="38.0" prefWidth="113.0" text="Read"
+											textAlignment="CENTER" wrapText="true" />
+										<Label alignment="CENTER" layoutX="145.0" layoutY="226.0"
+											prefHeight="25.0" prefWidth="105.0" text="Output"
+											textAlignment="CENTER">
+											<font>
+												<Font size="30.0" />
+											</font>
+										</Label>
 									</children>
 								</AnchorPane>
 							</items>
@@ -141,14 +285,20 @@
 				</AnchorPane>
 			</items>
 		</SplitPane>
-		<MenuBar blendMode="SRC_ATOP" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="1000.0">
+		<MenuBar blendMode="SRC_ATOP" maxHeight="-Infinity" maxWidth="-Infinity"
+			minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0"
+			prefWidth="1000.0">
 			<menus>
 				<Menu mnemonicParsing="false" text="File">
 					<items>
-						<MenuItem mnemonicParsing="false" onAction="#handleButtonNew" text="New" />
-						<MenuItem mnemonicParsing="false" onAction="#handleButtonLoad" text="Load" />
-						<MenuItem mnemonicParsing="false" onAction="#handleButtonSave" text="Save" />
-						<MenuItem mnemonicParsing="false" onAction="#handleExit" text="Close" />
+						<MenuItem mnemonicParsing="false" onAction="#handleButtonNew"
+							text="New" />
+						<MenuItem mnemonicParsing="false" onAction="#handleButtonLoad"
+							text="Load" />
+						<MenuItem mnemonicParsing="false" onAction="#handleButtonSave"
+							text="Save" />
+						<MenuItem mnemonicParsing="false" onAction="#handleExit"
+							text="Close" />
 					</items>
 				</Menu>
 				<Menu mnemonicParsing="false" text="Edit">

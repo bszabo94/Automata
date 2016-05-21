@@ -62,6 +62,8 @@ public class Main extends Application {
 	private ObservableList<core.Moore.Machine> mooreMachines = FXCollections.observableArrayList();
 	private core.Mealy.Machine selectedMealy;
 	private core.Moore.Machine selectedMoore;
+	private core.Mealy.State selectedMealyState;
+	private core.Moore.State selectedMooreState;
 
 	public ObservableList<core.Moore.Machine> getMooreMachines() {
 		return mooreMachines;
@@ -95,11 +97,12 @@ public class Main extends Application {
 			mooreMachines.add(mealyMachines.get(1).toMoore());
 			mooreMachines.add(mealyMachines.get(2).toMoore());
 			mooreMachines.add(new core.Moore.Machine("Process"));
-			mooreMachines.get(mooreMachines.size()-1).processData("abcdfegh1234567");
+			mooreMachines.get(mooreMachines.size() - 1).processData("abcdfegh1234567");
 			mealyMachines.add(new core.Mealy.Machine("TESTER"));
-			mealyMachines.get(mealyMachines.size()-1).processData("0123456789öüó"
-					+ "qwertzuiopőúasdfghjkléáűíyxcvbnm,.-§'\"+!%/=()ÖÜÓQWERTZUIOPŐÚASDFGHJKLÉÁŰÍYXCVBNM?:_*>;<}{"
-					+ "@&><äđĐ[]ħíłŁ$ß¤×÷”„Í€–ŧ¶e|\\");
+			mealyMachines.get(mealyMachines.size() - 1)
+					.processData("0123456789öüó"
+							+ "qwertzuiopőúasdfghjkléáűíyxcvbnm,.-§'\"+!%/=()ÖÜÓQWERTZUIOPŐÚASDFGHJKLÉÁŰÍYXCVBNM?:_*>;<}{"
+							+ "@&><äđĐ[]ħíłŁ$ß¤×÷”„Í€–ŧ¶e|\\");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -118,8 +121,6 @@ public class Main extends Application {
 	public static void main(String[] args) {
 		launch(args);
 
-		
-		
 	}
 
 	public void initGUI() {
@@ -153,6 +154,22 @@ public class Main extends Application {
 		alert.setContentText(message);
 
 		alert.showAndWait();
+	}
+
+	public core.Mealy.State getSelectedMealyState() {
+		return selectedMealyState;
+	}
+
+	public void setSelectedMealyState(core.Mealy.State selectedMealyState) {
+		this.selectedMealyState = selectedMealyState;
+	}
+
+	public core.Moore.State getSelectedMooreState() {
+		return selectedMooreState;
+	}
+
+	public void setSelectedMooreState(core.Moore.State selectedMooreState) {
+		this.selectedMooreState = selectedMooreState;
 	}
 
 }
