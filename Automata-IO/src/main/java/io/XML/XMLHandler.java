@@ -61,9 +61,12 @@ public class XMLHandler {
 	/**
 	 * Imports Mealy machines from a valid XML file.
 	 * 
-	 * <P> 
-	 * Opens and reads an XML file and creates a Machine described in the opened file.
-	 * @param inFile The file used as input.
+	 * <P>
+	 * Opens and reads an XML file and creates a Machine described in the opened
+	 * file.
+	 * 
+	 * @param inFile
+	 *            The file used as input.
 	 * @return A list containing all the machines exported from the file.
 	 * @throws SAXException
 	 * @throws IOException
@@ -112,15 +115,12 @@ public class XMLHandler {
 							NodeList states = properties.item(j).getChildNodes();
 							for (int l = 0; l < states.getLength(); l++)
 								if (states.item(l).getNodeType() == Node.ELEMENT_NODE)
-									machineList.get(machineList.size() - 1).addState(Integer.parseInt(states.item(l)
-											.getAttributes().getNamedItem("id").getNodeValue().substring(1)));
+									machineList.get(machineList.size() - 1)
+											.addState(states.item(l).getAttributes().getNamedItem("id").getNodeValue());
 
 							machineList.get(machineList.size() - 1)
-									.setCurrState(
-											machineList.get(machineList.size() - 1).getStates()
-													.get(Integer.parseInt(machines.item(i).getAttributes()
-															.getNamedItem("Initial_State").getNodeValue()
-															.substring(1))));
+									.setCurrState(machineList.get(machineList.size() - 1).findState(machines.item(i)
+											.getAttributes().getNamedItem("Initial_State").getNodeValue()));
 
 							for (int l = 0; l < states.getLength(); l++) {
 								if (states.item(l).getNodeType() == Node.ELEMENT_NODE) {
@@ -135,14 +135,33 @@ public class XMLHandler {
 																	.getNodeValue().charAt(0),
 															translations.item(m).getAttributes().getNamedItem("output")
 																	.getNodeValue().charAt(0),
-															machineList.get(machineList.size() - 1).getStates()
-																	.get(Integer.parseInt(states.item(l).getAttributes()
-																			.getNamedItem("id").getNodeValue()
-																			.substring(1))),
-															machineList.get(machineList.size() - 1).getStates()
-																	.get(Integer.parseInt(translations.item(m)
-																			.getAttributes().getNamedItem("target")
-																			.getNodeValue().substring(1)))));
+															machineList.get(machineList.size() - 1)
+																	.findState(states.item(l).getAttributes()
+																			.getNamedItem("id").getNodeValue()),
+															machineList.get(machineList.size() - 1)
+																	.findState(translations.item(m).getAttributes()
+																			.getNamedItem("target").getNodeValue())));
+
+											// machineList.get(machineList.size()
+											// - 1).getStates()
+											// .get(Integer.parseInt(states.item(l).getAttributes()
+											// .getNamedItem("id").getNodeValue().substring(1)))
+											// .addTranslation(new
+											// core.Mealy.Translation(
+											// translations.item(m).getAttributes().getNamedItem("input")
+											// .getNodeValue().charAt(0),
+											// translations.item(m).getAttributes().getNamedItem("output")
+											// .getNodeValue().charAt(0),
+											// machineList.get(machineList.size()
+											// - 1).getStates()
+											// .get(Integer.parseInt(states.item(l).getAttributes()
+											// .getNamedItem("id").getNodeValue()
+											// .substring(1))),
+											// machineList.get(machineList.size()
+											// - 1).getStates()
+											// .get(Integer.parseInt(translations.item(m)
+											// .getAttributes().getNamedItem("target")
+											// .getNodeValue().substring(1)))));
 										}
 									}
 								}
@@ -163,9 +182,12 @@ public class XMLHandler {
 	/**
 	 * Imports Moore machines from a valid XML file.
 	 * 
-	 * <P> 
-	 * Opens and reads an XML file and creates a Machine described in the opened file.
-	 * @param inFile The file used as input.
+	 * <P>
+	 * Opens and reads an XML file and creates a Machine described in the opened
+	 * file.
+	 * 
+	 * @param inFile
+	 *            The file used as input.
 	 * @return A list containing all the machines exported from the file.
 	 * @throws SAXException
 	 * @throws IOException
@@ -219,41 +241,30 @@ public class XMLHandler {
 										machineList.get(machineList.size() - 1).addState(
 												states.item(l).getAttributes().getNamedItem("output").getNodeValue()
 														.charAt(0),
-												Integer.parseInt(states.item(l).getAttributes().getNamedItem("id")
-														.getNodeValue().substring(1)));
+												states.item(l).getAttributes().getNamedItem("id").getNodeValue());
 
 								machineList.get(machineList.size() - 1)
-										.setCurrState(
-												machineList.get(machineList.size() - 1).getStates()
-														.get(Integer.parseInt(machines.item(i).getAttributes()
-																.getNamedItem("Initial_State").getNodeValue()
-																.substring(1))));
+										.setCurrState(machineList.get(machineList.size() - 1).findState(machines.item(i)
+												.getAttributes().getNamedItem("Initial_State").getNodeValue()));
 
 								for (int l = 0; l < states.getLength(); l++) {
 									if (states.item(l).getNodeType() == Node.ELEMENT_NODE) {
 										NodeList translations = states.item(l).getChildNodes();
 										for (int m = 0; m < translations.getLength(); m++) {
 											if (translations.item(m).getNodeType() == Node.ELEMENT_NODE) {
-												machineList.get(machineList.size() - 1).getStates()
-														.get(Integer.parseInt(states.item(l).getAttributes()
-																.getNamedItem("id").getNodeValue().substring(1)))
-														.addTranslation(
-																new core.Moore.Translation(
-																		machineList.get(machineList.size() - 1)
-																				.getStates().get(Integer.parseInt(states
-																						.item(l).getAttributes()
-																						.getNamedItem("id")
-																						.getNodeValue().substring(1))),
-																		translations.item(m)
-																				.getAttributes().getNamedItem("input")
-																				.getNodeValue().charAt(0),
-																		machineList.get(machineList.size() - 1)
-																				.getStates().get(
-																						Integer.parseInt(translations
-																								.item(m).getAttributes()
-																								.getNamedItem("target")
-																								.getNodeValue()
-																								.substring(1)))));
+												machineList.get(machineList.size() - 1)
+														.findState(states.item(l).getAttributes().getNamedItem("id")
+																.getNodeValue())
+														.addTranslation(new core.Moore.Translation(
+																machineList.get(machineList.size() - 1)
+																		.findState(states.item(l).getAttributes()
+																				.getNamedItem("id").getNodeValue()),
+																translations.item(m).getAttributes()
+																		.getNamedItem("input").getNodeValue().charAt(0),
+																machineList.get(machineList.size() - 1)
+																		.findState(translations.item(m).getAttributes()
+																				.getNamedItem("target")
+																				.getNodeValue())));
 											}
 										}
 									}
@@ -274,8 +285,11 @@ public class XMLHandler {
 
 	/**
 	 * Exports Machine objects to an XML file.
-	 * @param outFile The file used as output.
-	 * @param machines The list of Mealy Machines to be exported.
+	 * 
+	 * @param outFile
+	 *            The file used as output.
+	 * @param machines
+	 *            The list of Mealy Machines to be exported.
 	 * @throws ParserConfigurationException
 	 * @throws TransformerException
 	 */
@@ -306,8 +320,11 @@ public class XMLHandler {
 
 	/**
 	 * Exports Machine objects to an XML file.
-	 * @param outFile The file used as output.
-	 * @param machines The list of Moore Machines to be exported.
+	 * 
+	 * @param outFile
+	 *            The file used as output.
+	 * @param machines
+	 *            The list of Moore Machines to be exported.
 	 * @throws ParserConfigurationException
 	 * @throws TransformerException
 	 */
@@ -338,8 +355,7 @@ public class XMLHandler {
 	private static Node createNode(Document doc, core.Mealy.Machine machine) {
 		Element currMachine = doc.createElement("Machine");
 		currMachine.setAttribute("id", machine.getID());
-		currMachine.setAttribute("Initial_State",
-				"q" + Integer.toString(machine.getStates().indexOf(machine.getCurrState())));
+		currMachine.setAttribute("Initial_State", machine.getCurrState().getID());
 
 		Element iAlphabet = doc.createElement("InputAlphabet");
 
@@ -365,14 +381,13 @@ public class XMLHandler {
 		for (core.Mealy.State currState : machine.getStates()) {
 			Element state = doc.createElement("State");
 
-			state.setAttribute("id", "q" + machine.getStates().indexOf(currState));
+			state.setAttribute("id", currState.getID());
 
 			for (core.Mealy.Translation currTranslation : currState.getTranslations()) {
 				Element translation = doc.createElement("Translation");
 				translation.setAttribute("input", Character.toString(currTranslation.getInput()));
 				translation.setAttribute("output", Character.toString(currTranslation.getOutput()));
-				translation.setAttribute("target",
-						"q" + Integer.toString(machine.getStates().indexOf(currTranslation.getTarget())));
+				translation.setAttribute("target", currTranslation.getTarget().getID());
 				state.appendChild(translation);
 			}
 			states.appendChild(state);
@@ -384,8 +399,7 @@ public class XMLHandler {
 	private static Node createNode(Document doc, core.Moore.Machine machine) {
 		Element currMachine = doc.createElement("Machine");
 		currMachine.setAttribute("id", machine.getID());
-		currMachine.setAttribute("Initial_State",
-				"q" + Integer.toString(machine.getStates().indexOf(machine.getCurrState())));
+		currMachine.setAttribute("Initial_State", machine.getCurrState().getID());
 
 		Element iAlphabet = doc.createElement("InputAlphabet");
 
@@ -411,14 +425,13 @@ public class XMLHandler {
 		for (core.Moore.State currState : machine.getStates()) {
 			Element state = doc.createElement("State");
 
-			state.setAttribute("id", "q" + machine.getStates().indexOf(currState));
+			state.setAttribute("id", currState.getID());
 			state.setAttribute("output", currState.getOutput().toString());
 
 			for (core.Moore.Translation currTranslation : currState.getTranslations()) {
 				Element translation = doc.createElement("Translation");
 				translation.setAttribute("input", Character.toString(currTranslation.getInput()));
-				translation.setAttribute("target",
-						"q" + Integer.toString(machine.getStates().indexOf(currTranslation.getTarget())));
+				translation.setAttribute("target", currTranslation.getTarget().getID());
 				state.appendChild(translation);
 			}
 			states.appendChild(state);

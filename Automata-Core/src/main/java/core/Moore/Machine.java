@@ -287,7 +287,7 @@ public class Machine {
 		this.init(base, base);
 	}
 
-	@SuppressWarnings("unused")
+
 	public core.Mealy.Machine toMealy() throws core.Mealy.MachineException {
 		core.Mealy.Machine m = new core.Mealy.Machine(this.id + " --> Mealy");
 
@@ -295,7 +295,7 @@ public class Machine {
 		m.setoAlphabet(new HashSet<Character>(this.oAlphabet));
 
 		for (State currState : this.states)
-			m.addState();
+			m.addState(currState.getID());
 
 		m.setCurrState(m.getStates().get(this.states.indexOf(this.currState)));
 
@@ -415,10 +415,10 @@ public class Machine {
 		output += "Input Alphabet: " + this.iAlphabet + "\n";
 		output += "Output Alphabet: " + this.oAlphabet + "\n";
 		for (State currState : this.states) {
-			output += "---State " + this.states.indexOf(currState) + " | output: " + currState.getOutput() + "---\n";
+			output += "---State " + currState.getID() + " | output: " + currState.getOutput() + "---\n";
 			for (Translation currTranslation : currState.getTranslations()) {
 				output += "[ " + currTranslation.getParent().getID() + "/" + currTranslation.getInput() + " ---> q"
-						+ this.states.indexOf(currTranslation.getTarget()) + " ]\n";
+						+ currTranslation.getTarget().getID() + " ]\n";
 			}
 		}
 		return output;

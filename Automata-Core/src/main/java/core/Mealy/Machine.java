@@ -563,7 +563,7 @@ public class Machine {
 
 		for (State currState : symbolDistributor.keySet()) {
 			for (Character currChar : symbolDistributor.get(currState)) {
-				m.addState(currChar, i);
+				m.addState(currChar, currState.getID() + Integer.toString(i));
 				i++;
 				translationDistributor.get(currState).put(currChar, m.getStates().get(m.getStates().size() - 1));
 				if (m.getCurrState() == null && this.currState == currState) {
@@ -765,10 +765,10 @@ public class Machine {
 		output += "Input Alphabet: " + this.iAlphabet + "\n";
 		output += "Output Alphabet: " + this.oAlphabet + "\n";
 		for (State currState : this.states) {
-			output += "---State " + this.states.indexOf(currState) + "---\n";
+			output += "---State " + currState.getID() + "---\n";
 			for (Translation currTranslation : currState.getTranslations()) {
 				output += "[ " + currTranslation.getParent().getID() + "/" + currTranslation.getInput() + " ---> "
-						+ currTranslation.getOutput() + " / q" + this.states.indexOf(currTranslation.getTarget())
+						+ currTranslation.getOutput() + " / q" + currTranslation.getTarget().getID()
 						+ " ]\n";
 			}
 		}

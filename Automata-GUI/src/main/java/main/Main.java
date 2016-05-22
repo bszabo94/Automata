@@ -25,11 +25,18 @@ package main;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+
+import org.xml.sax.SAXException;
+
 import controllers.AutomataController;
+import core.Mealy.MachineException;
 import io.XML.XMLHandler;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -126,7 +133,42 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
-		launch(args);
+		// launch(args);
+		try {
+			List<core.Mealy.Machine> mealys = new ArrayList<core.Mealy.Machine>();
+			List<core.Moore.Machine> moores = new ArrayList<core.Moore.Machine>();
+
+			mealys.add(new core.Mealy.Machine("letters", new HashSet<Character>(Arrays.asList('a', 'b', 'c')),
+					new HashSet<Character>(Arrays.asList('e', 'f', 'g'))));
+			mealys.add(new core.Mealy.Machine("numbers", new HashSet<Character>(Arrays.asList('1', '2', '3')),
+					new HashSet<Character>(Arrays.asList('4', '5', '6'))));
+			mealys.add(new core.Mealy.Machine("symbols", new HashSet<Character>(Arrays.asList('ł', 'Ł', '$')),
+					new HashSet<Character>(Arrays.asList('ß', '÷', '×'))));
+			
+			
+//			for(int i=0; i<mealys.size(); i++){
+//				System.out.println(mealys.get(i));
+//				moores.add(mealys.get(i).toMoore());
+//			}
+				
+			System.out.println("-------_");
+			
+			for(int i=0; i<mealys.size(); i++){
+//				System.out.println(moores.get(i));
+			}
+			
+//			XMLHandler.exportMealy(new File("XMLMEALY.xml"), mealys);
+//			XMLHandler.exportMoore(new File("MOOREEXP.XML"), moores);
+			
+			moores.clear();
+			moores = XMLHandler.importMoore(new File("MOOREEXP.XML"));
+//			mealys = XMLHandler.importMealy(new File("XMLMEALY.xml"));
+			for(int i=0; i<mealys.size(); i++){
+				System.out.println(moores.get(i));
+			}
+		} catch (MachineException | ParserConfigurationException | SAXException | IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -139,7 +181,7 @@ public class Main extends Application {
 			controller.setMain(this);
 
 			this.mainWindow = controller;
-			
+
 			Scene scene = new Scene(rootPane);
 			primaryStage.setScene(scene);
 			primaryStage.setResizable(false);
