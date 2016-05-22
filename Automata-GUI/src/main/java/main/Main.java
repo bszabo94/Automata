@@ -48,6 +48,11 @@ public class Main extends Application {
 
 	private Stage primaryStage;
 	private AnchorPane rootPane;
+	private AutomataController mainWindow;
+
+	public AutomataController getMainWindow() {
+		return mainWindow;
+	}
 
 	public Stage getPrimaryStage() {
 		return primaryStage;
@@ -133,6 +138,8 @@ public class Main extends Application {
 			AutomataController controller = fxmlloader.getController();
 			controller.setMain(this);
 
+			this.mainWindow = controller;
+			
 			Scene scene = new Scene(rootPane);
 			primaryStage.setScene(scene);
 			primaryStage.setResizable(false);

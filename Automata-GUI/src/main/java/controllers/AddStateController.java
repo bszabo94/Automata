@@ -39,9 +39,9 @@ public class AddStateController {
 		this.main = main;
 		if(main.getSelectedMealy() != null){
 			labelOutput.setVisible(false);
-			labelOutput.setDisable(true);
+//			labelOutput.setDisable(true);
 			addOutput.setVisible(false);
-			addOutput.setDisable(true);
+//			addOutput.setDisable(true);
 		}
 	}
 

@@ -28,7 +28,9 @@ import java.util.List;
 /**
  * <h1>State of a Mealy Machine</h1>
  * <P>
- * Describes a State of a Mealy Machine.
+ * Describes a State of a Mealy Machine. Each State consist of an {@code ID} and
+ * a List of {@code Translations}, in which every Translation refers the
+ * {@code State} as parent.
  * 
  * @author bszabo
  * @version 1.0
@@ -62,7 +64,8 @@ public class State {
 	 * corresponding parent states. This method adds the {@code Translation}
 	 * object given as paramter to the translations list of this state.
 	 * 
-	 * @param newTranslation The {@code Translation} object to be added.
+	 * @param newTranslation
+	 *            The {@code Translation} object to be added.
 	 * @see core.Mealy.Translation Translation
 	 */
 	public void addTranslation(Translation newTranslation) {

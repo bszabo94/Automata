@@ -32,6 +32,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+
+
 public class Machine {
 	private List<State> states;
 	private String id;
@@ -113,8 +115,47 @@ public class Machine {
 		this.oAlphabet = oAlphabet;
 	}
 
+	public void addiAlphabet(String i) throws MachineException{
+		for(Character currChar: i.toCharArray()){
+			if(this.iAlphabet.contains(currChar))
+				throw new MachineException(currChar + "is already in the Input Alhpabet.");
+			this.iAlphabet.add(currChar);
+		}
+	}
+	
+	public void addoAlphabet(String i) throws MachineException{
+		for(Character currChar: i.toCharArray()){
+			if(this.oAlphabet.contains(currChar))
+				throw new MachineException(currChar + "is already in the Output Alhpabet.");
+			this.oAlphabet.add(currChar);
+		}
+	}
+
+	public void removeiAlphabet(String i) throws MachineException{
+		for(Character currChar: i.toCharArray()){
+			if(!this.iAlphabet.contains(currChar))
+				throw new MachineException(currChar + "is not in the Input Alhpabet.");
+			this.iAlphabet.remove(currChar);
+		}
+	}
+	
+	public void removeoAlphabet(String i) throws MachineException{
+		for(Character currChar: i.toCharArray()){
+			if(!this.oAlphabet.contains(currChar))
+				throw new MachineException(currChar + "is not in the Output Alhpabet.");
+			this.oAlphabet.remove(currChar);
+		}
+	}
+	
 	public void setCurrState(State currState) {
 		this.currState = currState;
+	}
+	
+	public void setCurrStateById(String id) throws MachineException{
+		State s = this.findState(id);
+		if (s == null)
+			throw new MachineException("There is no state with the id: " + id + ".");
+		this.currState = s;
 	}
 
 	public Set<Character> getiAlphabet() {

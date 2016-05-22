@@ -29,9 +29,11 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import core.Mealy.Translation;
 import io.XML.XMLHandler;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -282,16 +284,16 @@ public class AutomataController {
 			textareaOA.setText("");
 			textareaIA.setText("");
 		}
-		mooreTranslationTable.setDisable(true);
+//		mooreTranslationTable.setDisable(true);
 		mooreTranslationTable.setVisible(false);
-		mealyTranslationTable.setDisable(false);
+//		mealyTranslationTable.setDisable(false);
 		mealyTranslationTable.setVisible(true);
 
 		mooreStatesTable.setVisible(false);
-		mooreStatesTable.setDisable(true);
+//		mooreStatesTable.setDisable(true);
 
 		mealyStatesTable.setVisible(true);
-		mealyStatesTable.setDisable(false);
+//		mealyStatesTable.setDisable(false);
 	}
 
 	private void selectMoore(core.Moore.Machine m) {
@@ -319,16 +321,16 @@ public class AutomataController {
 			textareaOA.setText("");
 			textareaIA.setText("");
 		}
-		mealyTranslationTable.setDisable(true);
+//		mealyTranslationTable.setDisable(true);
 		mealyTranslationTable.setVisible(false);
-		mooreTranslationTable.setDisable(false);
+//		mooreTranslationTable.setDisable(false);
 		mooreTranslationTable.setVisible(true);
 
 		mooreStatesTable.setVisible(true);
-		mooreStatesTable.setDisable(false);
+//		mooreStatesTable.setDisable(false);
 
 		mealyStatesTable.setVisible(false);
-		mealyStatesTable.setDisable(true);
+//		mealyStatesTable.setDisable(true);
 	}
 
 	@FXML
@@ -632,5 +634,65 @@ public class AutomataController {
 			e.printStackTrace();
 		}
 	}
+
+	@FXML
+	private void handleButtonInit(ActionEvent event) {
+		try {
+			if (main.getSelectedMealy() != null) {
+				main.getSelectedMealy().init(main.getSelectedMealy().getiAlphabet(),
+						main.getSelectedMealy().getoAlphabet());
+			} else if (main.getSelectedMoore() != null) {
+				main.getSelectedMoore().init(main.getSelectedMealy().getiAlphabet(),
+						main.getSelectedMealy().getoAlphabet());
+			} else {
+				main.showPopup("Select a Machine first!", AlertType.WARNING);
+			}
+		} catch (core.Mealy.MachineException | core.Moore.MachineException e) {
+			main.showPopup(e.getMessage(), AlertType.ERROR);
+		}
+	}
+
+	@FXML
+	private void handleButtonEdit(ActionEvent event) {
+		if (main.getSelectedMealy() == null && main.getSelectedMoore() == null) {
+			main.showPopup("Select a machine first!", AlertType.ERROR);
+			return;
+		}
+
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource("/fxml/EditMachine.fxml"));
+			AnchorPane ap = (AnchorPane) loader.load();
+			EditMachineController controller = loader.getController();
+			controller.setMain(this.main);
+
+			Stage stage = new Stage();
+			stage.initStyle(StageStyle.UNDECORATED);
+			stage.setTitle("Edit Machine");
+
+			stage.setScene(new Scene(ap));
+			stage.show();
+
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+			main.showPopup(e.getMessage(), AlertType.ERROR);
+		}
+	}
+
+	@FXML
+	private void handleButtonExit(ActionEvent event) {
+		main.getPrimaryStage().getOnCloseRequest()
+				.handle(new WindowEvent(main.getPrimaryStage(), WindowEvent.WINDOW_CLOSE_REQUEST));
+	}
+
+	//TODO refresh stuff....
+//	public void refresh() {
+//		tableMealy.setItems(main.getMealyMachines());
+//		tableMoore.setItems(main.getMooreMachines());
+//		mealyTranslationTable.setItems(FXCollections.observableList(main.getSelectedMealy().getTranslationsAsList()));
+//		mooreTranslationTable.setItems(FXCollections.observableList(main.getSelectedMoore().getTranslationsAsList()));
+//		mealyStatesTable.setItems(FXCollections.observableList(main.getSelectedMealy().getStates()));
+//		mooreStatesTable.setItems(FXCollections.observableList(main.getSelectedMoore().getStates()));
+//	}
 
 }

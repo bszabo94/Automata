@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0"
+	prefWidth="450.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="controllers.EditMachineController">
+	<children>
+		<Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0"
+			layoutY="14.0" prefHeight="18.0" prefWidth="78.0" text="Edit Machine"
+			textAlignment="CENTER" AnchorPane.bottomAnchor="250.0"
+			AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0"
+			AnchorPane.topAnchor="10.0">
+			<font>
+				<Font size="25.0" />
+			</font>
+		</Label>
+		<Label layoutX="14.0" layoutY="61.0" text="ID: ">
+			<font>
+				<Font size="17.0" />
+			</font>
+		</Label>
+		<TextField fx:id="newMachineID" alignment="CENTER_RIGHT"
+			layoutX="146.0" layoutY="58.0" prefHeight="26.0" prefWidth="199.0"
+			promptText="New ID for Machine" />
+		<Button cancelButton="true" layoutX="373.0" layoutY="257.0"
+			mnemonicParsing="false" onAction="#handleButtonCancel" text="Exit" />
+		<Label layoutX="14.0" layoutY="97.0" text="Current State:">
+			<font>
+				<Font size="17.0" />
+			</font>
+		</Label>
+		<TextField fx:id="newCurrStateID" alignment="CENTER_RIGHT"
+			layoutX="146.0" layoutY="95.0" prefHeight="26.0" prefWidth="199.0"
+			promptText="ID of new Current State" />
+		<TextField fx:id="newSymbols" alignment="CENTER_RIGHT"
+			layoutX="187.0" layoutY="162.0" prefHeight="26.0" prefWidth="158.0"
+			promptText="Symbol" />
+		<Label layoutX="14.0" layoutY="165.0" text="Selected Symbols:">
+			<font>
+				<Font size="17.0" />
+			</font>
+		</Label>
+		<Button layoutX="358.0" layoutY="58.0" mnemonicParsing="false"
+			onAction="#handleRenameMachine" prefHeight="26.0" prefWidth="78.0"
+			text="Rename" />
+		<Button layoutX="358.0" layoutY="95.0" mnemonicParsing="false"
+			onAction="#handleSetCurrState" text="Set State" />
+		<Separator layoutX="125.0" layoutY="140.0" prefWidth="200.0"
+			AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+		<Button layoutX="186.0" layoutY="200.0" mnemonicParsing="false"
+			onAction="#handleIAAdd" prefHeight="26.0" prefWidth="78.0" text="Add" />
+		<Button layoutX="274.0" layoutY="201.0" mnemonicParsing="false"
+			onAction="#handleIARemove" prefHeight="26.0" prefWidth="78.0" text="Remove" />
+		<Button layoutX="186.0" layoutY="246.0" mnemonicParsing="false"
+			onAction="#handleOAAdd" prefHeight="26.0" prefWidth="78.0" text="Add" />
+					<Button layoutX="274.0" layoutY="247.0" mnemonicParsing="false"
+			onAction="#handleOARemove" prefHeight="26.0" prefWidth="78.0" text="Remove" />
+		<Label layoutX="14.0" layoutY="203.0" text="Input Alphabet:">
+			<font>
+				<Font size="17.0" />
+			</font>
+		</Label>
+		<Label layoutX="14.0" layoutY="249.0" text="Output Alphabet:">
+			<font>
+				<Font size="17.0" />
+			</font>
+		</Label>
+
+	</children>
+</AnchorPane>

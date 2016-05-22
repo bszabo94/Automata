@@ -228,9 +228,48 @@ public class Machine {
 	public void setoAlphabet(Set<Character> oAlphabet) {
 		this.oAlphabet = oAlphabet;
 	}
+	
+	public void addiAlphabet(String i) throws MachineException{
+		for(Character currChar: i.toCharArray()){
+			if(this.iAlphabet.contains(currChar))
+				throw new MachineException(currChar + "is already in the Input Alhpabet.");
+			this.iAlphabet.add(currChar);
+		}
+	}
+	
+	public void addoAlphabet(String i) throws MachineException{
+		for(Character currChar: i.toCharArray()){
+			if(this.oAlphabet.contains(currChar))
+				throw new MachineException(currChar + "is already in the Output Alhpabet.");
+			this.oAlphabet.add(currChar);
+		}
+	}
 
+	public void removeiAlphabet(String i) throws MachineException{
+		for(Character currChar: i.toCharArray()){
+			if(!this.iAlphabet.contains(currChar))
+				throw new MachineException(currChar + "is not in the Input Alhpabet.");
+			this.iAlphabet.remove(currChar);
+		}
+	}
+	
+	public void removeoAlphabet(String i) throws MachineException{
+		for(Character currChar: i.toCharArray()){
+			if(!this.oAlphabet.contains(currChar))
+				throw new MachineException(currChar + "is not in the Output Alhpabet.");
+			this.oAlphabet.remove(currChar);
+		}
+	}
+	
 	public void setCurrState(State currState) {
 		this.currState = currState;
+	}
+
+	public void setCurrStateById(String id) throws MachineException {
+		State s = this.findState(id);
+		if (s == null)
+			throw new MachineException("There is no state with the id: " + id + ".");
+		this.currState = s;
 	}
 
 	public Set<Character> getiAlphabet() {
@@ -261,6 +300,9 @@ public class Machine {
 	 * @throws core.Mealy.MachineException
 	 */
 	public void init(Set<Character> iAlphabet, Set<Character> oAlphabet) throws MachineException {
+		if (this.states.size() > 0 || this.getTranslationsAsList().size() > 0)
+			throw new MachineException(
+					"Only empty Machines can be initialized. No state or translation must exists in the machine.");
 		if (iAlphabet.size() > oAlphabet.size())
 			throw new MachineException("Input Alphabet must contain equal or less symbols than the Output Alphabet!");
 		this.iAlphabet = iAlphabet;
