@@ -22,6 +22,25 @@ package core.Mealy;
  * #L%
  */
 
+/**
+ * <h1>Translation of a Mealy Machine</h1>
+ * 
+ * <P>
+ * Translations describe unequivocal operations between the states of a machine.
+ * Each translation consist of four elements: {@code parent}, {@code target},
+ * {@code input} and {@code output}. Translations are stored in a list, within
+ * the {@code State} the translation describes as it's parent.
+ * 
+ * For every input symbol, the Machine finds the correct translation: where the
+ * parent state is the current state of the machine, and the input of tthe
+ * translation is the same symbol given as input, and executes the operation the
+ * translation describes: moves to the target state, and returns the output,
+ * which was associated to the input by the translation.
+ * 
+ * @author bszabo
+ * @verion 1.0
+ * @see core.Mealy.Machine Machine
+ */
 public class Translation {
 	private Character input, output;
 	private State parent, target;

@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Set;
 
 import controllers.AutomataController;
-import core.Mealy.State;
 import io.XML.XMLHandler;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -64,6 +63,8 @@ public class Main extends Application {
 	private core.Moore.Machine selectedMoore;
 	private core.Mealy.State selectedMealyState;
 	private core.Moore.State selectedMooreState;
+	private core.Mealy.Translation selectedMealyTranslation;
+	private core.Moore.Translation selectedMooreTranslation;
 
 	public ObservableList<core.Moore.Machine> getMooreMachines() {
 		return mooreMachines;
@@ -104,6 +105,7 @@ public class Main extends Application {
 							+ "qwertzuiopőúasdfghjkléáűíyxcvbnm,.-§'\"+!%/=()ÖÜÓQWERTZUIOPŐÚASDFGHJKLÉÁŰÍYXCVBNM?:_*>;<}{"
 							+ "@&><äđĐ[]ħíłŁ$ß¤×÷”„Í€–ŧ¶e|\\");
 		} catch (Exception e) {
+
 			e.printStackTrace();
 		}
 	}
@@ -112,7 +114,7 @@ public class Main extends Application {
 	public void start(Stage stage) {
 
 		this.primaryStage = stage;
-		stage.setTitle("Goat Simulator 2016");
+		stage.setTitle("Automata Simulator");
 
 		initGUI();
 
@@ -170,6 +172,22 @@ public class Main extends Application {
 
 	public void setSelectedMooreState(core.Moore.State selectedMooreState) {
 		this.selectedMooreState = selectedMooreState;
+	}
+
+	public core.Mealy.Translation getSelectedMealyTranslation() {
+		return selectedMealyTranslation;
+	}
+
+	public void setSelectedMealyTranslation(core.Mealy.Translation selectedMealyTranslation) {
+		this.selectedMealyTranslation = selectedMealyTranslation;
+	}
+
+	public core.Moore.Translation getSelectedMooreTranslation() {
+		return selectedMooreTranslation;
+	}
+
+	public void setSelectedMooreTranslation(core.Moore.Translation selectedMooreTranslation) {
+		this.selectedMooreTranslation = selectedMooreTranslation;
 	}
 
 }

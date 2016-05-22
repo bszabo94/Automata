@@ -1,4 +1,4 @@
-package core.Mealy;
+package core.Tests;
 
 /*
  * #%L
@@ -22,24 +22,12 @@ package core.Mealy;
  * #L%
  */
 
-/**
- * A Machine Exception
- * 
- * <P>
- * MachineException mainly serves to control the creation and modification of
- * the machines to be syntactially correct, clear and transparent. Makes
- * possible to avoid any incorrect form of addition or delition from the machine
- * that would cause logical problems and errors later.
- * 
- * @author bszabo
- * @version 1.0
- * @see core.Mealy.Machine Machine
- */
-@SuppressWarnings("serial")
-public class MachineException extends Exception {
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
 
-	public MachineException(String message) {
-		super(message);
-	}
+@RunWith(Suite.class)
+@SuiteClasses({MealyTests.class, MooreTests.class/*, ConversionTests.class*/})
+public class Test {
 
 }

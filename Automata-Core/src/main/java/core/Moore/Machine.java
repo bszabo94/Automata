@@ -49,6 +49,8 @@ public class Machine {
 	}
 
 	public Machine(String id, Set<Character> iAlphabet, Set<Character> oAlphabet) throws MachineException {
+		if (id == null || id.equals(""))
+			throw new MachineException("The ID must not be empty.");
 		this.id = id;
 		this.states = new ArrayList<State>();
 		this.currState = null;
@@ -76,6 +78,8 @@ public class Machine {
 	}
 
 	public void addState(Character output, String id) throws MachineException {
+		if (id == null || id.equals(""))
+			throw new MachineException("The ID must not be empty.");
 		if (this.findState(id) != null)
 			throw new MachineException("There is already a state in the machine with the ID: " + id);
 		this.states.add(new State(output, id));
@@ -205,7 +209,9 @@ public class Machine {
 		return null;
 	}
 
-	public String encode(String input) {
+	public String encode(String input) throws MachineException {
+		if (!this.isValid())
+			throw new MachineException("Must be a valid machine!");
 		State temp = this.currState;
 		String output = new String();
 		for (int i = 0; i < input.length(); i++) {
@@ -217,7 +223,9 @@ public class Machine {
 		return output;
 	}
 
-	public String decode(String input) {
+	public String decode(String input) throws MachineException {
+		if (!this.isValid())
+			throw new MachineException("Must be a valid machine!");
 		State temp = this.currState;
 		String output = new String();
 		for (int i = 0; i < input.length(); i++) {
@@ -262,7 +270,7 @@ public class Machine {
 		return m;
 	}
 
-	public Set<Character> getSymbols(String sentence) {
+	public static Set<Character> getSymbols(String sentence) {
 		Set<Character> symbols = new HashSet<Character>();
 		for (int i = 0; i < sentence.length(); i++) {
 			symbols.add(sentence.charAt(i));
@@ -316,6 +324,8 @@ public class Machine {
 			}
 		}
 		this.states.remove(s);
+		if (currState == s)
+			currState = null;
 	}
 
 	/**
@@ -339,6 +349,22 @@ public class Machine {
 		}
 
 		return s;
+	}
+
+	public void addTranslation(String parentID, String targetID, Character input) throws MachineException {
+		State s = this.findState(parentID);
+		if (s == null)
+			throw new MachineException("There is no such state described as parent.");
+		State t = this.findState(targetID);
+		if (t == null)
+			throw new MachineException("There is no such state described as target.");
+		if (!iAlphabet.contains(input))
+			throw new MachineException("Input symbol must be included in the input alphabet.");
+		s.addTranslation(new Translation(s, input, t));
+	}
+
+	public void removeTranslation(Translation t) {
+		t.getParent().getTranslations().remove(t);
 	}
 
 	@Override

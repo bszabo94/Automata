@@ -184,9 +184,12 @@ public class Machine {
 	 * @param id
 	 *            The string, which will be {@code id} of the new state;
 	 * @throws MachineException
+	 *             if the give {@code id} is empty or duplicate.
 	 * @see core.Mealy.Machine#addState() addState()
 	 */
 	public void addState(String id) throws MachineException {
+		if (id == null || id.equals(""))
+			throw new MachineException("The ID must not be empty.");
 		if (this.findState(id) != null)
 			throw new MachineException("There is already a state in the machine with the ID: " + id + ".");
 		this.states.add(new State(id));
@@ -409,7 +412,9 @@ public class Machine {
 	 * @return The output string after the encoding.
 	 * @throws MachineException
 	 */
-	public String encode(String input) throws MachineException {
+	public String encode(String input) throws core.Mealy.MachineException {
+		if (!this.isValid())
+			throw new core.Mealy.MachineException("Must be a valid machine!");
 		State temp = this.currState;
 		String output = new String();
 		for (int i = 0; i < input.length(); i++) {
@@ -434,8 +439,12 @@ public class Machine {
 	 *            The string it decodes.
 	 * @return The output string after the decoding.
 	 * @throws MachineException
+	 *             if one character of the given string is not included in the
+	 *             ouput alphabet.
 	 */
 	public String decode(String input) throws MachineException {
+		if (!this.isValid())
+			throw new MachineException("Must be a valid machine!");
 		State temp = this.currState;
 		String output = new String();
 		for (int i = 0; i < input.length(); i++) {
@@ -544,7 +553,7 @@ public class Machine {
 	 * @return The set of characters, containing all the symbols found in the
 	 *         given sentence or text.
 	 */
-	public Set<Character> getSymbols(String sentence) {
+	public static Set<Character> getSymbols(String sentence) {
 		Set<Character> symbols = new HashSet<Character>();
 		for (int i = 0; i < sentence.length(); i++) {
 			symbols.add(sentence.charAt(i));
@@ -614,33 +623,22 @@ public class Machine {
 	 * @throws MachineException
 	 */
 	public void removeState(String id) throws MachineException {
-		State s = null;
-		for (State currState : this.states)
-			if (id.equals(currState.getID())) {
-				s = currState;
-				break;
-			}
+		State s = this.findState(id);
 		if (s == null)
 			throw new MachineException("There is no State with the given ID.");
 
-		// for (State currState : this.states) {
-		// for (int i = 0; i < currState.getTranslations().size(); i++) {
-		// if (currState.getTranslations().get(i).getParent() == s
-		// || currState.getTranslations().get(i).getTarget() == s) {
-		// currState.getTranslations().remove(currState.getTranslations().get(i));
-		// i--;
-		// }
-		// }
-		// }
-		for (int i = 0; i < this.getTranslationsAsList().size(); i++) {
-			if (this.getTranslationsAsList().get(i).getParent() == s
-					|| this.getTranslationsAsList().get(i).getTarget() == s) {
-				this.getTranslationsAsList().remove(this.getTranslationsAsList().get(i));
-				i--;
+		for (State currState : this.states) {
+			for (int i = 0; i < currState.getTranslations().size(); i++) {
+				if (currState.getTranslations().get(i).getParent() == s
+						|| currState.getTranslations().get(i).getTarget() == s) {
+					currState.getTranslations().remove(currState.getTranslations().get(i));
+					i--;
+				}
 			}
-
 		}
 		this.states.remove(s);
+		if (currState == s)
+			currState = null;
 	}
 
 	/**
@@ -664,6 +662,59 @@ public class Machine {
 		}
 
 		return s;
+	}
+
+	/**
+	 * Adds a new translation to the machine.
+	 * 
+	 * <P>
+	 * Initializes a new {@link core.Mealy.Translation Translation} object, and
+	 * adds it to the translation list of the {@code parent} state given as
+	 * parameter.
+	 * 
+	 * @param parentID
+	 *            The ID of the state, which will be the parent state of the new
+	 *            translation.
+	 * @param targetID
+	 *            The ID of the state, which will be the target state of the new
+	 *            translation.
+	 * @param input
+	 *            The input symbol of the new translation.
+	 * @param output
+	 *            The output symbol of the new translation.
+	 * @throws MachineException
+	 *             If there is no state in the machine with the given ID either
+	 *             given as parent or target. Also throws an exception when
+	 *             input or output symbol is not included in the input or output
+	 *             alaphabets.
+	 */
+	public void addTranslation(String parentID, String targetID, Character input, Character output)
+			throws MachineException {
+		State s = this.findState(parentID);
+		if (s == null)
+			throw new MachineException("There is no such state described as parent.");
+		State t = this.findState(targetID);
+		if (t == null)
+			throw new MachineException("There is no such state described as target.");
+		if (!iAlphabet.contains(input) || !oAlphabet.contains(output))
+			throw new MachineException("Input and output symbols must be included in their corresponding alphabets.");
+		s.addTranslation(new Translation(input, output, s, t));
+	}
+
+	/**
+	 * Remove a translation from the machine.
+	 * 
+	 * <P>
+	 * Removes the {@code t} translation given as parameter from the
+	 * translations of it's parent state in the machine. Since translations are
+	 * stored only in their parent states translations list it removes it from
+	 * the machine completely.
+	 * 
+	 * @param t
+	 *            The translations to be removed.
+	 */
+	public void removeTranslation(Translation t) {
+		t.getParent().getTranslations().remove(t);
 	}
 
 	public String toString() {

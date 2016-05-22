@@ -29,6 +29,7 @@ import java.util.List;
  * <h1>State of a Mealy Machine</h1>
  * <P>
  * Describes a State of a Mealy Machine.
+ * 
  * @author bszabo
  * @version 1.0
  * @see core.Mealy.Machine Mealy Machine
@@ -47,15 +48,22 @@ public class State {
 		this.translations = new ArrayList<Translation>();
 		this.id = "q" + Integer.toString(n);
 	}
-	
+
 	public State(String s) {
 		this.translations = new ArrayList<Translation>();
 		this.id = s;
 	}
 
-	/**TODO
+	/**
 	 * Adds a translation to the state.
-	 * @param newTranslation
+	 * 
+	 * <P>
+	 * In the machines, all translations are stored in a List within their
+	 * corresponding parent states. This method adds the {@code Translation}
+	 * object given as paramter to the translations list of this state.
+	 * 
+	 * @param newTranslation The {@code Translation} object to be added.
+	 * @see core.Mealy.Translation Translation
 	 */
 	public void addTranslation(Translation newTranslation) {
 		this.translations.add(newTranslation);

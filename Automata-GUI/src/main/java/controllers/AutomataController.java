@@ -23,6 +23,11 @@ package controllers;
  */
 
 import java.io.File;
+import java.io.IOException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
 
 import io.XML.XMLHandler;
 import javafx.beans.property.SimpleStringProperty;
@@ -58,6 +63,8 @@ public class AutomataController {
 		tableMoore.setPlaceholder(new Label("There are no Moore Machines."));
 		mealyTranslationTable.setPlaceholder(new Label("No Machine has been selected."));
 		mooreTranslationTable.setPlaceholder(new Label("No Machine has been selected."));
+		mealyStatesTable.setPlaceholder(new Label(""));
+		mooreStatesTable.setPlaceholder(new Label(""));
 	}
 
 	public AutomataController(Main main) {
@@ -160,6 +167,9 @@ public class AutomataController {
 	Label labelNbrStates;
 
 	@FXML
+	Label labelCurrState;
+
+	@FXML
 	TextArea textareaOA;
 
 	@FXML
@@ -203,6 +213,12 @@ public class AutomataController {
 		mooreTrTarget
 				.setCellValueFactory(celldata -> new SimpleStringProperty(celldata.getValue().getTarget().getID()));
 
+		mealyTranslationTable.getSelectionModel().selectedItemProperty()
+				.addListener((o, oldValue, newValue) -> selectMealyTranslation(newValue));
+
+		mooreTranslationTable.getSelectionModel().selectedItemProperty()
+				.addListener((o, oldValue, newValue) -> selectMooreTranslation(newValue));
+
 		// States table
 		mealyStatesTable.getSelectionModel().selectedItemProperty()
 				.addListener((o, oldValue, newValue) -> selectMealyState(newValue));
@@ -218,24 +234,26 @@ public class AutomataController {
 
 	}
 
+	private void selectMealyTranslation(core.Mealy.Translation t) {
+		main.setSelectedMealyTranslation(t);
+		main.setSelectedMooreTranslation(null);
+	}
+
+	private void selectMooreTranslation(core.Moore.Translation t) {
+		main.setSelectedMealyTranslation(null);
+		main.setSelectedMooreTranslation(t);
+	}
+
 	private void selectMealyState(core.Mealy.State s) {
 		main.setSelectedMealyState(s);
 		main.setSelectedMooreState(null);
-		if (main.getSelectedMealyState() != null) {
-			mealyStatesTable.setItems(FXCollections.observableList(main.getSelectedMealy().getStates()));
-		} else {
-			mealyStatesTable.setItems(null);
-		}
+
 	}
 
 	private void selectMooreState(core.Moore.State s) {
 		main.setSelectedMooreState(s);
 		main.setSelectedMealyState(null);
-		if (main.getSelectedMooreState() != null) {
-			mooreStatesTable.setItems(FXCollections.observableList(main.getSelectedMoore().getStates()));
-		} else {
-			mooreStatesTable.setItems(null);
-		}
+
 	}
 
 	private void selectMealy(core.Mealy.Machine m) {
@@ -244,14 +262,23 @@ public class AutomataController {
 		if (main.getSelectedMealy() != null) {
 			mealyTranslationTable
 					.setItems(FXCollections.observableList(main.getSelectedMealy().getTranslationsAsList()));
+			mealyStatesTable.setItems(FXCollections.observableList(main.getSelectedMealy().getStates()));
+
 			labelID.setText(main.getSelectedMealy().getID());
 			labelNbrStates.setText(Integer.toString(main.getSelectedMealy().getStates().size()));
+			if (main.getSelectedMealy().getCurrState() != null) {
+				labelCurrState.setText(main.getSelectedMealy().getCurrState().getID());
+			} else {
+				labelCurrState.setText("None!");
+			}
 			textareaOA.setText(main.getSelectedMealy().getoAlphabet().toString());
 			textareaIA.setText(main.getSelectedMealy().getiAlphabet().toString());
 		} else {
 			mealyTranslationTable.setItems(null);
+			mealyStatesTable.setItems(null);
 			labelID.setText("");
 			labelNbrStates.setText("");
+			labelCurrState.setText("");
 			textareaOA.setText("");
 			textareaIA.setText("");
 		}
@@ -260,9 +287,11 @@ public class AutomataController {
 		mealyTranslationTable.setDisable(false);
 		mealyTranslationTable.setVisible(true);
 
-		mealyStatesTable.setItems(FXCollections.observableList(main.getSelectedMealy().getStates()));
 		mooreStatesTable.setVisible(false);
+		mooreStatesTable.setDisable(true);
+
 		mealyStatesTable.setVisible(true);
+		mealyStatesTable.setDisable(false);
 	}
 
 	private void selectMoore(core.Moore.Machine m) {
@@ -271,14 +300,22 @@ public class AutomataController {
 		if (main.getSelectedMoore() != null) {
 			mooreTranslationTable
 					.setItems(FXCollections.observableList(main.getSelectedMoore().getTranslationsAsList()));
+			mooreStatesTable.setItems(FXCollections.observableList(main.getSelectedMoore().getStates()));
 			labelID.setText(main.getSelectedMoore().getID());
 			labelNbrStates.setText(Integer.toString(main.getSelectedMoore().getStates().size()));
+			if (main.getSelectedMoore().getCurrState() != null) {
+				labelCurrState.setText(main.getSelectedMoore().getCurrState().getID());
+			} else {
+				labelCurrState.setText("None!");
+			}
 			textareaOA.setText(main.getSelectedMoore().getoAlphabet().toString());
 			textareaIA.setText(main.getSelectedMoore().getiAlphabet().toString());
 		} else {
 			mooreTranslationTable.setItems(null);
+			mooreStatesTable.setItems(null);
 			labelID.setText("");
 			labelNbrStates.setText("");
+			labelCurrState.setText("");
 			textareaOA.setText("");
 			textareaIA.setText("");
 		}
@@ -287,9 +324,11 @@ public class AutomataController {
 		mooreTranslationTable.setDisable(false);
 		mooreTranslationTable.setVisible(true);
 
-		mooreStatesTable.setItems(FXCollections.observableList(main.getSelectedMoore().getStates()));
 		mooreStatesTable.setVisible(true);
+		mooreStatesTable.setDisable(false);
+
 		mealyStatesTable.setVisible(false);
+		mealyStatesTable.setDisable(true);
 	}
 
 	@FXML
@@ -392,8 +431,8 @@ public class AutomataController {
 					main.getMooreMachines().addAll(XMLHandler.importMoore(file));
 					for (core.Moore.Machine m : main.getMooreMachines())
 						System.out.println(m);
-				} catch (Exception e) {
-					e.printStackTrace();
+				} catch (SAXException | ParserConfigurationException | IOException e) {
+					main.showPopup(e.getMessage(), AlertType.ERROR);
 				}
 				return;
 			}
@@ -407,14 +446,28 @@ public class AutomataController {
 			return;
 		}
 		if (main.getSelectedMealy() != null && main.getSelectedMealyState() != null) {
+			core.Mealy.State s = main.getSelectedMealyState();
 			try {
-				main.getSelectedMealy().removeState(main.getSelectedMealyState().getID());
+				main.setSelectedMealyState(null);
+				main.getSelectedMealy().removeState(s.getID());
+
+				mealyTranslationTable
+						.setItems(FXCollections.observableList(main.getSelectedMealy().getTranslationsAsList()));
+				mealyStatesTable.setItems(FXCollections.observableList(main.getSelectedMealy().getStates()));
+				labelNbrStates.setText(Integer.toString(main.getSelectedMealy().getStates().size()));
 			} catch (core.Mealy.MachineException e) {
 				main.showPopup(e.getMessage(), AlertType.ERROR);
 			}
 		} else if (main.getSelectedMoore() != null && main.getSelectedMooreState() != null) {
+			core.Moore.State s = main.getSelectedMooreState();
 			try {
-				main.getSelectedMoore().removeState(main.getSelectedMooreState().getID());
+				main.setSelectedMooreState(null);
+				main.getSelectedMoore().removeState(s.getID());
+
+				mooreTranslationTable
+						.setItems(FXCollections.observableList(main.getSelectedMoore().getTranslationsAsList()));
+				mooreStatesTable.setItems(FXCollections.observableList(main.getSelectedMoore().getStates()));
+				labelNbrStates.setText(Integer.toString(main.getSelectedMoore().getStates().size()));
 			} catch (core.Moore.MachineException e) {
 				main.showPopup(e.getMessage(), AlertType.ERROR);
 			}
@@ -422,25 +475,27 @@ public class AutomataController {
 			main.showPopup("Something went wrong. Try again!", AlertType.ERROR);
 		}
 
-		//
-		// try {
-		// FXMLLoader loader = new FXMLLoader();
-		// loader.setLocation(Main.class.getResource("/fxml/RemoveState.fxml"));
-		// AnchorPane ap = (AnchorPane) loader.load();
-		// RemoveStateController controller = loader.getController();
-		// controller.setMain(this.main);
-		//
-		// Stage stage = new Stage();
-		// stage.initStyle(StageStyle.UNDECORATED);
-		// stage.setTitle("Remove State");
-		//
-		// stage.setScene(new Scene(ap));
-		// stage.show();
-		//
-		// } catch (Exception e) {
-		// System.out.println(e.getMessage());
-		// e.printStackTrace();
-		// }
+	}
+
+	@FXML
+	private void handleMenuButtonRemoveState(ActionEvent event) {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource("/fxml/RemoveState.fxml"));
+			AnchorPane ap = (AnchorPane) loader.load();
+			RemoveStateController controller = loader.getController();
+			controller.setMain(this.main);
+
+			Stage stage = new Stage();
+			stage.initStyle(StageStyle.UNDECORATED);
+			stage.setTitle("Remove State");
+
+			stage.setScene(new Scene(ap));
+			stage.show();
+
+		} catch (IOException e) {
+			main.showPopup(e.getMessage(), AlertType.ERROR);
+		}
 	}
 
 	@FXML
@@ -464,9 +519,8 @@ public class AutomataController {
 			stage.setScene(new Scene(ap));
 			stage.show();
 
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
+		} catch (IOException e) {
+			main.showPopup(e.getMessage(), AlertType.ERROR);
 		}
 	}
 
@@ -487,54 +541,96 @@ public class AutomataController {
 
 	@FXML
 	private void handleButtonEncode(ActionEvent event) {
-		// TODO legyen validate
 		try {
 			if (main.getSelectedMealy() != null) {
 				textAreaOutput.setText(main.getSelectedMealy().encode(textAreaInput.getText()));
-				return;
 			} else if (main.getSelectedMoore() != null) {
 				textAreaOutput.setText(main.getSelectedMoore().encode(textAreaInput.getText()));
-				return;
 			} else {
 				main.showPopup("Select a Machine first!", AlertType.WARNING);
 			}
-		} catch (core.Mealy.MachineException e) {
-			e.printStackTrace();
+		} catch (core.Mealy.MachineException | core.Moore.MachineException e) {
+			main.showPopup(e.getMessage(), AlertType.ERROR);
 		}
 	}
 
 	@FXML
 	private void handleButtonDecode(ActionEvent event) {
-		// TODO legyen validate
 		try {
 			if (main.getSelectedMealy() != null) {
 				textAreaOutput.setText(main.getSelectedMealy().decode(textAreaInput.getText()));
-				return;
 			}
 			if (main.getSelectedMoore() != null) {
 				textAreaOutput.setText(main.getSelectedMoore().decode(textAreaInput.getText()));
-				return;
 			}
-		} catch (core.Mealy.MachineException /* | core.Moore.MachineException */ e) {
-			e.printStackTrace();
+		} catch (core.Mealy.MachineException | core.Moore.MachineException e) {
+			main.showPopup(e.getMessage(), AlertType.ERROR);
 		}
 
 	}
 
 	@FXML
 	private void handleButtonAddTranslation(ActionEvent event) {
-		// TODO
+		if (main.getSelectedMealy() == null && main.getSelectedMoore() == null) {
+			main.showPopup("Select a machine first!", AlertType.WARNING);
+			return;
+		}
+
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource("/fxml/NewTranslation.fxml"));
+			AnchorPane ap = (AnchorPane) loader.load();
+			NewTranslationController controller = loader.getController();
+			controller.setMain(this.main);
+
+			Stage stage = new Stage();
+			stage.initStyle(StageStyle.UNDECORATED);
+			stage.setTitle("New Translation");
+
+			stage.setScene(new Scene(ap));
+			stage.show();
+
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+			main.showPopup(e.getMessage(), AlertType.ERROR);
+		}
 	}
 
 	@FXML
 	private void handleButtonRemoveTranslation(ActionEvent event) {
-		// TODO
+		if (main.getSelectedMealyTranslation() != null) {
+			main.getSelectedMealy().removeTranslation(main.getSelectedMealyTranslation());
+			mealyTranslationTable
+					.setItems(FXCollections.observableList(main.getSelectedMealy().getTranslationsAsList()));
+		} else if (main.getSelectedMooreTranslation() != null) {
+			main.getSelectedMoore().removeTranslation(main.getSelectedMooreTranslation());
+			mooreTranslationTable
+					.setItems(FXCollections.observableList(main.getSelectedMoore().getTranslationsAsList()));
+		} else {
+			main.showPopup("Select a translation first!", AlertType.ERROR);
+		}
 	}
 
 	@FXML
 	private void handleButtonRead(ActionEvent event) {
-		// TODO
-		// újablak, radiobutonnel
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource("/fxml/ReadWindow.fxml"));
+			AnchorPane ap = (AnchorPane) loader.load();
+			ReadController controller = loader.getController();
+			controller.setMain(this.main, textAreaInput.getText());
+
+			Stage stage = new Stage();
+			stage.initStyle(StageStyle.UNDECORATED);
+			stage.setTitle("New Machine");
+
+			stage.setScene(new Scene(ap));
+			stage.show();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 }
