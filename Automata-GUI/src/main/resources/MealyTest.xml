@@ -1,111 +1,89 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!--
-  #%L
-  Automata-GUI
-  %%
-  Copyright (C) 2016 Faculty of Informatics, University of Debrecen
-  %%
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as
-  published by the Free Software Foundation, either version 3 of the
-  License, or (at your option) any later version.
-  
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-  
-  You should have received a copy of the GNU General Public
-  License along with this program.  If not, see
-  <http://www.gnu.org/licenses/gpl-3.0.html>.
-  #L%
-  -->
-
 <Machines>
-   <Machine Initial_State="q0" id="letters">
+   <Machine ID="letters" Initial_State="q0" Type="Mealy">
       <InputAlphabet>
          <Symbol>a</Symbol>
          <Symbol>b</Symbol>
          <Symbol>c</Symbol>
       </InputAlphabet>
       <OutputAlphabet>
-         <Symbol>d</Symbol>
          <Symbol>e</Symbol>
          <Symbol>f</Symbol>
+         <Symbol>g</Symbol>
       </OutputAlphabet>
       <States>
-         <State id="q0">
-            <Translation input="a" output="e" target="q2"/>
-            <Translation input="b" output="d" target="q1"/>
-            <Translation input="c" output="f" target="q0"/>
+         <State ID="q0">
+            <Translation input="a" output="g" target="q0"/>
+            <Translation input="b" output="f" target="q1"/>
+            <Translation input="c" output="e" target="q2"/>
          </State>
-         <State id="q1">
-            <Translation input="a" output="d" target="q1"/>
-            <Translation input="b" output="e" target="q2"/>
-            <Translation input="c" output="f" target="q0"/>
+         <State ID="q1">
+            <Translation input="a" output="e" target="q0"/>
+            <Translation input="b" output="g" target="q2"/>
+            <Translation input="c" output="f" target="q1"/>
          </State>
-         <State id="q2">
-            <Translation input="a" output="e" target="q2"/>
-            <Translation input="b" output="d" target="q0"/>
+         <State ID="q2">
+            <Translation input="a" output="e" target="q0"/>
+            <Translation input="b" output="g" target="q2"/>
             <Translation input="c" output="f" target="q1"/>
          </State>
       </States>
    </Machine>
-   <Machine Initial_State="q0" id="numbers">
+   <Machine ID="numbers" Initial_State="q0" Type="Mealy">
       <InputAlphabet>
          <Symbol>1</Symbol>
          <Symbol>2</Symbol>
          <Symbol>3</Symbol>
       </InputAlphabet>
       <OutputAlphabet>
-         <Symbol>3</Symbol>
-         <Symbol>4</Symbol>
          <Symbol>5</Symbol>
+         <Symbol>6</Symbol>
+         <Symbol>7</Symbol>
       </OutputAlphabet>
       <States>
-         <State id="q0">
+         <State ID="q0">
             <Translation input="1" output="5" target="q1"/>
-            <Translation input="2" output="3" target="q2"/>
-            <Translation input="3" output="4" target="q0"/>
+            <Translation input="2" output="6" target="q0"/>
+            <Translation input="3" output="7" target="q2"/>
          </State>
-         <State id="q1">
-            <Translation input="1" output="4" target="q1"/>
-            <Translation input="2" output="5" target="q2"/>
-            <Translation input="3" output="3" target="q0"/>
+         <State ID="q1">
+            <Translation input="1" output="6" target="q2"/>
+            <Translation input="2" output="5" target="q1"/>
+            <Translation input="3" output="7" target="q0"/>
          </State>
-         <State id="q2">
-            <Translation input="1" output="3" target="q1"/>
-            <Translation input="2" output="5" target="q2"/>
-            <Translation input="3" output="4" target="q0"/>
+         <State ID="q2">
+            <Translation input="1" output="5" target="q1"/>
+            <Translation input="2" output="6" target="q2"/>
+            <Translation input="3" output="7" target="q0"/>
          </State>
       </States>
    </Machine>
-   <Machine Initial_State="q0" id="spec">
+   <Machine ID="symbols" Initial_State="q0" Type="Mealy">
       <InputAlphabet>
          <Symbol>Ł</Symbol>
          <Symbol>$</Symbol>
          <Symbol>ß</Symbol>
       </InputAlphabet>
       <OutputAlphabet>
-         <Symbol> </Symbol>
-         <Symbol>ł</Symbol>
-         <Symbol>ß</Symbol>
+         <Symbol>Đ</Symbol>
+         <Symbol>@</Symbol>
+         <Symbol>&amp;</Symbol>
       </OutputAlphabet>
       <States>
-         <State id="q0">
-            <Translation input="Ł" output="ł" target="q0"/>
-            <Translation input="$" output="ß" target="q1"/>
-            <Translation input="ß" output=" " target="q2"/>
+         <State ID="q0">
+            <Translation input="Ł" output="Đ" target="q0"/>
+            <Translation input="$" output="@" target="q1"/>
+            <Translation input="ß" output="&amp;" target="q2"/>
          </State>
-         <State id="q1">
-            <Translation input="Ł" output="ß" target="q2"/>
-            <Translation input="$" output=" " target="q1"/>
-            <Translation input="ß" output="ł" target="q0"/>
+         <State ID="q1">
+            <Translation input="Ł" output="Đ" target="q2"/>
+            <Translation input="$" output="&amp;" target="q0"/>
+            <Translation input="ß" output="@" target="q1"/>
          </State>
-         <State id="q2">
-            <Translation input="Ł" output=" " target="q0"/>
-            <Translation input="$" output="ł" target="q2"/>
-            <Translation input="ß" output="ß" target="q1"/>
+         <State ID="q2">
+            <Translation input="Ł" output="Đ" target="q2"/>
+            <Translation input="$" output="&amp;" target="q0"/>
+            <Translation input="ß" output="@" target="q1"/>
          </State>
       </States>
    </Machine>

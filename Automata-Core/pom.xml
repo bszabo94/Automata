@@ -8,6 +8,8 @@
 	</parent>
 	<artifactId>Automata-Core</artifactId>
 	<name>Automata-Core</name>
+	<packaging>jar</packaging>
+	<description>A module, that contains class files, and tests for the Mealy and Moore Machines.</description>
 	<build>
 		<plugins>
 			<plugin>
@@ -23,17 +25,21 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.6</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>single</goal>
-						</goals>
-						<phase>package</phase>
-						<configuration>
-							<descriptorRefs>jar-with-dependencies</descriptorRefs>
-						</configuration>
-					</execution>
-				</executions>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.19.1</version>
+				<configuration>
+					<includes>
+						<include>MachineTestSuite.java</include>
+					</includes>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

@@ -7,7 +7,7 @@
 	<packaging>pom</packaging>
 	<name>Automata</name>
 	<inceptionYear>2016</inceptionYear>
-	<description>Automata Simulator. A description will be here.</description>
+	<description>Simulates the functioning of Mealy and Moore Machines, allows to fully costumize them, supports input and output, as well as some special operations defined on finite-state automata, such as the conversion between each other.</description>
 	<developers>
 		<developer>
 			<id>bszabo</id>
@@ -20,7 +20,6 @@
 	</organization>
 	<licenses>
 		<license>
-			<!-- <name>gpl_v3</name> -->
 			<name>GNU General Public License Version 3.0</name>
 			<url>http://www.gnu.org/licenses/gpl-3.0</url>
 		</license>
@@ -30,12 +29,14 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+		<mainClass>hu.unideb.inf.Automata-GUI.main.Main</mainClass>
 	</properties>
 
 	<modules>
 		<module>Automata-Core</module>
 		<module>Automata-IO</module>
 		<module>Automata-GUI</module>
+		<module>Automata-Assembly</module>
 	</modules>
 	<scm>
 		<url>https://github.com/bszabo94/Automata</url>
@@ -46,11 +47,27 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-report-plugin</artifactId>
-				<version>2.19.1</version>
-				<configuration>
-					<aggregate>true</aggregate>
-				</configuration>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.6</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<phase>package</phase>
+						<configuration>
+<!-- 							<aggregate>true</aggregate> -->
+							<archive>
+								<manifest>
+									<mainClass>hu.unideb.inf.Automata-GUI.main.Main</mainClass>
+								</manifest>
+							</archive>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -80,14 +97,6 @@
 					<outputEncoding>UTF-8</outputEncoding>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.3</version>
-				<configuration>
-					<aggregate>true</aggregate>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 	<reporting>
@@ -104,6 +113,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-report-plugin</artifactId>
 				<version>2.19.1</version>
+				<inherited>false</inherited>
 				<configuration>
 					<aggregate>true</aggregate>
 				</configuration>
@@ -122,37 +132,42 @@
 				<version>2.17</version>
 				<configuration>
 					<configLocation>checkstyle.xml</configLocation>
+					<aggregate>true</aggregate>
 				</configuration>
 			</plugin>
-			<!-- <plugin> -->
-			<!-- <groupId>org.codehaus.mojo</groupId> -->
-			<!-- <artifactId>cobertura-maven-plugin</artifactId> -->
-			<!-- <version>2.7</version> -->
-			<!-- <reportSets> -->
-			<!-- <reportSet> -->
-			<!-- <id>cobertura</id> -->
-			<!-- <reports> -->
-			<!-- <report>cobertura</report> -->
-			<!-- </reports> -->
-			<!-- <configuration> -->
-			<!-- <includes> -->
-			<!-- <include>MachineTestSuite.java</include> -->
-			<!-- </includes> -->
-			<!-- <aggregate>true</aggregate> -->
-			<!-- </configuration> -->
-			<!-- </reportSet> -->
-			<!-- </reportSets> -->
-			<!-- </plugin> -->
-			<!-- <plugin> -->
-			<!-- <groupId>org.jacoco</groupId> -->
-			<!-- <artifactId>jacoco-maven-plugin</artifactId> -->
-			<!-- <version>0.7.6.201602180812</version> -->
-			<!-- <configuration> -->
-			<!-- <aggregate>true</aggregate> -->
-			<!-- </configuration> -->
-			<!-- </plugin> -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<aggregate>true</aggregate>
+					<instrumentation>
+						<ignores>
+							<ignore>hu.unideb.inf.Automata-GUI.*</ignore>
+						</ignores>
+					</instrumentation>
+				</configuration>
+			</plugin>
 		</plugins>
 	</reporting>
+	<dependencies>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.21</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>1.1.7</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.1.7</version>
+		</dependency>
+	</dependencies>
+
 	<distributionManagement>
 		<site>
 			<id>website</id>

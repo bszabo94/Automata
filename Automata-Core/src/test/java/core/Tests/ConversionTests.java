@@ -33,7 +33,7 @@ import org.junit.Test;
 public class ConversionTests {
 
 	@Test
-	public void testToMealy() {
+	public void testToMealy() throws core.Mealy.MachineException, core.Moore.MachineException {
 		try {
 			String data = "This string serves as data for the text Machine. 0123456789łŁ$ß¤|e<>#";
 			core.Moore.Machine moore = new core.Moore.Machine("Test Moore");
@@ -73,41 +73,36 @@ public class ConversionTests {
 	}
 
 	@Test
-	public void testToMoore() {
-		try {
-			String data = "This string serves as data for the text Machine. 0123456789łŁ$ß¤|e<>#";
-			core.Mealy.Machine mealy = new core.Mealy.Machine("Test Mealy");
-			mealy.processData(data);
-			core.Moore.Machine moore = mealy.toMoore();
+	public void testToMoore() throws core.Mealy.MachineException, core.Moore.MachineException {
+		String data = "This string serves as data for the text Machine. 0123456789łŁ$ß¤|e<>#";
+		core.Mealy.Machine mealy = new core.Mealy.Machine("Test Mealy");
+		mealy.processData(data);
+		core.Moore.Machine moore = mealy.toMoore();
 
-			assertEquals(mealy.getID() + " --> Moore", moore.getID());
-			assertNotSame(mealy.getID() + " --> Moore", moore.getID());
+		assertEquals(mealy.getID() + " --> Moore", moore.getID());
+		assertNotSame(mealy.getID() + " --> Moore", moore.getID());
 
-			assertEquals(moore.getiAlphabet(), mealy.getiAlphabet());
-			assertEquals(moore.getoAlphabet(), mealy.getoAlphabet());
+		assertEquals(moore.getiAlphabet(), mealy.getiAlphabet());
+		assertEquals(moore.getoAlphabet(), mealy.getoAlphabet());
 
-			assertNotSame(moore.getiAlphabet(), mealy.getiAlphabet());
-			assertNotSame(moore.getoAlphabet(), mealy.getoAlphabet());
+		assertNotSame(moore.getiAlphabet(), mealy.getiAlphabet());
+		assertNotSame(moore.getoAlphabet(), mealy.getoAlphabet());
 
-			String testinput = new String();
-			List<Character> testAlphabet = new ArrayList<Character>(moore.getiAlphabet());
+		String testinput = new String();
+		List<Character> testAlphabet = new ArrayList<Character>(moore.getiAlphabet());
 
-			for (int i = 0; i < 100; i++) {
-				for (int j = 0; j < 5; j++) {
-					Collections.shuffle(testAlphabet);
-					for (Character currChar : testAlphabet) {
-						testinput += currChar;
-					}
+		for (int i = 0; i < 100; i++) {
+			for (int j = 0; j < 5; j++) {
+				Collections.shuffle(testAlphabet);
+				for (Character currChar : testAlphabet) {
+					testinput += currChar;
 				}
-				assertEquals(moore.encode(testinput), mealy.encode(testinput));
-				assertNotSame(moore.encode(testinput), mealy.encode(testinput));
-
-				assertEquals(moore.decode(testinput), mealy.decode(testinput));
-				assertNotSame(moore.decode(testinput), mealy.decode(testinput));
 			}
+			assertEquals(moore.encode(testinput), mealy.encode(testinput));
+			assertNotSame(moore.encode(testinput), mealy.encode(testinput));
 
-		} catch (core.Moore.MachineException | core.Mealy.MachineException e) {
-			fail(e.getMessage());
+			assertEquals(moore.decode(testinput), mealy.decode(testinput));
+			assertNotSame(moore.decode(testinput), mealy.decode(testinput));
 		}
 
 	}

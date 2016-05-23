@@ -1,6 +1,5 @@
+// CHECKSTYLE:OFF
 package controllers;
-
-import java.util.Set;
 
 /*
  * #%L
@@ -28,8 +27,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;

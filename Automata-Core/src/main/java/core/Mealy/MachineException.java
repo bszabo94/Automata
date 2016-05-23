@@ -38,6 +38,15 @@ package core.Mealy;
 @SuppressWarnings("serial")
 public class MachineException extends Exception {
 
+	/**
+	 * Constructor
+	 * <P>
+	 * Constructor for the exception. Most of the times initialized with an
+	 * error message to be informative.
+	 * 
+	 * @param message
+	 *            The error message.
+	 */
 	public MachineException(String message) {
 		super(message);
 	}

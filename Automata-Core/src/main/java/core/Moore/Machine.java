@@ -32,7 +32,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-
 /**
  * <h1>Moore Machine</h1>
  * <P>
@@ -129,7 +128,7 @@ public class Machine {
 	 * 
 	 * <P>
 	 * Creates a new {@link core.Moore.State State} object without and id or
-	 * putput, and puts it to the list, which contains the states of this
+	 * output, and puts it to the list, which contains the states of this
 	 * machine.
 	 * 
 	 * @see core.Moore.Machine#addState(Character) addState(Character)
@@ -138,6 +137,17 @@ public class Machine {
 		this.states.add(new State());
 	}
 
+	/**
+	 * Adds a new state to the machine without an id.
+	 * 
+	 * <P>
+	 * Creates a new {@link core.Moore.State State} object without an id and
+	 * with the given output, and puts it to the list, which contains the states
+	 * of this machine.
+	 * 
+	 * @param output
+	 *            The output of the new state.
+	 */
 	public void addState(Character output) {
 		this.states.add(new State(output));
 	}
@@ -264,7 +274,7 @@ public class Machine {
 	 * Changes the output alphabet of the machine for the new one given as
 	 * paramter.
 	 * 
-	 * @param iAlphabet
+	 * @param oAlphabet
 	 *            A {@code Set} of {@code Characters} serving as new output
 	 *            alphabet.
 	 */
@@ -448,6 +458,31 @@ public class Machine {
 
 	}
 
+	/**
+	 * Checks whether the machine is valid or not.
+	 * 
+	 * <P>
+	 * A machine is considered valid if:
+	 * <ul>
+	 * <li>it has an initial state (the reference does not point to null)</li>
+	 * <li>each of it's states has unique id</li>
+	 * <li>each states contains a translation for all of the characters of the
+	 * input alphabet</li>
+	 * <li>does not assign the same output to different inputs</li>
+	 * <li>each state assign only one translation to each symbol of the input
+	 * alphabet</li>
+	 * <li>no translation contains symbol as input that is not a member of the
+	 * input alphabet</li>
+	 * <li>no state contains symbol as output that is not a member of the output
+	 * alphabet</li>
+	 * </ul>
+	 * <P>
+	 * Following these, the machine will not be ambiguous, both encoding and
+	 * decoding will be clear.
+	 * 
+	 * 
+	 * @return True, if the machine is valid, and false otherwise.
+	 */
 	public boolean isValid() {
 
 		if (this.currState == null) {
@@ -512,12 +547,15 @@ public class Machine {
 	 *            True will set the method to encoding, and false will set to
 	 *            decoding.
 	 * @return The symbol of the corresponding translation.
-	 * @throws core.Mealy.MachineException
+	 * @throws core.Moore.MachineException
 	 *             if the given character is not included in it's corresponding
 	 *             alphabet.
 	 */
-	public Character step(Character input, boolean encoding) {
+	public Character step(Character input, boolean encoding) throws MachineException {
 		if (encoding) {
+			if (!this.iAlphabet.contains(input))
+				throw new MachineException(
+						"The given symbol is not in the input alphabet: " + input + " in " + this.iAlphabet);
 			for (Translation currTranslation : this.currState.getTranslations()) {
 				if (currTranslation.getInput().equals(input)) {
 					this.currState = currTranslation.getTarget();
@@ -525,6 +563,8 @@ public class Machine {
 				}
 			}
 		} else {
+			if (!this.oAlphabet.contains(input))
+				throw new MachineException("The given symbol is not in the output alphabet.");
 			for (Translation currTranslation : this.currState.getTranslations()) {
 				if (currTranslation.getTarget().getOutput().equals(input)) {
 					this.currState = currTranslation.getTarget();
@@ -603,12 +643,14 @@ public class Machine {
 	 * @param data
 	 *            The text the machine uses the characters of.
 	 */
-	public void processData(String data) throws MachineException {
-		Set<Character> base = new HashSet<Character>();
-		for (int i = 0; i < data.length(); i++) {
-			base.add(data.charAt(i));
+	public void processData(String data) {
+		try {
+			Set<Character> base = getSymbols(data);
+			this.init(base, base);
+		} catch (MachineException e) {
+			// never reaches here
+			e.printStackTrace();
 		}
-		this.init(base, base);
 	}
 
 	/**

@@ -63,15 +63,13 @@ public class MooreTests {
 	@Test
 	public void testGetCurrState() throws MachineException {
 		Machine m = new Machine("Tester");
-		try {
-			m.processData("Data for processing.");
-		} catch (MachineException e) {
-			e.printStackTrace();
-		}
+		m.processData("Data for processing.");
+
 		assertSame(m.getStates().get(0), m.getCurrState());
 		State testState = new State();
 		m.setCurrState(testState);
 		assertSame(testState, m.getCurrState());
+
 	}
 
 	@Test
@@ -89,31 +87,24 @@ public class MooreTests {
 	}
 
 	@Test
-	public void testiAlphabet() {
+	public void testiAlphabet() throws MachineException {
 		Set<Character> testAlphabet = new HashSet<Character>(Arrays.asList('a', 'b', 'c', '1', '2', '3'));
-		try {
-			Machine m = new Machine("Initialized Tester",
-					new HashSet<Character>(Arrays.asList('a', 'b', 'c', '1', '2', '3')),
-					new HashSet<Character>(Arrays.asList('a', 'b', 'c', '1', '2', '3')));
-			m.setiAlphabet(testAlphabet);
-			assertSame(testAlphabet, m.getiAlphabet());
-		} catch (MachineException e) {
-			fail(e.getMessage());
-		}
+		Machine m = new Machine("Initialized Tester",
+				new HashSet<Character>(Arrays.asList('a', 'b', 'c', '1', '2', '3')),
+				new HashSet<Character>(Arrays.asList('a', 'b', 'c', '1', '2', '3')));
+		m.setiAlphabet(testAlphabet);
+		assertSame(testAlphabet, m.getiAlphabet());
 	}
 
 	@Test
-	public void testoAlphabet() {
+	public void testoAlphabet() throws MachineException {
 		Set<Character> testAlphabet = new HashSet<Character>(Arrays.asList('a', 'b', 'c', '1', '2', '3'));
-		try {
-			Machine m = new Machine("Initialized Tester",
-					new HashSet<Character>(Arrays.asList('a', 'b', 'c', '1', '2', '3')),
-					new HashSet<Character>(Arrays.asList('a', 'b', 'c', '1', '2', '3')));
-			m.setoAlphabet(testAlphabet);
-			assertSame(testAlphabet, m.getoAlphabet());
-		} catch (MachineException e) {
-			fail(e.getMessage());
-		}
+
+		Machine m = new Machine("Initialized Tester",
+				new HashSet<Character>(Arrays.asList('a', 'b', 'c', '1', '2', '3')),
+				new HashSet<Character>(Arrays.asList('a', 'b', 'c', '1', '2', '3')));
+		m.setoAlphabet(testAlphabet);
+		assertSame(testAlphabet, m.getoAlphabet());
 	}
 
 	@Test
@@ -166,20 +157,17 @@ public class MooreTests {
 		Machine m = new Machine("Tester");
 		if (m.getCurrState() != null)
 			fail("Current State must be null before initialization.");
-		try {
-			m.init(new HashSet<Character>(Arrays.asList('a', 'b')), new HashSet<Character>(Arrays.asList('1', '2')));
-			assertEquals(m.getiAlphabet(), new HashSet<Character>(Arrays.asList('a', 'b')));
-			assertEquals(m.getoAlphabet(), new HashSet<Character>(Arrays.asList('1', '2')));
-			if (m.getCurrState() == null)
-				fail("Current State must not be null after initialization.");
-			if (!m.isValid())
-				fail("Init must produce a valid Machine.");
-		} catch (MachineException e) {
-			fail(e.getMessage());
-		}
+		m.init(new HashSet<Character>(Arrays.asList('a', 'b')), new HashSet<Character>(Arrays.asList('1', '2')));
+		assertEquals(m.getiAlphabet(), new HashSet<Character>(Arrays.asList('a', 'b')));
+		assertEquals(m.getoAlphabet(), new HashSet<Character>(Arrays.asList('1', '2')));
+		if (m.getCurrState() == null)
+			fail("Current State must not be null after initialization.");
+		if (!m.isValid())
+			fail("Init must produce a valid Machine.");
+
 	}
 
-	@Test
+	@Test(expected = MachineException.class)
 	public void testStep() throws MachineException {
 
 		// q0:
@@ -191,9 +179,9 @@ public class MooreTests {
 
 		Machine m = new Machine("Tester");
 		m.setiAlphabet(new HashSet<Character>(Arrays.asList('a', 'b')));
-		m.setiAlphabet(new HashSet<Character>(Arrays.asList('1', '0')));
-		m.addState('1');
-		m.addState('0');
+		m.setoAlphabet(new HashSet<Character>(Arrays.asList('1', '0')));
+		m.addState('1', "q0");
+		m.addState('0', "q1");
 		m.setCurrState(m.getStates().get(0));
 
 		m.getStates().get(0).addTranslation(new Translation(m.getStates().get(0), 'a', m.getStates().get(1)));
@@ -223,9 +211,9 @@ public class MooreTests {
 
 		Machine m = new Machine("Tester");
 		m.setiAlphabet(new HashSet<Character>(Arrays.asList('a', 'b')));
-		m.setiAlphabet(new HashSet<Character>(Arrays.asList('1', '0')));
-		m.addState('0');
-		m.addState('1');
+		m.setoAlphabet(new HashSet<Character>(Arrays.asList('1', '0')));
+		m.addState('0', "q0");
+		m.addState('1', "q1");
 		m.setCurrState(m.getStates().get(0));
 
 		m.getStates().get(0).addTranslation(new Translation(m.getStates().get(0), 'a', m.getStates().get(0)));
@@ -237,79 +225,66 @@ public class MooreTests {
 	}
 
 	@Test
-	public void testDecode() {
-		try {
+	public void testDecode() throws MachineException {
 
-			Set<Character> in = new HashSet<Character>(Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g'));
-			Set<Character> out = new HashSet<Character>(Arrays.asList('H', 'I', 'J', 'K', 'L', 'M', 'N'));
-			Machine m = new Machine("Test", in, out);
+		Set<Character> in = new HashSet<Character>(Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g'));
+		Set<Character> out = new HashSet<Character>(Arrays.asList('H', 'I', 'J', 'K', 'L', 'M', 'N'));
+		Machine m = new Machine("Test", in, out);
 
-			String input = new String();
-			List<Character> inputgenerator = new ArrayList<Character>(in);
+		String input = new String();
+		List<Character> inputgenerator = new ArrayList<Character>(in);
 
-			for (int i = 0; i < 1000; i++) {
-				for (int j = 0; j < 5; j++) {
-					Collections.shuffle(inputgenerator);
-					for (Character currChr : inputgenerator) {
-						input += currChr;
-					}
+		for (int i = 0; i < 1000; i++) {
+			for (int j = 0; j < 5; j++) {
+				Collections.shuffle(inputgenerator);
+				for (Character currChr : inputgenerator) {
+					input += currChr;
 				}
-				if (!input.equals(m.decode(m.encode(input))))
-					fail("decode method not working correctly.");
-				input = "";
 			}
-		} catch (MachineException e) {
-			e.printStackTrace();
+			if (!input.equals(m.decode(m.encode(input))))
+				fail("decode method not working correctly.");
+			input = "";
 		}
 	}
 
 	@Test
 	public void testGetSymbols() throws MachineException {
-		Machine m = new Machine("Tester");
 		String sentence = "This is a sentence to test getSymbol method.";
-		assertEquals(m.getSymbols(sentence),
+		assertEquals(core.Moore.Machine.getSymbols(sentence),
 				new HashSet<Character>(Arrays.asList('T', 'h', 'i', 's', ' ', 'i', 's', ' ', 'a', ' ', 's', 'e', 'n',
 						't', 'e', 'n', 'c', 'e', ' ', 't', 'o', ' ', 't', 'e', 's', 't', ' ', 'g', 'e', 't', 'S', 'y',
 						'm', 'b', 'o', 'l', ' ', 'm', 'e', 't', 'h', 'o', 'd', '.')));
 	}
 
 	@Test
-	public void testProcessData() {
-		try {
-			Machine m = new Machine("Tester");
-			m.processData("This is a sentence to test processData method.");
-			Set<Character> compareSet = new HashSet<Character>(Arrays.asList('T', 'h', 'i', 's', ' ', 'i', 's', ' ',
-					'a', ' ', 's', 'e', 'n', 't', 'e', 'n', 'c', 'e', ' ', 't', 'o', ' ', 't', 'e', 's', 't', ' ', 'p',
-					'r', 'o', 'c', 'e', 's', 's', 'D', 'a', 't', 'a', ' ', 'm', 'e', 't', 'h', 'o', 'd', '.'));
+	public void testProcessData() throws MachineException {
+		Machine m = new Machine("Tester");
+		m.processData("This is a sentence to test processData method.");
+		Set<Character> compareSet = new HashSet<Character>(Arrays.asList('T', 'h', 'i', 's', ' ', 'i', 's', ' ', 'a',
+				' ', 's', 'e', 'n', 't', 'e', 'n', 'c', 'e', ' ', 't', 'o', ' ', 't', 'e', 's', 't', ' ', 'p', 'r', 'o',
+				'c', 'e', 's', 's', 'D', 'a', 't', 'a', ' ', 'm', 'e', 't', 'h', 'o', 'd', '.'));
 
-			assertEquals(m.getiAlphabet(), compareSet);
-			assertEquals(m.getoAlphabet(), compareSet);
-			assertTrue(m.isValid());
+		assertEquals(m.getiAlphabet(), compareSet);
+		assertEquals(m.getoAlphabet(), compareSet);
+		assertTrue(m.isValid());
 
-		} catch (MachineException e) {
-			fail(e.getMessage());
-		}
 	}
 
 	@Test
-	public void testGetTranslations() {
-		try {
-			Machine m = new Machine("Tester");
-			m.processData("This is a test for getTranslations method.");
-			Map<State, List<Translation>> compareTranslations = new HashMap<State, List<Translation>>();
+	public void testGetTranslations() throws MachineException {
+		Machine m = new Machine("Tester");
+		m.processData("This is a test for getTranslations method.");
+		Map<State, List<Translation>> compareTranslations = new HashMap<State, List<Translation>>();
 
-			for (State currState : m.getStates())
-				compareTranslations.put(currState, new ArrayList<Translation>());
+		for (State currState : m.getStates())
+			compareTranslations.put(currState, new ArrayList<Translation>());
 
-			for (State currState : m.getStates())
-				for (Translation currTranslation : currState.getTranslations())
-					compareTranslations.get(currState).add(currTranslation);
+		for (State currState : m.getStates())
+			for (Translation currTranslation : currState.getTranslations())
+				compareTranslations.get(currState).add(currTranslation);
 
-			assertEquals(compareTranslations, m.getTranslations());
+		assertEquals(compareTranslations, m.getTranslations());
 
-		} catch (MachineException e) {
-			fail(e.getMessage());
-		}
 	}
 
 }

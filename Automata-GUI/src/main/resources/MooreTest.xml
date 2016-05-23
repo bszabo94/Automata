@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Machines>
+   <Machine ID="letters" Initial_State="q0" Type="Moore">
+      <InputAlphabet>
+         <Symbol>a</Symbol>
+         <Symbol>b</Symbol>
+         <Symbol>c</Symbol>
+      </InputAlphabet>
+      <OutputAlphabet>
+         <Symbol>e</Symbol>
+         <Symbol>f</Symbol>
+         <Symbol>g</Symbol>
+      </OutputAlphabet>
+      <States>
+         <State ID="q0" output="e">
+            <Translation input="a" target="q1"/>
+            <Translation input="b" target="q2"/>
+            <Translation input="c" target="q0"/>
+         </State>
+         <State ID="q1" output="f">
+            <Translation input="a" target="q0"/>
+            <Translation input="b" target="q2"/>
+            <Translation input="c" target="q1"/>
+         </State>
+         <State ID="q2" output="g">
+            <Translation input="a" target="q1"/>
+            <Translation input="b" target="q2"/>
+            <Translation input="c" target="q0"/>
+         </State>
+      </States>
+   </Machine>
+   <Machine ID="numbers" Initial_State="q0" Type="Moore">
+      <InputAlphabet>
+         <Symbol>1</Symbol>
+         <Symbol>2</Symbol>
+         <Symbol>3</Symbol>
+      </InputAlphabet>
+      <OutputAlphabet>
+         <Symbol>5</Symbol>
+         <Symbol>6</Symbol>
+         <Symbol>7</Symbol>
+      </OutputAlphabet>
+      <States>
+         <State ID="q0" output="5">
+            <Translation input="1" target="q2"/>
+            <Translation input="2" target="q0"/>
+            <Translation input="3" target="q1"/>
+         </State>
+         <State ID="q1" output="6">
+            <Translation input="1" target="q0"/>
+            <Translation input="2" target="q2"/>
+            <Translation input="3" target="q1"/>
+         </State>
+         <State ID="q2" output="7">
+            <Translation input="1" target="q2"/>
+            <Translation input="2" target="q1"/>
+            <Translation input="3" target="q0"/>
+         </State>
+      </States>
+   </Machine>
+   <Machine ID="symbols" Initial_State="q0" Type="Moore">
+      <InputAlphabet>
+         <Symbol>Ł</Symbol>
+         <Symbol>$</Symbol>
+         <Symbol>ß</Symbol>
+      </InputAlphabet>
+      <OutputAlphabet>
+         <Symbol>Đ</Symbol>
+         <Symbol>@</Symbol>
+         <Symbol>&amp;</Symbol>
+      </OutputAlphabet>
+      <States>
+         <State ID="q0" output="Đ">
+            <Translation input="Ł" target="q2"/>
+            <Translation input="$" target="q0"/>
+            <Translation input="ß" target="q1"/>
+         </State>
+         <State ID="q1" output="@">
+            <Translation input="Ł" target="q1"/>
+            <Translation input="$" target="q2"/>
+            <Translation input="ß" target="q0"/>
+         </State>
+         <State ID="q2" output="&amp;">
+            <Translation input="Ł" target="q1"/>
+            <Translation input="$" target="q2"/>
+            <Translation input="ß" target="q0"/>
+         </State>
+      </States>
+   </Machine>
+</Machines>

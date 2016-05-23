@@ -1,6 +1,5 @@
+// CHECKSTYLE:OFF
 package controllers;
-
-import core.Mealy.MachineException;
 
 /*
  * #%L

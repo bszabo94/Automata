@@ -267,7 +267,7 @@ public class Machine {
 	 * Changes the output alphabet of the machine for the new one given as
 	 * paramter.
 	 * 
-	 * @param iAlphabet
+	 * @param oAlphabet
 	 *            A {@code Set} of {@code Characters} serving as new output
 	 *            alphabet.
 	 */
@@ -637,14 +637,14 @@ public class Machine {
 	 * the {@code data} parameter.
 	 * 
 	 * @param data
-	 *            The text the machine uses the characters of.
+	 *            The text the machine uses the characters of..
 	 */
 	public void processData(String data) {
-		Set<Character> base = getSymbols(data);
 		try {
+			Set<Character> base = getSymbols(data);
 			this.init(base, base);
 		} catch (MachineException e) {
-			// can never reach here
+			// never reaches here
 			e.printStackTrace();
 		}
 
@@ -691,8 +691,10 @@ public class Machine {
 		int i = 0;
 
 		for (State currState : symbolDistributor.keySet()) {
+//			i = 0;
 			for (Character currChar : symbolDistributor.get(currState)) {
-				m.addState(currChar, currState.getID() + Integer.toString(i));
+//				m.addState(currChar, currState.getID() + Integer.toString(i));
+				m.addState(currChar, i);
 				i++;
 				translationDistributor.get(currState).put(currChar, m.getStates().get(m.getStates().size() - 1));
 				if (m.getCurrState() == null && this.currState == currState) {

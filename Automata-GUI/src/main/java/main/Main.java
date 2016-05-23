@@ -1,3 +1,4 @@
+// CHECKSTYLE:OFF
 package main;
 
 /*
@@ -22,36 +23,31 @@ package main;
  * #L%
  */
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 
-import org.w3c.dom.DOMException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import controllers.AutomataController;
+import core.Mealy.MachineException;
 import io.XML.XMLHandler;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 public class Main extends Application {
+
+	private final static Logger logger = LoggerFactory.getLogger(Main.class);
 
 	private Stage primaryStage;
 	private AnchorPane rootPane;
@@ -104,21 +100,15 @@ public class Main extends Application {
 
 	public Main() {
 		try {
-			mealyMachines
-					.addAll(XMLHandler.importMealy(new File(ClassLoader.getSystemResource("MealyTest.xml").toURI())));
-			mooreMachines.add(mealyMachines.get(0).toMoore());
-			mooreMachines.add(mealyMachines.get(1).toMoore());
-			mooreMachines.add(mealyMachines.get(2).toMoore());
-			mooreMachines.add(new core.Moore.Machine("Process"));
-			mooreMachines.get(mooreMachines.size() - 1).processData("abcdfegh1234567");
-			mealyMachines.add(new core.Mealy.Machine("TESTER"));
-			mealyMachines.get(mealyMachines.size() - 1)
-					.processData("0123456789öüó"
-							+ "qwertzuiopőúasdfghjkléáűíyxcvbnm,.-§'\"+!%/=()ÖÜÓQWERTZUIOPŐÚASDFGHJKLÉÁŰÍYXCVBNM?:_*>;<}{"
-							+ "@&><äđĐ[]ħíłŁ$ß¤×÷”„Í€–ŧ¶e|\\");
-		} catch (Exception e) {
 
-			e.printStackTrace();
+			mealyMachines.addAll(
+					XMLHandler.importMealyFromInputStream(ClassLoader.getSystemResourceAsStream("MealyTest.xml")));
+			mooreMachines.addAll(
+					XMLHandler.importMooreFromInputStream(ClassLoader.getSystemResourceAsStream("MooreTest.xml")));
+
+		} catch (MachineException | ParserConfigurationException | core.Moore.MachineException | SAXException
+				| IOException e) {
+			logger.error(e.getMessage());
 		}
 	}
 
@@ -133,44 +123,7 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
-		 launch(args);
-//		try {
-//			List<core.Mealy.Machine> mealys = new ArrayList<core.Mealy.Machine>();
-//			List<core.Moore.Machine> moores = new ArrayList<core.Moore.Machine>();
-//
-////			mealys.add(new core.Mealy.Machine("letters", new HashSet<Character>(Arrays.asList('a', 'b', 'c')),
-////					new HashSet<Character>(Arrays.asList('e', 'f', 'g'))));
-////			mealys.add(new core.Mealy.Machine("numbers", new HashSet<Character>(Arrays.asList('1', '2', '3')),
-////					new HashSet<Character>(Arrays.asList('4', '5', '6'))));
-////			mealys.add(new core.Mealy.Machine("symbols", new HashSet<Character>(Arrays.asList('ł', 'Ł', '$')),
-////					new HashSet<Character>(Arrays.asList('ß', '÷', '×'))));
-//			
-//			
-//			for(int i=0; i<mealys.size(); i++){
-////				System.out.println(mealys.get(i));
-//				moores.add(mealys.get(i).toMoore());
-//			}
-//				
-//			System.out.println("-------_");
-//			
-//			for(int i=0; i<mealys.size(); i++){
-////				System.out.println(moores.get(i));
-//			}
-//			
-////			XMLHandler.exportMealy(new File("XMLMEALY.xml"), mealys);
-////			XMLHandler.exportMoore(new File("MOOREEXP.XML"), moores);
-//			
-////			moores.clear();
-//			moores = XMLHandler.importMoore(new File("MOOREEXP.XML"));
-//			mealys = XMLHandler.importMealy(new File("XMLMEALY.xml"));
-//			for(int i=0; i<mealys.size(); i++){
-//				System.out.println(mealys.get(i));
-//			}
-//		} catch (core.Mealy.MachineException | ParserConfigurationException | DOMException | core.Moore.MachineException  | SAXException | IOException e) {
-//			System.out.println(e.getMessage());
-//			
-//		}
-
+		launch(args);
 	}
 
 	public void initGUI() {
@@ -193,9 +146,10 @@ public class Main extends Application {
 			});
 
 			primaryStage.show();
+			logger.info("main window created");
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 	}
 

@@ -1,3 +1,4 @@
+// CHECKSTYLE:OFF
 package controllers;
 
 /*
@@ -30,12 +31,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.DOMException;
 import org.xml.sax.SAXException;
 
-import core.Mealy.Translation;
 import core.Moore.MachineException;
 import io.XML.XMLHandler;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -286,16 +285,16 @@ public class AutomataController {
 			textareaOA.setText("");
 			textareaIA.setText("");
 		}
-//		mooreTranslationTable.setDisable(true);
+		// mooreTranslationTable.setDisable(true);
 		mooreTranslationTable.setVisible(false);
-//		mealyTranslationTable.setDisable(false);
+		// mealyTranslationTable.setDisable(false);
 		mealyTranslationTable.setVisible(true);
 
 		mooreStatesTable.setVisible(false);
-//		mooreStatesTable.setDisable(true);
+		// mooreStatesTable.setDisable(true);
 
 		mealyStatesTable.setVisible(true);
-//		mealyStatesTable.setDisable(false);
+		// mealyStatesTable.setDisable(false);
 	}
 
 	private void selectMoore(core.Moore.Machine m) {
@@ -323,16 +322,16 @@ public class AutomataController {
 			textareaOA.setText("");
 			textareaIA.setText("");
 		}
-//		mealyTranslationTable.setDisable(true);
+		// mealyTranslationTable.setDisable(true);
 		mealyTranslationTable.setVisible(false);
-//		mooreTranslationTable.setDisable(false);
+		// mooreTranslationTable.setDisable(false);
 		mooreTranslationTable.setVisible(true);
 
 		mooreStatesTable.setVisible(true);
-//		mooreStatesTable.setDisable(false);
+		// mooreStatesTable.setDisable(false);
 
 		mealyStatesTable.setVisible(false);
-//		mealyStatesTable.setDisable(true);
+		// mealyStatesTable.setDisable(true);
 	}
 
 	@FXML
@@ -367,8 +366,8 @@ public class AutomataController {
 			stage.show();
 
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
+			main.showPopup(e.getMessage(), AlertType.ERROR);
+			
 		}
 
 	}
@@ -391,7 +390,7 @@ public class AutomataController {
 				try {
 					XMLHandler.exportMealy(file, main.getMealyMachines());
 				} catch (Exception e) {
-					e.printStackTrace();
+					main.showPopup(e.getMessage(), AlertType.ERROR);
 				}
 				return;
 			}
@@ -399,7 +398,7 @@ public class AutomataController {
 				try {
 					XMLHandler.exportMoore(file, main.getMooreMachines());
 				} catch (Exception e) {
-					e.printStackTrace();
+					main.showPopup(e.getMessage(), AlertType.ERROR);
 				}
 				return;
 			}
@@ -422,7 +421,7 @@ public class AutomataController {
 		if (file != null) {
 			if (mealyTab.isSelected()) {
 				try {
-					main.getMealyMachines().addAll(XMLHandler.importMealy(file));
+					main.getMealyMachines().addAll(XMLHandler.importMealyFromFile(file));
 				} catch (Exception e) {
 					// TODO
 					System.out.println("new window says: XML cotains Moore Machines! Import it to the Moore Tab!");
@@ -432,10 +431,11 @@ public class AutomataController {
 			}
 			if (mooreTab.isSelected()) {
 				try {
-					main.getMooreMachines().addAll(XMLHandler.importMoore(file));
+					main.getMooreMachines().addAll(XMLHandler.importMooreFromFile(file));
 					for (core.Moore.Machine m : main.getMooreMachines())
 						System.out.println(m);
-				} catch (SAXException | ParserConfigurationException | IOException | DOMException | MachineException e) {
+				} catch (SAXException | ParserConfigurationException | IOException | DOMException
+						| MachineException e) {
 					main.showPopup(e.getMessage(), AlertType.ERROR);
 				}
 				return;
@@ -632,8 +632,7 @@ public class AutomataController {
 			stage.show();
 
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
+			main.showPopup(e.getMessage(), AlertType.ERROR);
 		}
 	}
 
@@ -687,14 +686,14 @@ public class AutomataController {
 				.handle(new WindowEvent(main.getPrimaryStage(), WindowEvent.WINDOW_CLOSE_REQUEST));
 	}
 
-	//TODO refresh stuff....
-//	public void refresh() {
-//		tableMealy.setItems(main.getMealyMachines());
-//		tableMoore.setItems(main.getMooreMachines());
-//		mealyTranslationTable.setItems(FXCollections.observableList(main.getSelectedMealy().getTranslationsAsList()));
-//		mooreTranslationTable.setItems(FXCollections.observableList(main.getSelectedMoore().getTranslationsAsList()));
-//		mealyStatesTable.setItems(FXCollections.observableList(main.getSelectedMealy().getStates()));
-//		mooreStatesTable.setItems(FXCollections.observableList(main.getSelectedMoore().getStates()));
-//	}
+	// TODO refresh stuff....
+	// public void refresh() {
+	// tableMealy.setItems(main.getMealyMachines());
+	// tableMoore.setItems(main.getMooreMachines());
+	// mealyTranslationTable.setItems(FXCollections.observableList(main.getSelectedMealy().getTranslationsAsList()));
+	// mooreTranslationTable.setItems(FXCollections.observableList(main.getSelectedMoore().getTranslationsAsList()));
+	// mealyStatesTable.setItems(FXCollections.observableList(main.getSelectedMealy().getStates()));
+	// mooreStatesTable.setItems(FXCollections.observableList(main.getSelectedMoore().getStates()));
+	// }
 
 }

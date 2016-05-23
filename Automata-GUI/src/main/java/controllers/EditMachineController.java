@@ -1,9 +1,7 @@
+// CHECKSTYLE:OFF
 package controllers;
 
-import java.util.HashSet;
-import java.util.Set;
 
-import core.Mealy.MachineException;
 
 /*
  * #%L
@@ -30,9 +28,6 @@ import core.Mealy.MachineException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
@@ -129,7 +124,7 @@ public class EditMachineController {
 	}
 
 	@FXML
-	private void handleRenameMachine(ActionEvent event) throws MachineException {
+	private void handleRenameMachine(ActionEvent event) {
 		if (main.getSelectedMealy() != null) {
 			main.getSelectedMealy().setID(newMachineID.getText());
 
