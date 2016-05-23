@@ -27,9 +27,11 @@ import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.w3c.dom.DOMException;
 import org.xml.sax.SAXException;
 
 import core.Mealy.Translation;
+import core.Moore.MachineException;
 import io.XML.XMLHandler;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -433,7 +435,7 @@ public class AutomataController {
 					main.getMooreMachines().addAll(XMLHandler.importMoore(file));
 					for (core.Moore.Machine m : main.getMooreMachines())
 						System.out.println(m);
-				} catch (SAXException | ParserConfigurationException | IOException e) {
+				} catch (SAXException | ParserConfigurationException | IOException | DOMException | MachineException e) {
 					main.showPopup(e.getMessage(), AlertType.ERROR);
 				}
 				return;

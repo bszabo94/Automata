@@ -97,14 +97,13 @@ public class Machine {
 	 * 
 	 * <P>
 	 * Creates a Machine object with empty input and output alphabets, and
-	 * without states and translations. Throws
-	 * {@link core.Mealy.MachineException MachineException} if the given id is
-	 * an empty string.
+	 * without states and translations.
 	 * 
 	 * @param id
 	 *            The value of the {@code id} will be the ID of the Machine.
 	 * 
 	 * @throws core.Mealy.MachineException
+	 *             if the given id is an empty string.
 	 * @see core.Mealy.Machine#Machine(String, Set, Set) Machine(String, Set,
 	 *      Set)
 	 */
@@ -123,9 +122,7 @@ public class Machine {
 	 * 
 	 * <P>
 	 * Creates a Machine object with the given id, input and output alphabets,
-	 * and without states and translations. Throws
-	 * {@link core.Mealy.MachineException MachineException} if the given id is
-	 * an empty string.
+	 * and without states and translations.
 	 * 
 	 * @param id
 	 *            The value of the {@code id} will be the ID of the Machine.
@@ -135,8 +132,11 @@ public class Machine {
 	 * @param oAlphabet
 	 *            The set of characters, which will be used as output alphabet
 	 *            for the machine.
-	 * @see core.Mealy.Machine#Machine(String) Machine(String)
+	 * 
 	 * @throws core.Mealy.MachineException
+	 *             if the given id is an empty string.
+	 * 
+	 * @see core.Mealy.Machine#Machine(String) Machine(String)
 	 */
 	public Machine(String id, Set<Character> iAlphabet, Set<Character> oAlphabet) throws MachineException {
 		if (id == null)
@@ -147,14 +147,29 @@ public class Machine {
 		this.init(iAlphabet, oAlphabet);
 	}
 
+	/**
+	 * Provides a String indicating the type of the machine.
+	 * 
+	 * @return The "Mealy" {@code String}.
+	 */
 	public String getType() {
 		return "Mealy";
 	}
 
+	/**
+	 * Gets all states of the machine.
+	 * 
+	 * @return A {@code List} containg all {@code State}s of the machine.
+	 */
 	public List<State> getStates() {
 		return states;
 	}
 
+	/**
+	 * Gets the State which marked as "current state" in the machine.
+	 * 
+	 * @return The {@code State} object referred as current state.
+	 */
 	public State getCurrState() {
 		return currState;
 	}
@@ -213,58 +228,156 @@ public class Machine {
 		this.states.add(new State(n));
 	}
 
+	/**
+	 * Gets the {@code ID} of the machine.
+	 * 
+	 * @return The {@code String} used as ID for the machine.
+	 */
 	public String getID() {
 		return id;
 	}
 
+	/**
+	 * Sets a new {@code ID} for the machine.
+	 * 
+	 * @param id
+	 *            The new {@code ID} of the machine.
+	 */
 	public void setID(String id) {
 		this.id = id;
 	}
 
+	/**
+	 * Sets a new input alphabet.
+	 * <P>
+	 * Changes the input alphabet of the machine for the new one given as
+	 * paramter.
+	 * 
+	 * @param iAlphabet
+	 *            A {@code Set} of {@code Characters} serving as new input
+	 *            alphabet.
+	 */
 	public void setiAlphabet(Set<Character> iAlphabet) {
 		this.iAlphabet = iAlphabet;
 	}
 
+	/**
+	 * Sets a new output alphabet.
+	 * <P>
+	 * Changes the output alphabet of the machine for the new one given as
+	 * paramter.
+	 * 
+	 * @param iAlphabet
+	 *            A {@code Set} of {@code Characters} serving as new output
+	 *            alphabet.
+	 */
 	public void setoAlphabet(Set<Character> oAlphabet) {
 		this.oAlphabet = oAlphabet;
 	}
-	
-	public void addiAlphabet(String i) throws MachineException{
-		for(Character currChar: i.toCharArray()){
-			if(this.iAlphabet.contains(currChar))
+
+	/**
+	 * Extends the input alphabet.
+	 * <P>
+	 * Extends the input alphabet with all charachters of the given
+	 * {@code String}.
+	 * 
+	 * @param i
+	 *            The string containing all the new characters.
+	 * @throws MachineException
+	 *             If founds a character in the string, which is already
+	 *             included in the input alphabet.
+	 */
+	public void addiAlphabet(String i) throws MachineException {
+		for (Character currChar : i.toCharArray()) {
+			if (this.iAlphabet.contains(currChar))
 				throw new MachineException(currChar + "is already in the Input Alhpabet.");
 			this.iAlphabet.add(currChar);
 		}
 	}
-	
-	public void addoAlphabet(String i) throws MachineException{
-		for(Character currChar: i.toCharArray()){
-			if(this.oAlphabet.contains(currChar))
+
+	/**
+	 * Extends the output alphabet.
+	 * <P>
+	 * Extends the output alphabet with all charachters of the given
+	 * {@code String}.
+	 * 
+	 * @param i
+	 *            The string containing all the new characters.
+	 * @throws MachineException
+	 *             If founds a character in the string, which is already
+	 *             included in the output alphabet.
+	 */
+	public void addoAlphabet(String i) throws MachineException {
+		for (Character currChar : i.toCharArray()) {
+			if (this.oAlphabet.contains(currChar))
 				throw new MachineException(currChar + "is already in the Output Alhpabet.");
 			this.oAlphabet.add(currChar);
 		}
 	}
 
-	public void removeiAlphabet(String i) throws MachineException{
-		for(Character currChar: i.toCharArray()){
-			if(!this.iAlphabet.contains(currChar))
+	/**
+	 * Removes characters from the input alphabet
+	 * <P>
+	 * Removes all of characters of a given string from the input alphabet of
+	 * the machine.
+	 * 
+	 * @param i
+	 *            The string containing all characters to be removed.
+	 * @throws MachineException
+	 *             If it reaches a character in the string which is not included
+	 *             in the input alphabet of the machine.
+	 */
+	public void removeiAlphabet(String i) throws MachineException {
+		for (Character currChar : i.toCharArray()) {
+			if (!this.iAlphabet.contains(currChar))
 				throw new MachineException(currChar + "is not in the Input Alhpabet.");
 			this.iAlphabet.remove(currChar);
 		}
 	}
-	
-	public void removeoAlphabet(String i) throws MachineException{
-		for(Character currChar: i.toCharArray()){
-			if(!this.oAlphabet.contains(currChar))
+
+	/**
+	 * Removes characters from the output alphabet
+	 * <P>
+	 * Removes all of characters of a given string from the output alphabet of
+	 * the machine.
+	 * 
+	 * @param i
+	 *            The string containing all characters to be removed.
+	 * @throws MachineException
+	 *             If it reaches a character in the string which is not included
+	 *             in the output alphabet of the machine.
+	 */
+	public void removeoAlphabet(String i) throws MachineException {
+		for (Character currChar : i.toCharArray()) {
+			if (!this.oAlphabet.contains(currChar))
 				throw new MachineException(currChar + "is not in the Output Alhpabet.");
 			this.oAlphabet.remove(currChar);
 		}
 	}
-	
+
+	/**
+	 * Sets a new current state.
+	 * <P>
+	 * Sets the given {@code State} object as new current state of the machine-
+	 * 
+	 * @param currState
+	 *            The state, that will be the new current state.
+	 */
 	public void setCurrState(State currState) {
 		this.currState = currState;
 	}
 
+	/**
+	 * Sets a new current state.
+	 * <P>
+	 * Finds the {@code State} with the given id in the states of the machine,
+	 * and sets it as current state.
+	 * 
+	 * @param id
+	 *            The id of the new current state.
+	 * @throws MachineException
+	 *             If no state with the given id was found.
+	 */
 	public void setCurrStateById(String id) throws MachineException {
 		State s = this.findState(id);
 		if (s == null)
@@ -272,10 +385,22 @@ public class Machine {
 		this.currState = s;
 	}
 
+	/**
+	 * Gets the input alphabet of the machine.
+	 * 
+	 * @return The {@code Set} of {@code Characters} serving as input alphabet
+	 *         for the machine.
+	 */
 	public Set<Character> getiAlphabet() {
 		return iAlphabet;
 	}
 
+	/**
+	 * Gets the output alphabet of the machine.
+	 * 
+	 * @return The {@code Set} of {@code Characters} serving as output alphabet
+	 *         for the machine.
+	 */
 	public Set<Character> getoAlphabet() {
 		return oAlphabet;
 	}
@@ -289,15 +414,16 @@ public class Machine {
 	 * given as parameters, as well as creates as many states as the number of
 	 * characters the input alphabet contains, then fills up with random
 	 * translations, assigning a translation to each input character in every
-	 * state. Throws a {@link core.Mealy.MachineException MachineException} if
-	 * the input alphabet contains more character than the output alphabet. The
-	 * machine initialized with this method is considered valid.
+	 * state.
 	 * 
 	 * @param iAlphabet
 	 *            The set of characters, that will be used as input alphabet.
 	 * @param oAlphabet
 	 *            The set of characters, that will be used as output alphabet.
 	 * @throws core.Mealy.MachineException
+	 *             if the input alphabet contains more character than the output
+	 *             alphabet. The machine initialized with this method is
+	 *             considered valid.
 	 */
 	public void init(Set<Character> iAlphabet, Set<Character> oAlphabet) throws MachineException {
 		if (this.states.size() > 0 || this.getTranslationsAsList().size() > 0)
@@ -414,8 +540,10 @@ public class Machine {
 	 * @param encoding
 	 *            True will set the method to encoding, and false will set to
 	 *            decoding.
-	 * @return The symbol od the corresponding translation.
+	 * @return The symbol of the corresponding translation.
 	 * @throws core.Mealy.MachineException
+	 *             if the given character is not included in it's corresponding
+	 *             alphabet.
 	 */
 	public Character step(Character input, boolean encoding) throws MachineException {
 		if (encoding) {
@@ -445,14 +573,14 @@ public class Machine {
 	 * Encodes the given string.
 	 * 
 	 * Uses the given string as input, and encodes it with the usage of the
-	 * machine. Throws {@link core.Mealy.MachineException MachineException} if
-	 * one character of the given string is not included in the input alphabet
-	 * of the machine.
+	 * machine.
 	 * 
 	 * @param input
 	 *            The string it encodes.
 	 * @return The output string after the encoding.
 	 * @throws MachineException
+	 *             if one character of the given string is not included in the
+	 *             input alphabet of the machine.
 	 */
 	public String encode(String input) throws core.Mealy.MachineException {
 		if (!this.isValid())
@@ -536,6 +664,7 @@ public class Machine {
 	 * 
 	 * @return The Moore Machine converted from the Mealy Machine.
 	 * @throws core.Moore.MachineException
+	 *             when the source machine contains syntactical errors.
 	 */
 	public core.Moore.Machine toMoore() throws core.Moore.MachineException {
 		core.Moore.Machine m = new core.Moore.Machine(this.id + " --> Moore");
@@ -657,12 +786,12 @@ public class Machine {
 	 * Removes the state from the machine, that ID is equal to the given
 	 * {@code id} parameter. Removing a state includes removing all translations
 	 * from the machine where the removed state appears as either parent or
-	 * target. Throws a {@link core.Mealy.MachineException MachineException} if
-	 * there is no state in the machine with the given id.
+	 * target.
 	 * 
 	 * @param id
 	 *            The {@code ID} of the state to be removed.
 	 * @throws MachineException
+	 *             if there is no state in the machine with the given id.
 	 */
 	public void removeState(String id) throws MachineException {
 		State s = this.findState(id);
@@ -759,6 +888,8 @@ public class Machine {
 		t.getParent().getTranslations().remove(t);
 	}
 
+	@SuppressWarnings("checkstyle:javadocmethod")
+	@Override
 	public String toString() {
 		String output = new String();
 		output += "Machine: " + this.id + "\n";
@@ -768,8 +899,7 @@ public class Machine {
 			output += "---State " + currState.getID() + "---\n";
 			for (Translation currTranslation : currState.getTranslations()) {
 				output += "[ " + currTranslation.getParent().getID() + "/" + currTranslation.getInput() + " ---> "
-						+ currTranslation.getOutput() + " / q" + currTranslation.getTarget().getID()
-						+ " ]\n";
+						+ currTranslation.getOutput() + " / q" + currTranslation.getTarget().getID() + " ]\n";
 			}
 		}
 		return output;

@@ -3,6 +3,8 @@ package controllers;
 import java.util.HashSet;
 import java.util.Set;
 
+import core.Mealy.MachineException;
+
 /*
  * #%L
  * Automata-GUI
@@ -127,9 +129,11 @@ public class EditMachineController {
 	}
 
 	@FXML
-	private void handleRenameMachine(ActionEvent event) {
+	private void handleRenameMachine(ActionEvent event) throws MachineException {
 		if (main.getSelectedMealy() != null) {
 			main.getSelectedMealy().setID(newMachineID.getText());
+
+			// TODO refresh
 		} else {
 			main.getSelectedMoore().setID(newMachineID.getText());
 		}

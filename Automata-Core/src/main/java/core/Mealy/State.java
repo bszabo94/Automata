@@ -41,16 +41,43 @@ public class State {
 	private String id;
 	private List<Translation> translations;
 
+	/**
+	 * Constructor of the State.
+	 * <P>
+	 * A constructor which initalizes the {@code List} that contains the
+	 * {@code Translations} of the State, and initailizes the state with a
+	 * {@code null} ID.
+	 */
 	public State() {
 		this.translations = new ArrayList<Translation>();
 		this.id = null;
 	}
 
+	/**
+	 * Constructor of the State.
+	 * <P>
+	 * A constructor which initalizes the {@code List} that contains the
+	 * {@code Translations} of the State, and initailizes the state with a "qn"
+	 * ID, where {@code n}. stands for the number given as paramter.
+	 * 
+	 * @param n
+	 *            The number, from which the ID will be set.
+	 */
 	public State(int n) {
 		this.translations = new ArrayList<Translation>();
 		this.id = "q" + Integer.toString(n);
 	}
 
+	/**
+	 * Constructor of the State.
+	 * <P>
+	 * A constructor which initalizes the {@code List} that contains the
+	 * {@code Translations} of the State, and initailizes the state with the
+	 * given {@code String} as ID.
+	 * 
+	 * @param s
+	 *            The String which will serve as the ID of the {@code State}.
+	 */
 	public State(String s) {
 		this.translations = new ArrayList<Translation>();
 		this.id = s;
@@ -72,10 +99,25 @@ public class State {
 		this.translations.add(newTranslation);
 	}
 
+	/**
+	 * Gets the translations of the state.
+	 * <P>
+	 * Gets all {@code Translation} objects, that has the {@code State} as
+	 * parent, and are contained by the State.
+	 * 
+	 * @return A {@code List} containing all of the state's translations.
+	 */
 	public List<Translation> getTranslations() {
 		return this.translations;
 	}
 
+	/**
+	 * Gets the ID of the State.
+	 * 
+	 * Gets the {@code ID} assigned to the {@code} object.
+	 * 
+	 * @return The ID of the State.
+	 */
 	public String getID() {
 		return this.id;
 	}

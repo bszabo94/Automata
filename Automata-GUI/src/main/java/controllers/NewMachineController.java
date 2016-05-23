@@ -90,8 +90,7 @@ public class NewMachineController {
 
 			handleButtonCancel(event);
 		} catch (core.Moore.MachineException | core.Mealy.MachineException e) {
-			// TODO
-			// System.out.println(e.getMessage());
+
 			main.showPopup(e.getMessage(), AlertType.WARNING);
 		}
 	}

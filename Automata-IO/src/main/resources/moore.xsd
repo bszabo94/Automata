@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<xs:element name="Machines">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name='Machine' type='MachineType' minOccurs='0'
+					maxOccurs='unbounded' />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="MachineType">
+		<xs:sequence>
+			<xs:element name="InputAlphabet">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Symbol" minOccurs="0" maxOccurs="unbounded">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:length value='1' />
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="OutputAlphabet">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Symbol" minOccurs="0" maxOccurs="unbounded">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:length value='1' />
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="States">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="State" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Translation" minOccurs="0"
+										maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:attributeGroup ref="TranslationAttr" />
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+								<xs:attribute name="ID" type="xs:string" />
+								<xs:attribute name="output" type="xs:string" />
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attributeGroup ref="MachineAttr" />
+	</xs:complexType>
+
+
+	<xs:attributeGroup name="MachineAttr">
+		<xs:attribute name="ID" type="xs:string" />
+		<xs:attribute name="Initial_State" type="xs:string" />
+		<xs:attribute name="Type" type="xs:string" fixed="Moore" />
+	</xs:attributeGroup>
+
+	<xs:attributeGroup name="TranslationAttr">
+		<xs:attribute name="input" type="xs:string" />
+		<xs:attribute name="target" type="xs:string" />
+	</xs:attributeGroup>
+</xs:schema>
+
+

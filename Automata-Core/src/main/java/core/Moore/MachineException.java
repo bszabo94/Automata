@@ -22,6 +22,19 @@ package core.Moore;
  * #L%
  */
 
+/**
+ * A Machine Exception
+ * 
+ * <P>
+ * MachineException mainly serves to control the creation and modification of
+ * the machines to be syntactially correct, clear and transparent. Makes
+ * possible to avoid any incorrect form of addition or delition from the machine
+ * that would cause logical problems and errors later.
+ * 
+ * @author bszabo
+ * @version 1.0
+ * @see core.Moore.Machine Machine
+ */
 @SuppressWarnings("serial")
 public class MachineException extends Exception {
 
