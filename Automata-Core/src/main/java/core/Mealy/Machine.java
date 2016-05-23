@@ -29,8 +29,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+//import java.util.stream.Collectors;
+//import java.util.stream.IntStream;
 
 /**
  * <h1>Mealy Machine</h1>
@@ -431,13 +431,19 @@ public class Machine {
 					"Only empty Machines can be initialized. No state or translation must exists in the machine.");
 		if (iAlphabet.size() > oAlphabet.size())
 			throw new MachineException("Input Alphabet must contain equal or less symbols than the Output Alphabet!");
-		this.iAlphabet = iAlphabet;
-		this.oAlphabet = oAlphabet;
+		this.iAlphabet = new HashSet<Character>(iAlphabet);
+		this.oAlphabet = new HashSet<Character>(oAlphabet);
 
 		List<Character> inputAlphabet = new ArrayList<Character>(iAlphabet);
 		List<Character> outputAlphabet = new ArrayList<Character>(oAlphabet);
-		List<Integer> range = IntStream.range(0, iAlphabet.size()).boxed().collect(Collectors.toList());
+		
+//		Edit to exclude stream(), as Coberture misses the proper java8 support.
+//		List<Integer> range = IntStream.range(0, iAlphabet.size()).boxed().collect(Collectors.toList());
 
+		List<Integer> range = new ArrayList<Integer>();
+		for(int i = 0; i < iAlphabet.size(); i++)
+			range.add(i);
+		
 		for (int i = 0; i < iAlphabet.size(); i++)
 			this.addState(i);
 

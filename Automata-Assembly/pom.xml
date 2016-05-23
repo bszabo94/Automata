@@ -7,6 +7,7 @@
 		<version>1.0</version>
 	</parent>
 
+	<description>A module that produces the final artifact. After the package lifecycle-phase, the executable jar will be produced under this project.</description>
 	<build>
 		<plugins>
 			<plugin>

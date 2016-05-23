@@ -287,4 +287,34 @@ public class MooreTests {
 
 	}
 
+	@Test
+	public void testAlphabetStrings() throws MachineException {
+		Machine m = new Machine("Tester");
+		m.addiAlphabet("abcd");
+		m.addoAlphabet("1234");
+		if (!m.getiAlphabet().equals(new HashSet<Character>(Arrays.asList('a', 'b', 'c', 'd'))))
+			fail("Failed on addiAlpbet(String)");
+		if (!m.getiAlphabet().equals(new HashSet<Character>(Arrays.asList('a', 'b', 'c', 'd'))))
+			fail("Failed on addiAlpbet(String)");
+
+		m.removeiAlphabet("abcd");
+		m.removeoAlphabet("1234");
+
+		if (!m.getiAlphabet().isEmpty())
+			fail("Failed on addiAlpbet(String)");
+		if (!m.getiAlphabet().isEmpty())
+			fail("Failed on addiAlpbet(String)");
+
+		try {
+			m.removeiAlphabet("abcd");
+			fail("failed at removeiAlphabet(String)");
+		} catch (MachineException e) {
+			try {
+				m.removeoAlphabet("1234");
+				fail("failed at removeoAlphabet(String)");
+			} catch (MachineException f) {
+
+			}
+		}
+	}
 }

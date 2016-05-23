@@ -29,8 +29,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+//import java.util.stream.Collectors;
+//import java.util.stream.IntStream;
 
 /**
  * <h1>Moore Machine</h1>
@@ -435,12 +435,17 @@ public class Machine {
 	public void init(Set<Character> iAlphabet, Set<Character> oAlphabet) throws MachineException {
 		if (iAlphabet.size() > oAlphabet.size())
 			throw new MachineException("Input Alphabet must contain equal or less symbols than the Output Alphabet!");
-		this.iAlphabet = iAlphabet;
-		this.oAlphabet = oAlphabet;
+		this.iAlphabet = new HashSet<Character>(iAlphabet);
+		this.oAlphabet = new HashSet<Character>(oAlphabet);
 
 		List<Character> inputAlphabet = new ArrayList<Character>(iAlphabet);
 		List<Character> outputAlphabet = new ArrayList<Character>(oAlphabet);
-		List<Integer> range = IntStream.range(0, iAlphabet.size()).boxed().collect(Collectors.toList());
+//		Edit to exclude stream(), as Coberture misses the proper java8 support.
+//		List<Integer> range = IntStream.range(0, iAlphabet.size()).boxed().collect(Collectors.toList());
+
+		List<Integer> range = new ArrayList<Integer>();
+		for(int i = 0; i < iAlphabet.size(); i++)
+			range.add(i);
 
 		for (int i = 0; i < oAlphabet.size(); i++)
 			this.addState(outputAlphabet.get(i), i);

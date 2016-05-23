@@ -38,11 +38,11 @@ public class AddStateController {
 
 	public void setMain(Main main) {
 		this.main = main;
-		if(main.getSelectedMealy() != null){
+		if (main.getSelectedMealy() != null) {
 			labelOutput.setVisible(false);
-//			labelOutput.setDisable(true);
+			// labelOutput.setDisable(true);
 			addOutput.setVisible(false);
-//			addOutput.setDisable(true);
+			// addOutput.setDisable(true);
 		}
 	}
 
@@ -64,7 +64,7 @@ public class AddStateController {
 
 	@FXML
 	TextField addOutput;
-	
+
 	@FXML
 	Label labelOutput;
 
@@ -90,20 +90,6 @@ public class AddStateController {
 			main.showPopup(e.getMessage(), AlertType.ERROR);
 		}
 
-	}
-
-	@FXML
-	private void initialize() {
-		// TODO
-		// if (main.getSelectedMealy() != null) {
-		// removeTitle.setText("Remove State from " +
-		// main.getSelectedMealy().getID());
-		// }
-		// if (main.getSelectedMoore() != null) {
-		// removeTitle.setText("Remove State from " /*+
-		// main.getSelectedMoore().getID()*/);
-		// }
-		// System.out.println(main.getSelectedMealy().getID());
 	}
 
 }

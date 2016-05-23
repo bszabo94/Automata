@@ -28,6 +28,8 @@ import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.DOMException;
 import org.xml.sax.SAXException;
 
@@ -55,6 +57,8 @@ import javafx.stage.WindowEvent;
 import main.Main;
 
 public class AutomataController {
+
+	private final static Logger logger = LoggerFactory.getLogger(Main.class);
 
 	private Main main;
 
@@ -367,7 +371,8 @@ public class AutomataController {
 
 		} catch (Exception e) {
 			main.showPopup(e.getMessage(), AlertType.ERROR);
-			
+			logger.warn(e.getMessage());
+			logger.error(e.getCause().toString());
 		}
 
 	}
@@ -391,6 +396,8 @@ public class AutomataController {
 					XMLHandler.exportMealy(file, main.getMealyMachines());
 				} catch (Exception e) {
 					main.showPopup(e.getMessage(), AlertType.ERROR);
+					logger.warn(e.getMessage());
+					logger.error(e.getCause().toString());
 				}
 				return;
 			}
@@ -399,6 +406,8 @@ public class AutomataController {
 					XMLHandler.exportMoore(file, main.getMooreMachines());
 				} catch (Exception e) {
 					main.showPopup(e.getMessage(), AlertType.ERROR);
+					logger.warn(e.getMessage());
+					logger.error(e.getCause().toString());
 				}
 				return;
 			}
@@ -423,9 +432,7 @@ public class AutomataController {
 				try {
 					main.getMealyMachines().addAll(XMLHandler.importMealyFromFile(file));
 				} catch (Exception e) {
-					// TODO
-					System.out.println("new window says: XML cotains Moore Machines! Import it to the Moore Tab!");
-					System.out.println(e.getMessage());
+					main.showPopup(e.getMessage(), AlertType.ERROR);
 				}
 				return;
 			}
@@ -437,6 +444,8 @@ public class AutomataController {
 				} catch (SAXException | ParserConfigurationException | IOException | DOMException
 						| MachineException e) {
 					main.showPopup(e.getMessage(), AlertType.ERROR);
+					logger.warn(e.getMessage());
+					logger.error(e.getCause().toString());
 				}
 				return;
 			}
@@ -474,6 +483,8 @@ public class AutomataController {
 				labelNbrStates.setText(Integer.toString(main.getSelectedMoore().getStates().size()));
 			} catch (core.Moore.MachineException e) {
 				main.showPopup(e.getMessage(), AlertType.ERROR);
+				logger.warn(e.getMessage());
+				logger.error(e.getCause().toString());
 			}
 		} else {
 			main.showPopup("Something went wrong. Try again!", AlertType.ERROR);
@@ -499,6 +510,8 @@ public class AutomataController {
 
 		} catch (IOException e) {
 			main.showPopup(e.getMessage(), AlertType.ERROR);
+			logger.warn(e.getMessage());
+			logger.error(e.getCause().toString());
 		}
 	}
 
@@ -525,6 +538,8 @@ public class AutomataController {
 
 		} catch (IOException e) {
 			main.showPopup(e.getMessage(), AlertType.ERROR);
+			logger.warn(e.getMessage());
+			logger.error(e.getCause().toString());
 		}
 	}
 
@@ -595,8 +610,9 @@ public class AutomataController {
 			stage.show();
 
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
 			main.showPopup(e.getMessage(), AlertType.ERROR);
+			logger.warn(e.getMessage());
+			logger.error(e.getCause().toString());
 		}
 	}
 
@@ -633,6 +649,8 @@ public class AutomataController {
 
 		} catch (Exception e) {
 			main.showPopup(e.getMessage(), AlertType.ERROR);
+			logger.warn(e.getMessage());
+			logger.error(e.getCause().toString());
 		}
 	}
 
@@ -650,6 +668,8 @@ public class AutomataController {
 			}
 		} catch (core.Mealy.MachineException | core.Moore.MachineException e) {
 			main.showPopup(e.getMessage(), AlertType.ERROR);
+			logger.warn(e.getMessage());
+			logger.error(e.getCause().toString());
 		}
 	}
 
@@ -675,8 +695,9 @@ public class AutomataController {
 			stage.show();
 
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
 			main.showPopup(e.getMessage(), AlertType.ERROR);
+			logger.warn(e.getMessage());
+			logger.error(e.getCause().toString());
 		}
 	}
 
@@ -685,15 +706,5 @@ public class AutomataController {
 		main.getPrimaryStage().getOnCloseRequest()
 				.handle(new WindowEvent(main.getPrimaryStage(), WindowEvent.WINDOW_CLOSE_REQUEST));
 	}
-
-	// TODO refresh stuff....
-	// public void refresh() {
-	// tableMealy.setItems(main.getMealyMachines());
-	// tableMoore.setItems(main.getMooreMachines());
-	// mealyTranslationTable.setItems(FXCollections.observableList(main.getSelectedMealy().getTranslationsAsList()));
-	// mooreTranslationTable.setItems(FXCollections.observableList(main.getSelectedMoore().getTranslationsAsList()));
-	// mealyStatesTable.setItems(FXCollections.observableList(main.getSelectedMealy().getStates()));
-	// mooreStatesTable.setItems(FXCollections.observableList(main.getSelectedMoore().getStates()));
-	// }
 
 }
