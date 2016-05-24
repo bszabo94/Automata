@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.DOMException;
 import org.xml.sax.SAXException;
 
-import core.Moore.MachineException;
 import io.XML.XMLHandler;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -442,7 +441,7 @@ public class AutomataController {
 					for (core.Moore.Machine m : main.getMooreMachines())
 						System.out.println(m);
 				} catch (SAXException | ParserConfigurationException | IOException | DOMException
-						| MachineException e) {
+						| core.Moore.MachineException e) {
 					main.showPopup(e.getMessage(), AlertType.ERROR);
 					logger.warn(e.getMessage());
 					logger.error(e.getCause().toString());
@@ -661,8 +660,8 @@ public class AutomataController {
 				main.getSelectedMealy().init(main.getSelectedMealy().getiAlphabet(),
 						main.getSelectedMealy().getoAlphabet());
 			} else if (main.getSelectedMoore() != null) {
-				main.getSelectedMoore().init(main.getSelectedMealy().getiAlphabet(),
-						main.getSelectedMealy().getoAlphabet());
+				main.getSelectedMoore().init(main.getSelectedMoore().getiAlphabet(),
+						main.getSelectedMoore().getoAlphabet());
 			} else {
 				main.showPopup("Select a Machine first!", AlertType.WARNING);
 			}
@@ -695,6 +694,23 @@ public class AutomataController {
 			stage.show();
 
 		} catch (IOException e) {
+			main.showPopup(e.getMessage(), AlertType.ERROR);
+			logger.warn(e.getMessage());
+			logger.error(e.getCause().toString());
+		}
+	}
+
+	@FXML
+	private void handleConversion() {
+		try {
+			if (main.getSelectedMealy() != null) {
+				main.getMooreMachines().add(main.getSelectedMealy().toMoore());
+			} else if (main.getSelectedMoore() != null) {
+				main.getMealyMachines().add(main.getSelectedMoore().toMealy());
+			} else {
+				main.showPopup("Select a machine first!", AlertType.WARNING);
+			}
+		} catch (core.Moore.MachineException | core.Mealy.MachineException e) {
 			main.showPopup(e.getMessage(), AlertType.ERROR);
 			logger.warn(e.getMessage());
 			logger.error(e.getCause().toString());

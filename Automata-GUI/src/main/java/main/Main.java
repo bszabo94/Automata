@@ -193,5 +193,16 @@ public class Main extends Application {
 	public void setSelectedMooreTranslation(core.Moore.Translation selectedMooreTranslation) {
 		this.selectedMooreTranslation = selectedMooreTranslation;
 	}
+	
+	public void refresh(){
+		ObservableList<core.Mealy.Machine> mealyDummy = FXCollections.observableArrayList(mealyMachines);
+		ObservableList<core.Moore.Machine> mooreDummy = FXCollections.observableArrayList(mooreMachines);
+		
+		mealyMachines.removeAll(mealyDummy);
+		mealyMachines.addAll(mealyDummy);
+		
+		mooreMachines.removeAll(mooreDummy);
+		mooreMachines.addAll(mooreDummy);
+	}
 
 }

@@ -1,7 +1,7 @@
 // CHECKSTYLE:OFF
 package controllers;
 
-
+import core.Mealy.MachineException;
 
 /*
  * #%L
@@ -75,6 +75,7 @@ public class EditMachineController {
 			} else {
 				main.getSelectedMoore().addiAlphabet(newSymbols.getText());
 			}
+			main.refresh();
 			handleButtonCancel(event);
 		} catch (core.Mealy.MachineException | core.Moore.MachineException e) {
 			main.showPopup(e.getMessage(), AlertType.ERROR);
@@ -89,6 +90,7 @@ public class EditMachineController {
 			} else {
 				main.getSelectedMoore().addoAlphabet(newSymbols.getText());
 			}
+			main.refresh();
 			handleButtonCancel(event);
 		} catch (core.Mealy.MachineException | core.Moore.MachineException e) {
 			main.showPopup(e.getMessage(), AlertType.ERROR);
@@ -103,6 +105,7 @@ public class EditMachineController {
 			} else {
 				main.getSelectedMoore().removeiAlphabet(newSymbols.getText());
 			}
+			main.refresh();
 			handleButtonCancel(event);
 		} catch (core.Mealy.MachineException | core.Moore.MachineException e) {
 			main.showPopup(e.getMessage(), AlertType.ERROR);
@@ -117,6 +120,7 @@ public class EditMachineController {
 			} else {
 				main.getSelectedMoore().removeoAlphabet(newSymbols.getText());
 			}
+			main.refresh();
 			handleButtonCancel(event);
 		} catch (core.Mealy.MachineException | core.Moore.MachineException e) {
 			main.showPopup(e.getMessage(), AlertType.ERROR);
@@ -124,9 +128,12 @@ public class EditMachineController {
 	}
 
 	@FXML
-	private void handleRenameMachine(ActionEvent event) {
+	private void handleRenameMachine(ActionEvent event) throws MachineException {
 		if (main.getSelectedMealy() != null) {
 			main.getSelectedMealy().setID(newMachineID.getText());
+
+			main.refresh();
+			handleButtonCancel(event);
 
 			// TODO refresh
 		} else {
@@ -142,6 +149,8 @@ public class EditMachineController {
 			} else {
 				main.getSelectedMoore().setCurrStateById(newCurrStateID.getText());
 			}
+			main.refresh();
+			handleButtonCancel(event);
 		} catch (core.Mealy.MachineException | core.Moore.MachineException e) {
 			main.showPopup(e.getMessage(), AlertType.ERROR);
 		}

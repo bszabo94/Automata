@@ -15,9 +15,9 @@
 		</layout>
 	</appender>
 
-	<logger name="automata.logger" level="INFO" additivity="false">
+<!--	<logger name="automata.logger" level="INFO" additivity="false">
 		<appender-ref ref="FILE" />
-	</logger>
+	</logger> -->
 
 	<root level="DEBUG">
 <!-- 		<appender-ref ref="STDOUT" /> -->

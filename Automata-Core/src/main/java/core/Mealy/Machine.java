@@ -431,19 +431,23 @@ public class Machine {
 					"Only empty Machines can be initialized. No state or translation must exists in the machine.");
 		if (iAlphabet.size() > oAlphabet.size())
 			throw new MachineException("Input Alphabet must contain equal or less symbols than the Output Alphabet!");
+		if (iAlphabet.size() == 0 || oAlphabet.size() == 0)
+			throw new MachineException("Both alphabets must contain at least one symbols.");
 		this.iAlphabet = new HashSet<Character>(iAlphabet);
 		this.oAlphabet = new HashSet<Character>(oAlphabet);
 
 		List<Character> inputAlphabet = new ArrayList<Character>(iAlphabet);
 		List<Character> outputAlphabet = new ArrayList<Character>(oAlphabet);
-		
-//		Edit to exclude stream(), as Coberture misses the proper java8 support.
-//		List<Integer> range = IntStream.range(0, iAlphabet.size()).boxed().collect(Collectors.toList());
+
+		// Edit to exclude stream(), as Coberture misses the proper java8
+		// support.
+		// List<Integer> range = IntStream.range(0,
+		// iAlphabet.size()).boxed().collect(Collectors.toList());
 
 		List<Integer> range = new ArrayList<Integer>();
-		for(int i = 0; i < iAlphabet.size(); i++)
+		for (int i = 0; i < iAlphabet.size(); i++)
 			range.add(i);
-		
+
 		for (int i = 0; i < iAlphabet.size(); i++)
 			this.addState(i);
 
@@ -697,10 +701,9 @@ public class Machine {
 		int i = 0;
 
 		for (State currState : symbolDistributor.keySet()) {
-//			i = 0;
+			i = 0;
 			for (Character currChar : symbolDistributor.get(currState)) {
-//				m.addState(currChar, currState.getID() + Integer.toString(i));
-				m.addState(currChar, i);
+				m.addState(currChar, currState.getID() + "s" + Integer.toString(i));
 				i++;
 				translationDistributor.get(currState).put(currChar, m.getStates().get(m.getStates().size() - 1));
 				if (m.getCurrState() == null && this.currState == currState) {

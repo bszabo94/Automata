@@ -340,6 +340,8 @@
 					<items>
 						<MenuItem mnemonicParsing="false" onAction="#handleMenuButtonRemoveState"
 							text="Remove State" />
+						<MenuItem mnemonicParsing="false" onAction="#handleConversion"
+							text="Convert" />
 					</items>
 				</Menu>
 				<Menu mnemonicParsing="false" text="Help">
